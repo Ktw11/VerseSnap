@@ -9,15 +9,9 @@ let project = Project(
         defaultKnownRegions: ["en", "ko"],
         developmentRegion: "ko"
     ),
-    settings: .settings(
-        base: Settings.baseSettings,
-        configurations: [
-            .debug(name: .dev, xcconfig: .relativeToRoot("Configs/\(BuildTarget.dev.name).xcconfig")),
-            .release(name: .prod, xcconfig: .relativeToRoot("Configs/\(BuildTarget.prod.name).xcconfig"))
-        ]
-    ),
+    settings: .commonModule,
     targets: [
-        Project.target(
+        Target.commonTarget(
             type: type,
             product: .app,
             infoPlist: .extendingDefault(
@@ -29,7 +23,10 @@ let project = Project(
                 ]
             ),
             sources: ["Sources/**"],
-            resources: ["Resources/**"]
+            resources: ["Resources/**"],
+            dependencies: [
+                .feature(type: .signIn)
+            ]
         )
     ],
     schemes: [

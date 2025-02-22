@@ -5,5 +5,6 @@ let workspace = Workspace(
     name: "VerseSnap",
     projects: [
         "App",
+        "Feature/**",
     ]
 )
