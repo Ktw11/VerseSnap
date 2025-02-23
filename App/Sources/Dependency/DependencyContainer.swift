@@ -15,6 +15,6 @@ final class DependencyContainer {
     @MainActor
     func buildRootView() -> some View {
         let viewModel = RootViewModel()
-        RootView(viewModel: viewModel)
+        RootView(viewModel: viewModel, signInBuilder: signInBuilder)
     }
 }

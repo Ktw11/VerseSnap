@@ -27,7 +27,7 @@ public extension Target {
         dependencies: [TargetDependency] = []
     ) -> Target {
         Target.target(
-            name: "\(type.name)Interface",
+            name: type.interfaceName,
             destinations: .iOS,
             product: product,
             bundleId: type.interfaceBundleId,

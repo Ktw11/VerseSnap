@@ -10,6 +10,10 @@ public extension TargetType {
         self.rawValue
     }
     
+    var interfaceName: String {
+        "\(self.name)Interface"
+    }
+    
     var bundleId: String {
         switch self {
         case .app:
@@ -20,7 +24,7 @@ public extension TargetType {
     }
     
     var interfaceBundleId: String {
-        "\(baseBundleId).Feature.\(self.name)Interface"
+        "\(baseBundleId).Feature.\(interfaceName)"
     }
 }
 

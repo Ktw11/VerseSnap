@@ -11,7 +11,10 @@ let project = Project(
             type: .signIn,
             product: .framework,
             sources: ["Sources/**"],
-            resources: ["Resources/**"]
+            resources: ["Resources/**"],
+            dependencies: [
+                .featureInterface(type: targetType)
+            ]
         ),
         Target.interfaceTarget(type: .signIn, product: .framework)
     ]

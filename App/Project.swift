@@ -25,7 +25,8 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .feature(type: .signIn)
+                .feature(type: .signIn),
+                .featureInterface(type: .signIn)
             ]
         )
     ],
