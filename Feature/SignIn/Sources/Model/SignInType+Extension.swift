@@ -13,7 +13,7 @@ extension SignInType {
         case .apple:
             return Color.white
         case .kakao:
-            return Color.yellow
+            return SignInAsset.kakaoBrand.swiftUIColor
         }
     }
 
