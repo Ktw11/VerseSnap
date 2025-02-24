@@ -54,20 +54,22 @@ private struct SignInButton: View {
     let type: SignInType
     
     var body: some View {
-        HStack {
+        HStack(alignment: .center) {
             type.icon
                 .resizable()
                 .frame(width: 24, height: 24)
+            
             Spacer()
+            
             Text("\(type.buttonText)로 로그인")
                 .font(.system(size: 16, weight: .regular))
+            
             Spacer()
         }
         .foregroundStyle(Color.black)
-        .padding(.vertical, 12)
         .padding(.horizontal, 24)
+        .frame(height: 48)
         .background(type.backgroundColor)
         .clipShape(Capsule())
-        .frame(height: 48)
     }
 }

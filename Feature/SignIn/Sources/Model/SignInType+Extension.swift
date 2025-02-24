@@ -13,16 +13,16 @@ extension SignInType {
         case .apple:
             return Color.white
         case .kakao:
-            return SignInAsset.kakaoBrand.swiftUIColor
+            return SignInAsset.Color.kakaoBrand.swiftUIColor
         }
     }
 
     var icon: Image {
         switch self {
         case .apple:
-            return Image(systemName: "person.circle.fill")
+            SignInAsset.Image.icApple.swiftUIImage
         case .kakao:
-            return Image(systemName: "person.circle.fill")
+            SignInAsset.Image.icKakao.swiftUIImage
         }
     }
     
