@@ -1,7 +1,7 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let targetType: TargetType = .authentication
+let targetType: TargetType = .thirdPartyAuth
 
 let project = Project(
     name: targetType.name,

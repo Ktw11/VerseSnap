@@ -1,5 +1,5 @@
 //
-//  AppleAuthHelper.swift
+//  AppleAccountAuthHelper.swift
 //  Authentication
 //
 //  Created by 공태웅 on 3/1/25.
@@ -8,7 +8,7 @@
 import Foundation
 import AuthenticationServices
 
-final class AppleAuthHelper: NSObject, ThirdPartyAuthHelpable {
+final class AppleAccountAuthHelper: NSObject, ThirdPartyAccountAuthHelpable {
     
     // MARK: Definitions
     
@@ -48,7 +48,7 @@ final class AppleAuthHelper: NSObject, ThirdPartyAuthHelpable {
     }
 }
 
-private extension AppleAuthHelper {
+private extension AppleAccountAuthHelper {
     func getAuthorizationFromApple() async throws -> ASAuthorization {
         try await withCheckedThrowingContinuation { continuation in
             Task {
@@ -74,13 +74,13 @@ private extension AppleAuthHelper {
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
               let authCodeData = credential.authorizationCode,
               let authCodeString = String(data: authCodeData, encoding: .utf8) else {
-            throw AuthProviderError.failedToGetToken
+            throw ThirdPartyAuthProviderError.failedToGetToken
         }
         return authCodeString
     }
 }
 
-extension AppleAuthHelper: ASAuthorizationControllerDelegate {
+extension AppleAccountAuthHelper: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         Task {
             await self.state.authContinuation?.resume(returning: authorization)

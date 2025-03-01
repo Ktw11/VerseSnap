@@ -1,5 +1,5 @@
 //
-//  KakaoAuthHelper.swift
+//  KakaoAccountAuthHelper.swift
 //  Authentication
 //
 //  Created by 공태웅 on 3/1/25.
@@ -11,7 +11,7 @@ import KakaoSDKUser
 import KakaoSDKCommon
 
 @MainActor
-final class KakaoAuthHelper: ThirdPartyAuthHelpable {
+final class KakaoAccountAuthHelper: ThirdPartyAccountAuthHelpable {
     
     // MARK: Methods
     
@@ -62,7 +62,7 @@ final class KakaoAuthHelper: ThirdPartyAuthHelpable {
     }
 }
 
-private extension KakaoAuthHelper {
+private extension KakaoAccountAuthHelper {
     func login(completion: @escaping (Result<String, Error>) -> Void) {
         if UserApi.isKakaoTalkLoginAvailable() {
             loginWithApp { completion($0) }
@@ -79,7 +79,7 @@ private extension KakaoAuthHelper {
             }
             
             guard let token else {
-                completion(.failure(AuthProviderError.failedToGetToken))
+                completion(.failure(ThirdPartyAuthProviderError.failedToGetToken))
                 return
             }
             
@@ -95,7 +95,7 @@ private extension KakaoAuthHelper {
             }
             
             guard let token else {
-                completion(.failure(AuthProviderError.failedToGetToken))
+                completion(.failure(ThirdPartyAuthProviderError.failedToGetToken))
                 return
             }
             

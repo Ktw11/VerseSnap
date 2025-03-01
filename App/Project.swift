@@ -29,7 +29,7 @@ let project = Project(
             dependencies: [
                 .feature(type: .signIn),
                 .featureInterface(type: .signIn),
-                .core(type: .authentication)
+                .core(type: .thirdPartyAuth)
             ]
         )
     ],

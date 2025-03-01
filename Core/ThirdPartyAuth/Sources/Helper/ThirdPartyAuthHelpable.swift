@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ThirdPartyAuthHelpable: Sendable {
+protocol ThirdPartyAccountAuthHelpable: Sendable {
     @MainActor func configure()
     @MainActor func handleURL(_ url: URL) -> Bool
     func getToken() async throws -> String

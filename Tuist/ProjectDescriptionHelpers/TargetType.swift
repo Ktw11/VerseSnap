@@ -3,7 +3,7 @@ import ProjectDescription
 public enum TargetType: String, Sendable {
     case app = "App"
     case signIn = "SignIn"
-    case authentication = "Authentication"
+    case thirdPartyAuth = "ThirdPartyAuth"
 }
 
 public extension TargetType {
@@ -21,7 +21,7 @@ public extension TargetType {
             baseBundleId
         case .signIn:
             featureBundleId
-        case .authentication:
+        case .thirdPartyAuth:
             coreBundleId
         }
     }
