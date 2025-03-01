@@ -7,9 +7,6 @@
     import struct ProjectDescription.PackageSettings
 
     let packageSettings = PackageSettings(
-        // Customize the product types for specific package product
-        // Default is .staticFramework
-        // productTypes: ["Alamofire": .framework,]
         productTypes: [PackageProduct.kakaoSDK.rawValue: .staticLibrary],
         baseSettings: .settings(configurations: Configuration.common)
     )
