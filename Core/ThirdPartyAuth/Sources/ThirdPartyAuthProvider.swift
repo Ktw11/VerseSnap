@@ -7,7 +7,7 @@
 
 import Foundation
 
-public actor ThirdPartyAuthProvider {
+public actor ThirdPartyAuthProvider: ThirdPartyAuthProvidable {
     
     // MARK: Lifecycle
     
