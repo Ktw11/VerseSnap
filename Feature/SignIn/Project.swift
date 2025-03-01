@@ -5,6 +5,7 @@ let targetType: TargetType = .signIn
 
 let project = Project(
     name: targetType.name,
+    options: .commonOptions(),
     settings: .commonModule,
     targets: [
         Target.commonTarget(

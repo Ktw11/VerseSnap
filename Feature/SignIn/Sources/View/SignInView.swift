@@ -60,8 +60,8 @@ private struct SignInButton: View {
                 .frame(width: 24, height: 24)
             
             Spacer()
-            
-            Text("\(type.buttonText)로 로그인")
+
+            Text("\(type.buttonText)로 로그인", bundle: .module)
                 .font(.system(size: 16, weight: .regular))
             
             Spacer()

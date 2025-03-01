@@ -29,9 +29,9 @@ extension SignInType {
     var buttonText: String {
         switch self {
         case .apple:
-            "Apple ID"
+            String(localized: "애플", bundle: .module)
         case .kakao:
-            "카카오"
+            String(localized: "카카오", bundle: .module)
         }
     }
 }

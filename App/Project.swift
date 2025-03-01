@@ -5,10 +5,7 @@ let type = TargetType.app
 
 let project = Project(
     name: type.name,
-    options: .options(
-        defaultKnownRegions: ["en", "ko"],
-        developmentRegion: "ko"
-    ),
+    options: .commonOptions(automaticSchemesOptions: .disabled),
     settings: .commonModule,
     targets: [
         Target.commonTarget(
