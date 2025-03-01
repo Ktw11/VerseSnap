@@ -7,6 +7,7 @@ public extension Target {
         infoPlist: InfoPlist = .default,
         sources: SourceFilesList?,
         resources: ResourceFileElements? = nil,
+        entitlements: Entitlements? = nil,
         dependencies: [TargetDependency] = []
     ) -> Target {
         Target.target(
@@ -17,6 +18,7 @@ public extension Target {
             infoPlist: infoPlist,
             sources: sources,
             resources: resources ?? [],
+            entitlements: entitlements,
             dependencies: dependencies
         )
     }
