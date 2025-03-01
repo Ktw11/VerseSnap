@@ -6,8 +6,16 @@
 //
 
 import SwiftUI
+import ThirdPartyAuth
 
 final class DependencyContainer {
+    
+    // MARK: Properties
+    
+    lazy var thirdPartyAuthProvider: ThirdPartyAuthProvidable = {
+        ThirdPartyAuthProvider(accounts: [.apple, .kakao])
+    }()
+    
     
     // MARK: Methods
     
