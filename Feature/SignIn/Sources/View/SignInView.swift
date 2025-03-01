@@ -24,6 +24,7 @@ public struct SignInView: View {
             Spacer()
             
             Text("로그인")
+                .foregroundStyle(Color.white)
                 .font(.largeTitle)
             
             Spacer()

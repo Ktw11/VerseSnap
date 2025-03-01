@@ -17,6 +17,8 @@ struct RootView<Builder: SignInBuilder>: View {
 
     var body: some View {
         ZStack {
+            Color.black
+                .ignoresSafeArea()
             switch viewModel.scene {
             case .splash:
                 #warning("스플래시 화면 구현 필요")
