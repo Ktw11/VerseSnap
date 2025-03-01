@@ -9,5 +9,5 @@ import Foundation
 
 public enum ThirdPartyAuthProviderError: Error {
     case failedToGetToken
-    case invalidThirdPartyType
+    case invalidAccount
 }
