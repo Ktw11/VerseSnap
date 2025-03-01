@@ -17,6 +17,10 @@ let project = Project(
                         "UIColorName": "",
                         "UIImageName": "",
                     ],
+                    "KakaoAppKey": "$(KAKAO_APP_KEY)",
+                    "LSApplicationQueriesSchemes": [
+                        "kakaokompassauth"
+                    ]
                 ]
             ),
             sources: ["Sources/**"],
