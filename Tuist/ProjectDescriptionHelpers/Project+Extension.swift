@@ -8,5 +8,9 @@ public extension TargetDependency {
     static func featureInterface(type: TargetType) -> TargetDependency {
         .project(target: type.interfaceName, path: .relativeToRoot("Feature/\(type.name)"))
     }
+    
+    static func core(type: TargetType) -> TargetDependency {
+        .project(target: type.name, path: .relativeToRoot("Core/\(type.name)"))
+    }
 }
 

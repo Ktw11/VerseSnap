@@ -3,10 +3,7 @@ import ProjectDescription
 public extension ProjectDescription.Settings {
     static let commonModule: ProjectDescription.Settings = .settings(
         base: Settings.baseSettings,
-        configurations: [
-            .debug(name: .dev, xcconfig: .relativeToRoot("Configs/\(BuildTarget.dev.name).xcconfig")),
-            .release(name: .prod, xcconfig: .relativeToRoot("Configs/\(BuildTarget.prod.name).xcconfig"))
-        ]
+        configurations: Configuration.common
     )
 }
 

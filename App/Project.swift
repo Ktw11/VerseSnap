@@ -23,7 +23,8 @@ let project = Project(
             resources: ["Resources/**"],
             dependencies: [
                 .feature(type: .signIn),
-                .featureInterface(type: .signIn)
+                .featureInterface(type: .signIn),
+                .core(type: .authentication)
             ]
         )
     ],

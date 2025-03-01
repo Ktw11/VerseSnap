@@ -3,6 +3,7 @@ import ProjectDescription
 public enum TargetType: String, Sendable {
     case app = "App"
     case signIn = "SignIn"
+    case authentication = "Authentication"
 }
 
 public extension TargetType {
@@ -17,9 +18,11 @@ public extension TargetType {
     var bundleId: String {
         switch self {
         case .app:
-            return baseBundleId
+            baseBundleId
         case .signIn:
-            return featureBundleId
+            featureBundleId
+        case .authentication:
+            coreBundleId
         }
     }
     
@@ -35,5 +38,9 @@ private extension TargetType {
     
     var featureBundleId: String {
         "\(baseBundleId).Feature.\(self.name)"
+    }
+    
+    var coreBundleId: String {
+        "\(baseBundleId).Core.\(self.name)"
     }
 }
