@@ -1,3 +1,4 @@
 #include "./Shared.xcconfig"
+#include "./Secret_DEV.xcconfig"
 
 OTHER_SWIFT_FLAGS[config=DEBUG][sdk=*] = $(inherited) -DDEV

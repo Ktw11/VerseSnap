@@ -76,5 +76,5 @@ Derived/
 Tuist/.build
 
 ### xcconfig ###
-Secret.xcconfig
+Secret*.xcconfig
 

@@ -1,3 +1,4 @@
 #include "./Shared.xcconfig"
+#include "./Secret_PROD.xcconfig"
 
 OTHER_SWIFT_FLAGS[config=RELEASE][sdk=*] = $(inherited) -DPROD
