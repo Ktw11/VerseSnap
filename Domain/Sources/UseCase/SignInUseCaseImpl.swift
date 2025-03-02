@@ -7,7 +7,7 @@
 
 import Foundation
 
-public actor SignInUseCaseImpl {
+public actor SignInUseCaseImpl: SignInUseCase {
     
     // MARK: Lifecycle
     
