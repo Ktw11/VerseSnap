@@ -9,6 +9,10 @@ public extension TargetDependency {
         .project(target: type.interfaceName, path: .relativeToRoot("Feature/\(type.name)"))
     }
     
+    static var domain: TargetDependency {
+        .project(target: TargetType.domain.name, path: .relativeToRoot("Domain"))
+    }
+    
     static func core(type: TargetType) -> TargetDependency {
         .project(target: type.name, path: .relativeToRoot("Core/\(type.name)"))
     }
