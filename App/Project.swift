@@ -18,6 +18,7 @@ let project = Project(
                         "UIImageName": "",
                     ],
                     "KakaoAppKey": "$(KAKAO_APP_KEY)",
+                    "BaseURL": "$(API_BASE_URL)",
                     "LSApplicationQueriesSchemes": [
                         "kakaokompassauth"
                     ]
