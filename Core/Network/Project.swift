@@ -1,7 +1,7 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let targetType: TargetType = .repository
+let targetType: TargetType = .network
 
 let project = Project(
     name: targetType.name,
@@ -10,12 +10,8 @@ let project = Project(
     targets: [
         Target.commonTarget(
             type: targetType,
-            product: .staticLibrary,
-            sources: ["Sources/**"],
-            dependencies: [
-                .domain,
-                .core(type: .network)
-            ]
+            product: .framework,
+            sources: ["Sources/**"]
         )
     ]
 )
