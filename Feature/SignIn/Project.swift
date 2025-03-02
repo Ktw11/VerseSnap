@@ -14,7 +14,9 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .featureInterface(type: targetType)
+                .featureInterface(type: targetType),
+                .domain,
+                .core(type: .thirdPartyAuth)
             ]
         ),
         Target.interfaceTarget(type: .signIn, product: .framework)

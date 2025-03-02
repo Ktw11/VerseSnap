@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import Domain
 
 public struct SignInDependency {
     let signInTypes: [SignInType]
+    let useCase: SignInUseCase
     
     public init(signInTypes: [SignInType]) {
         self.signInTypes = signInTypes
