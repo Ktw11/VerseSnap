@@ -12,5 +12,9 @@ public extension TargetDependency {
     static func core(type: TargetType) -> TargetDependency {
         .project(target: type.name, path: .relativeToRoot("Core/\(type.name)"))
     }
+
+    static func data(type: TargetType) -> TargetDependency {
+        .project(target: type.name, path: .relativeToRoot("Data/\(type.name)"))
+    }
 }
 

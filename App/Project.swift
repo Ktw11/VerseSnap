@@ -29,7 +29,8 @@ let project = Project(
             dependencies: [
                 .feature(type: .signIn),
                 .featureInterface(type: .signIn),
-                .core(type: .thirdPartyAuth)
+                .core(type: .thirdPartyAuth),
+                .data(type: .repository)
             ]
         )
     ],

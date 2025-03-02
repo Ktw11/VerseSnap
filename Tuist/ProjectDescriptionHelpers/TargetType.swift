@@ -4,6 +4,7 @@ public enum TargetType: String, Sendable {
     case app = "App"
     case signIn = "SignIn"
     case thirdPartyAuth = "ThirdPartyAuth"
+    case repository = "Repository"
 }
 
 public extension TargetType {
@@ -23,6 +24,8 @@ public extension TargetType {
             featureBundleId
         case .thirdPartyAuth:
             coreBundleId
+        case .repository:
+            dataBundleId
         }
     }
     
@@ -42,5 +45,9 @@ private extension TargetType {
     
     var coreBundleId: String {
         "\(baseBundleId).Core.\(self.name)"
+    }
+    
+    var dataBundleId: String {
+        "\(baseBundleId).Data.\(self.name)"
     }
 }
