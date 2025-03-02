@@ -11,6 +11,12 @@ import SignInInterface
 
 extension DependencyContainer {
     var signInBuilder: some SignInBuilder {
-        SignInComponent(dependency: .init(signInTypes: [.apple, .kakao]))
+        SignInComponent(
+            dependency: SignInDependency(
+                signInTypes: [.apple, .kakao],
+                useCase: useCaseBuilder.signInUseCase,
+                authProvider: thirdPartyAuthProvider
+            )
+        )
     }
 }

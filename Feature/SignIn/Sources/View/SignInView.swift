@@ -45,7 +45,15 @@ public struct SignInView: View {
 }
 
 #Preview {
-    SignInView(viewModel: .init(dependency: .init(signInTypes: [.apple, .kakao])))
+    SignInView(
+        viewModel: .init(
+            dependency: .init(
+                signInTypes: [.apple, .kakao],
+                useCase: MockSignInUseCase.preview,
+                authProvider: MockAuthProvider.preview
+            )
+        )
+    )
 }
 
 private struct SignInButton: View {

@@ -16,11 +16,10 @@ final class DependencyContainer {
     lazy var thirdPartyAuthProvider: ThirdPartyAuthProvidable = {
         ThirdPartyAuthProvider(accounts: [.apple, .kakao])
     }()
-    
-    private lazy var repositoryBuilder: RepositoryBuilder = {
+    lazy var repositoryBuilder: RepositoryBuilder = {
         RepositoryComponent(networkProvider: networkProvider)
     }()
-    private lazy var useCaseBuilder: UseCaseBuilder = {
+    lazy var useCaseBuilder: UseCaseBuilder = {
         UseCaseComponent(repositoryBuilder: repositoryBuilder)
     }()
     
