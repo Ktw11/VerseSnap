@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-protocol SignInInfoDataSource {
+protocol SignInInfoDataSource: Sendable {
     func retrieve() async -> SignInInfoDTO?
     func save(info: SignInInfoDTO) async throws
     func reset() async throws

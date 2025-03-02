@@ -6,8 +6,15 @@
 //
 
 import Foundation
+import Domain
 
 struct SignInInfoDTO {
     let refreshToken: String
     let signInType: String
+}
+
+extension SignInInfoDTO {
+    var toDomain: SignInInfo {
+        .init(refreshToken: refreshToken, signInType: signInType)
+    }
 }
