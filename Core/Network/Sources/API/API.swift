@@ -15,3 +15,21 @@ public protocol API: Sendable {
     var bodyParameters: [String: String]? { get }
     var needsAuthorization: Bool { get }
 }
+
+public extension API {
+    var headers: [String: String] {
+        [:]
+    }
+    
+    var queryParameters: [String: String]? {
+        nil
+    }
+    
+    var bodyParameters: [String: String]? {
+        nil
+    }
+
+    var needsAuthorization: Bool {
+        false
+    }
+}
