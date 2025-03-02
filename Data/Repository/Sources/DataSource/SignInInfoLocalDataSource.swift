@@ -8,18 +8,18 @@
 import Foundation
 import SwiftData
 
-protocol SignInInfoDataSource: Sendable {
+public protocol SignInInfoDataSource: Sendable {
     func retrieve() async -> SignInInfoDTO?
     func save(info: SignInInfoDTO) async throws
     func reset() async throws
 }
 
 @ModelActor
-actor SignInInfoLocalDataSource: SignInInfoDataSource {
+public actor SignInInfoLocalDataSource: SignInInfoDataSource {
     
     // MARK: Lifecycle
     
-    init() {
+    public init() {
         let schema = Schema([
             PersistSignInInfo.self,
         ])
@@ -37,18 +37,18 @@ actor SignInInfoLocalDataSource: SignInInfoDataSource {
     
     // MARK: Methods
     
-    func retrieve() -> SignInInfoDTO? {
+    public func retrieve() -> SignInInfoDTO? {
         let descriptor = FetchDescriptor<PersistSignInInfo>()
         return try? modelContext.fetch(descriptor).first?.toDTO
     }
 
-    func save(info: SignInInfoDTO) throws {
+    public func save(info: SignInInfoDTO) throws {
         try reset()
         modelContext.insert(info.toPersist)
         try modelContext.save()
     }
     
-    func reset() throws {
+    public func reset() throws {
         try modelContext.delete(model: PersistSignInInfo.self)
     }
 }

@@ -8,11 +8,11 @@
 import Foundation
 import Domain
 
-actor SignInInfoRepositoryImpl: SignInInfoRepository {
+public actor SignInInfoRepositoryImpl: SignInInfoRepository {
 
     // MARK: Lifecycle
     
-    init(dataSource: SignInInfoDataSource) {
+    public init(dataSource: SignInInfoDataSource) {
         self.dataSource = dataSource
     }
     
@@ -22,16 +22,16 @@ actor SignInInfoRepositoryImpl: SignInInfoRepository {
     
     // MARK: Methods
     
-    func retrieve() async -> SignInInfo? {
+    public func retrieve() async -> SignInInfo? {
         await dataSource.retrieve()?.toDomain
     }
     
-    func save(info: SignInInfo) async throws {
+    public func save(info: SignInInfo) async throws {
         let dto = SignInInfoDTO(refreshToken: info.refreshToken, signInType: info.signInType)
         try await dataSource.save(info: dto)
     }
     
-    func reset() async throws {
+    public func reset() async throws {
         try await dataSource.reset()
     }
 }

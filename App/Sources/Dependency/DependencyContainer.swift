@@ -17,6 +17,10 @@ final class DependencyContainer {
         ThirdPartyAuthProvider(accounts: [.apple, .kakao])
     }()
     
+    private lazy var repositoryBuilder: RepositoryBuilder = {
+        RepositoryComponent(networkProvider: networkProvider)
+    }()
+    
     private let networkProvider: NetworkProvidable = NetworkProvider(
         configuration: NetworkConfiguration(baseUrlString: AppKeys.baseUrl)
     )

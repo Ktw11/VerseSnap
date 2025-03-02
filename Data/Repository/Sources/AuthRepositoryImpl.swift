@@ -9,11 +9,11 @@ import Foundation
 import Network
 import Domain
 
-actor AuthRepositoryImpl: AuthRepository {
+public actor AuthRepositoryImpl: AuthRepository {
     
     // MARK: Lifecycle
     
-    init(networkProvider: NetworkProvidable) {
+    public init(networkProvider: NetworkProvidable) {
         self.networkProvider = networkProvider
     }
     

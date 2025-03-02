@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-struct SignInInfoDTO {
+public struct SignInInfoDTO: Sendable {
     let refreshToken: String
     let signInType: String
 }
