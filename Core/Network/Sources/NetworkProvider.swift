@@ -44,7 +44,7 @@ public actor NetworkProvider: NetworkProvidable {
 private extension NetworkProvider {
     func requestData(api: API, retry: Bool = true) async throws -> Data {
         let accessToken = await tokenStore?.accessToken
-        let request: URLRequest = try api.makeURLRequest(baseURLString: configuration.baseURLString, accessToken: accessToken)
+        let request: URLRequest = try api.makeURLRequest(baseURLString: configuration.baseUrlString, accessToken: accessToken)
         
         let (data, response): (Data, URLResponse)
         do {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ThirdPartyAuth
+import Network
 
 final class DependencyContainer {
     
@@ -16,6 +17,9 @@ final class DependencyContainer {
         ThirdPartyAuthProvider(accounts: [.apple, .kakao])
     }()
     
+    private let networkProvider: NetworkProvidable = NetworkProvider(
+        configuration: NetworkConfiguration(baseUrlString: AppKeys.baseUrl)
+    )
     
     // MARK: Methods
     

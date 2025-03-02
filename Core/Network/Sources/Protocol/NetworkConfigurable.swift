@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol NetworkConfigurable: Sendable {
-    var baseURLString: String { get }
+    var baseUrlString: String { get }
 }

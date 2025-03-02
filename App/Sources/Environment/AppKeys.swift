@@ -12,13 +12,13 @@ enum AppKeys {
     // MARK: Definitions
     
     private enum Key {
-        static let baseURL = "BaseURL"
+        static let baseUrl = "BaseURL"
     }
     
     // MARK: Properties
 
-    static let baseURL: String = {
-        guard let key = infoDictionary?[Key.baseURL] as? String else {
+    static let baseUrl: String = {
+        guard let key = infoDictionary?[Key.baseUrl] as? String else {
             fatalError()
         }
         return key

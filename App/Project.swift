@@ -31,7 +31,8 @@ let project = Project(
                 .feature(type: .signIn),
                 .featureInterface(type: .signIn),
                 .core(type: .thirdPartyAuth),
-                .data(type: .repository)
+                .core(type: .network),
+                .data(type: .repository),
             ]
         )
     ],
