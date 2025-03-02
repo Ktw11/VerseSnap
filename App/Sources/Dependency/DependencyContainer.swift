@@ -20,6 +20,9 @@ final class DependencyContainer {
     private lazy var repositoryBuilder: RepositoryBuilder = {
         RepositoryComponent(networkProvider: networkProvider)
     }()
+    private lazy var useCaseBuilder: UseCaseBuilder = {
+        UseCaseComponent(repositoryBuilder: repositoryBuilder)
+    }()
     
     private let networkProvider: NetworkProvidable = NetworkProvider(
         configuration: NetworkConfiguration(baseUrlString: AppKeys.baseUrl)
