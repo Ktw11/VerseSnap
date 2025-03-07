@@ -10,7 +10,7 @@ let project = Project(
     targets: [
         Target.commonTarget(
             type: targetType,
-            product: .staticLibrary,
+            product: .framework,
             sources: ["Sources/**"]
         )
     ]
