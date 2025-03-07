@@ -21,7 +21,7 @@ class MockSignInUseCase: SignInUseCase, @unchecked Sendable {
         expectedSignInWithSavedToken
     }
     
-    func signIn(token: String, account: String) async throws -> SignInResponse {
+    func signIn(account: ThirdPartyAccount) async throws -> SignInResponse {
         if let expectedSignIn {
             return expectedSignIn
         }

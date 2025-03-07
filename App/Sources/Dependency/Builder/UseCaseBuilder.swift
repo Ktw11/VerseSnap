@@ -16,18 +16,24 @@ final class UseCaseComponent: UseCaseBuilder {
     
     // MARK: Lifecycle
     
-    init(repositoryBuilder: RepositoryBuilder) {
+    init(
+        repositoryBuilder: RepositoryBuilder,
+        thirdAuthProvider: ThirdPartyAuthProvidable
+    ) {
         self.repositoryBuilder = repositoryBuilder
+        self.thirdAuthProvider = thirdAuthProvider
     }
     
     // MARK: Properties
     
     private let repositoryBuilder: RepositoryBuilder
+    private let thirdAuthProvider: ThirdPartyAuthProvidable
     
     var signInUseCase: SignInUseCase {
         SignInUseCaseImpl(
             authRepository: repositoryBuilder.authRepository,
-            signInInfoRepository: repositoryBuilder.signInInfoRepository
+            signInInfoRepository: repositoryBuilder.signInInfoRepository,
+            thirdAuthProvider: thirdAuthProvider
         )
     }
 }

@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Domain
-import ThirdPartyAuth
 
 @Observable
 @MainActor
@@ -18,7 +17,6 @@ public final class SignInViewModel {
     public init(dependency: SignInDependency){
         self.signInTypes = dependency.signInTypes
         self.useCase = dependency.useCase
-        self.authProvider = dependency.authProvider
     }
     
     // MARK: Properties
@@ -26,5 +24,4 @@ public final class SignInViewModel {
     let signInTypes: [SignInType]
     
     private let useCase: SignInUseCase
-    private let authProvider: ThirdPartyAuthProvidable
 }

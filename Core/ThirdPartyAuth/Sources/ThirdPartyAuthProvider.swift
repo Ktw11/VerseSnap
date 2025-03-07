@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Domain
 
 public actor ThirdPartyAuthProvider: ThirdPartyAuthProvidable {
     

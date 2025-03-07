@@ -13,7 +13,8 @@ let project = Project(
             product: .framework,
             sources: ["Sources/**"],
             dependencies: [
-                .external(name: PackageProduct.kakaoSDK.rawValue)
+                .external(name: PackageProduct.kakaoSDK.rawValue),
+                .domain
             ]
         )
     ]

@@ -7,20 +7,16 @@
 
 import Foundation
 import Domain
-import ThirdPartyAuth
 
 public struct SignInDependency {
     let signInTypes: [SignInType]
     let useCase: SignInUseCase
-    let authProvider: ThirdPartyAuthProvidable
     
     public init(
         signInTypes: [SignInType],
-        useCase: SignInUseCase,
-        authProvider: ThirdPartyAuthProvidable
+        useCase: SignInUseCase
     ) {
         self.signInTypes = signInTypes
         self.useCase = useCase
-        self.authProvider = authProvider
     }
 }

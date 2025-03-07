@@ -1,5 +1,5 @@
 import SwiftUI
-import ThirdPartyAuth
+import Domain
 
 @main
 struct VerseSnapApp: App {
@@ -10,14 +10,14 @@ struct VerseSnapApp: App {
         let dependency = DependencyContainer()
         self.dependency = dependency
         
-        dependency.thirdPartyAuthProvider.configure()
+        dependency.thirdAuthProvider.configure()
     }
     
     // MARK: Properties
     
     private let dependency: DependencyContainer
-    private var thirdPartyAuthProvider: ThirdPartyAuthProvidable {
-        dependency.thirdPartyAuthProvider
+    private var thirdAuthProvider: ThirdPartyAuthProvidable {
+        dependency.thirdAuthProvider
     }
     
     var body: some Scene {
@@ -32,6 +32,6 @@ struct VerseSnapApp: App {
 
 private extension VerseSnapApp {
     func handleURL(_ url: URL) {
-        thirdPartyAuthProvider.handleURL(url)
+        thirdAuthProvider.handleURL(url)
     }
 }

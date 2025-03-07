@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Domain
 import ThirdPartyAuth
 import VSNetwork
 
@@ -13,14 +14,17 @@ final class DependencyContainer {
     
     // MARK: Properties
     
-    lazy var thirdPartyAuthProvider: ThirdPartyAuthProvidable = {
+    lazy var thirdAuthProvider: ThirdPartyAuthProvidable = {
         ThirdPartyAuthProvider(accounts: [.apple, .kakao])
     }()
     lazy var repositoryBuilder: RepositoryBuilder = {
         RepositoryComponent(networkProvider: networkProvider)
     }()
     lazy var useCaseBuilder: UseCaseBuilder = {
-        UseCaseComponent(repositoryBuilder: repositoryBuilder)
+        UseCaseComponent(
+            repositoryBuilder: repositoryBuilder,
+            thirdAuthProvider: thirdAuthProvider
+        )
     }()
     
     private let networkProvider: NetworkProvidable = NetworkProvider(

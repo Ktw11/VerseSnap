@@ -9,5 +9,5 @@ import Foundation
 
 public protocol SignInUseCase: Sendable {
     func signInWithSavedToken() async -> SignInResponse?
-    func signIn(token: String, account: String) async throws -> SignInResponse
+    func signIn(account: ThirdPartyAccount) async throws -> SignInResponse
 }

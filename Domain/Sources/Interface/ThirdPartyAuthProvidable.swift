@@ -1,8 +1,8 @@
 //
 //  ThirdPartyAuthProvidable.swift
-//  ThirdPartyAuth
+//  Domain
 //
-//  Created by 공태웅 on 3/1/25.
+//  Created by 공태웅 on 3/7/25.
 //
 
 import Foundation

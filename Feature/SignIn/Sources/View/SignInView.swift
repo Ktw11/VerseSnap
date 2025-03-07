@@ -49,8 +49,7 @@ public struct SignInView: View {
         viewModel: .init(
             dependency: .init(
                 signInTypes: [.apple, .kakao],
-                useCase: MockSignInUseCase.preview,
-                authProvider: MockAuthProvider.preview
+                useCase: MockSignInUseCase.preview
             )
         )
     )
