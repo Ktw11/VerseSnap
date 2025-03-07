@@ -9,14 +9,14 @@ import Foundation
 import Domain
 
 public struct SignInDependency {
-    let signInTypes: [SignInType]
+    let accounts: [ThirdPartyAccount]
     let useCase: SignInUseCase
     
     public init(
-        signInTypes: [SignInType],
+        accounts: [ThirdPartyAccount],
         useCase: SignInUseCase
     ) {
-        self.signInTypes = signInTypes
+        self.accounts = accounts
         self.useCase = useCase
     }
 }

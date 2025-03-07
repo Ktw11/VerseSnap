@@ -1,13 +1,14 @@
 //
-//  SignInType+Extension.swift
+//  ThirdPartyAccount+Extension.swift
 //  SignIn
 //
 //  Created by 공태웅 on 2/22/25.
 //
 
 import SwiftUI
+import Domain
 
-extension SignInType {
+extension ThirdPartyAccount {
     var backgroundColor: Color {
         switch self {
         case .apple:

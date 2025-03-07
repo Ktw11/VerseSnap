@@ -30,11 +30,15 @@ public struct SignInView: View {
             Spacer()
             
             VStack(spacing: 10) {
-                ForEach(viewModel.signInTypes, id: \.rawValue) { type in
+                ForEach(viewModel.accounts, id: \.rawValue) { account in
                     Button(action: {
-                        #warning("버튼 액션 추가 필요")
+                        viewModel.didTapSignInButton(account: account)
                     }, label: {
-                        SignInButton(type: type)
+                        SignInButton(
+                            icon: account.icon,
+                            buttonText: account.buttonText,
+                            backgroundColor: account.backgroundColor
+                        )
                     })
                 }
             }
@@ -48,7 +52,7 @@ public struct SignInView: View {
     SignInView(
         viewModel: .init(
             dependency: .init(
-                signInTypes: [.apple, .kakao],
+                accounts: [.apple, .kakao],
                 useCase: MockSignInUseCase.preview
             )
         )
@@ -59,17 +63,19 @@ private struct SignInButton: View {
     
     // MARK: Properties
     
-    let type: SignInType
+    let icon: Image
+    let buttonText: String
+    let backgroundColor: Color
     
     var body: some View {
         HStack(alignment: .center) {
-            type.icon
+            icon
                 .resizable()
                 .frame(width: 24, height: 24)
             
             Spacer()
 
-            Text("\(type.buttonText)로 로그인", bundle: .module)
+            Text("\(buttonText)로 로그인", bundle: .module)
                 .font(.system(size: 16, weight: .regular))
             
             Spacer()
@@ -77,7 +83,7 @@ private struct SignInButton: View {
         .foregroundStyle(Color.black)
         .padding(.horizontal, 24)
         .frame(height: 48)
-        .background(type.backgroundColor)
+        .background(backgroundColor)
         .clipShape(Capsule())
     }
 }

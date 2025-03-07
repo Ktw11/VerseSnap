@@ -13,7 +13,7 @@ extension DependencyContainer {
     var signInBuilder: some SignInBuilder {
         SignInComponent(
             dependency: SignInDependency(
-                signInTypes: [.apple, .kakao],
+                accounts: [.apple, .kakao],
                 useCase: useCaseBuilder.signInUseCase
             )
         )
