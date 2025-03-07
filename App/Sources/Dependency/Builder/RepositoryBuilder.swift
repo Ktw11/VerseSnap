@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 import Repository
-import Network
+import VSNetwork
 
 protocol RepositoryBuilder {
     var authRepository: AuthRepository { get }

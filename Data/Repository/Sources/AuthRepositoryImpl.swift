@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Network
+import VSNetwork
 import Domain
 
 public actor AuthRepositoryImpl: AuthRepository {

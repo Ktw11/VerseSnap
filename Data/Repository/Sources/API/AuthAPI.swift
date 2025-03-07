@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Network
+import VSNetwork
 
 enum AuthAPI {
     case signIn(token: String, account: String)
@@ -23,7 +23,7 @@ extension AuthAPI: API {
         }
     }
     
-    var method: Network.HttpMethod {
+    var method: HttpMethod {
         switch self {
         case .signIn, .autoSignIn:
             .post

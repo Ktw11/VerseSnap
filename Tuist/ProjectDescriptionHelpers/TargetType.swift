@@ -5,7 +5,7 @@ public enum TargetType: String, Sendable {
     case domain = "Domain"
     case signIn = "SignIn"
     case thirdPartyAuth = "ThirdPartyAuth"
-    case network = "Network"
+    case network = "VSNetwork"
     case repository = "Repository"
 }
 

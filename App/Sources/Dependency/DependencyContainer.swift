@@ -7,7 +7,7 @@
 
 import SwiftUI
 import ThirdPartyAuth
-import Network
+import VSNetwork
 
 final class DependencyContainer {
     
