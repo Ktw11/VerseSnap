@@ -18,7 +18,7 @@ public protocol API: Sendable {
 
 public extension API {
     var headers: [String: String] {
-        [:]
+        ["Content-Type": "application/json"]
     }
     
     var queryParameters: [String: String]? {
