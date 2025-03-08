@@ -15,7 +15,8 @@ let project = Project(
             resources: ["Resources/**"],
             dependencies: [
                 .featureInterface(type: targetType),
-                .domain
+                .domain,
+                .shared(type: .commonUI)
             ]
         ),
         Target.interfaceTarget(type: .signIn, product: .framework)
