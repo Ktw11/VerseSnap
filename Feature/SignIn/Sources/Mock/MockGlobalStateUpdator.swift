@@ -6,3 +6,14 @@
 //
 
 import Foundation
+import Domain
+
+class MockGlobalStateUpdator: GlobalAppStateUpdatable, @unchecked Sendable {
+    static var preview: GlobalAppStateUpdatable {
+        MockGlobalStateUpdator()
+    }
+
+    func addToast(info: ToastInfo) {
+        // do nothing
+    }
+}

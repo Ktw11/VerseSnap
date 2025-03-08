@@ -17,14 +17,16 @@ public final class SignInViewModel {
     public init(dependency: SignInDependency){
         self.accounts = dependency.accounts
         self.useCase = dependency.useCase
+        self.appStateUpdator = dependency.appStateUpdator
     }
     
     // MARK: Properties
     
     let accounts: [ThirdPartyAccount]
+    var isLoading: Bool = false
     
-    private var isLoading: Bool = false
     private let useCase: SignInUseCase
+    private let appStateUpdator: GlobalAppStateUpdatable
     
     // MARK: Methods
     
@@ -38,7 +40,7 @@ public final class SignInViewModel {
             do {
                 _ = try await useCase.signIn(account: account)
             } catch {
-                #warning("에러 대응 필요")
+                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
             }
         }
     }

@@ -11,12 +11,15 @@ import Domain
 public struct SignInDependency {
     let accounts: [ThirdPartyAccount]
     let useCase: SignInUseCase
+    let appStateUpdator: GlobalAppStateUpdatable
     
     public init(
         accounts: [ThirdPartyAccount],
-        useCase: SignInUseCase
+        useCase: SignInUseCase,
+        appStateUpdator: GlobalAppStateUpdatable
     ) {
         self.accounts = accounts
         self.useCase = useCase
+        self.appStateUpdator = appStateUpdator
     }
 }

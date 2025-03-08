@@ -24,6 +24,16 @@
         }
       }
     },
+    "에러가 발생했습니다. 다시 시도해주세요." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred. Please try again later."
+          }
+        }
+      }
+    },
     "카카오" : {
       "localizations" : {
         "en" : {
