@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CommonUI
 
 public struct SignInView: View {
     
@@ -20,30 +21,37 @@ public struct SignInView: View {
     private let viewModel: SignInViewModel
     
     public var body: some View {
-        VStack {
-            Spacer()
-            
-            Text("로그인")
-                .foregroundStyle(Color.white)
-                .font(.largeTitle)
-            
-            Spacer()
-            
-            VStack(spacing: 10) {
-                ForEach(viewModel.accounts, id: \.rawValue) { account in
-                    Button(action: {
-                        viewModel.didTapSignInButton(account: account)
-                    }, label: {
+        ZStack {
+            VStack {
+                Spacer()
+                
+                Text("로그인")
+                    .foregroundStyle(Color.white)
+                    .font(.largeTitle)
+                
+                Spacer()
+                
+                VStack(spacing: 10) {
+                    ForEach(viewModel.accounts, id: \.rawValue) { account in
                         SignInButton(
                             icon: account.icon,
                             buttonText: account.buttonText,
                             backgroundColor: account.backgroundColor
-                        )
-                    })
+                        ).onTapGesture {
+                            viewModel.didTapSignInButton(account: account)
+                        }
+                    }
                 }
+                .padding(.horizontal, 36)
+                .padding(.bottom, 52)
             }
-            .padding(.horizontal, 36)
-            .padding(.bottom, 52)
+            
+            Color.black.opacity(0.7)
+                .overlay(alignment: .center) {
+                    LoadingView()
+                }
+                .opacity(viewModel.showProgressView ? 1.0 : 0)
+                .ignoresSafeArea()
         }
     }
 }

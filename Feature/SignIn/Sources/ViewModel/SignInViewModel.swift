@@ -23,10 +23,11 @@ public final class SignInViewModel {
     // MARK: Properties
     
     let accounts: [ThirdPartyAccount]
-    var isLoading: Bool = false
+    var showProgressView: Bool { isLoading }
     
     private let useCase: SignInUseCase
     private let appStateUpdator: GlobalAppStateUpdatable
+    private var isLoading: Bool = false
     
     // MARK: Methods
     
