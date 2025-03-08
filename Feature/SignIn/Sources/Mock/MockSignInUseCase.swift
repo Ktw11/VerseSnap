@@ -8,20 +8,22 @@
 import Foundation
 import Domain
 
-class MockSignInUseCase: SignInUseCase, @unchecked Sendable {
+public final class MockSignInUseCase: SignInUseCase, @unchecked Sendable {
+    
+    public init() { }
     
     static var preview: MockSignInUseCase {
         MockSignInUseCase()
     }
     
-    var expectedSignInWithSavedToken: SignInResponse?
-    var expectedSignIn: SignInResponse?
+    public var expectedSignInWithSavedToken: SignInResponse?
+    public var expectedSignIn: SignInResponse?
     
-    func signInWithSavedToken() async -> SignInResponse? {
+    public func signInWithSavedToken() async -> SignInResponse? {
         expectedSignInWithSavedToken
     }
     
-    func signIn(account: ThirdPartyAccount) async throws -> SignInResponse {
+    public func signIn(account: ThirdPartyAccount) async throws -> SignInResponse {
         if let expectedSignIn {
             return expectedSignIn
         }

@@ -19,6 +19,7 @@ struct RootView<Builder: SignInBuilder>: View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
+
             switch viewModel.scene {
             case .splash:
                 #warning("스플래시 화면 구현 필요")
@@ -26,13 +27,14 @@ struct RootView<Builder: SignInBuilder>: View {
                     .font(.largeTitle)
             case .signIn:
                 signInBuilder.build()
+            case .tabs:
+                #warning("Tab 화면 구현 필요")
+                Text("@@@ TAB")
+                    .font(.largeTitle)
             }
         }
         .onAppear {
-            Task {
-                _ = try? await Task.sleep(nanoseconds: 2000000000)
-                viewModel.scene = .signIn
-            }
+            viewModel.trySignIn()
         }
     }
 }
@@ -40,5 +42,8 @@ struct RootView<Builder: SignInBuilder>: View {
 
 #Preview {
     let dependency = DependencyContainer()
-    RootView(viewModel: .init(), signInBuilder: dependency.signInBuilder)
+    RootView(
+        viewModel: dependency.mockRootViewModel,
+        signInBuilder: dependency.signInBuilder
+    )
 }
