@@ -10,11 +10,13 @@ import SignIn
 import SignInInterface
 
 extension DependencyContainer {
+    @MainActor
     var signInBuilder: some SignInBuilder {
         SignInComponent(
             dependency: SignInDependency(
                 accounts: [.apple, .kakao],
-                useCase: useCaseBuilder.signInUseCase
+                useCase: useCaseBuilder.signInUseCase,
+                appStateUpdator: appStateStore
             )
         )
     }

@@ -12,6 +12,11 @@ import VSNetwork
 
 final class DependencyContainer {
     
+    // MARK: LifeCycle
+
+    @MainActor
+    init() { }
+    
     // MARK: Properties
     
     lazy var thirdAuthProvider: ThirdPartyAuthProvidable = {
@@ -26,6 +31,9 @@ final class DependencyContainer {
             thirdAuthProvider: thirdAuthProvider
         )
     }()
+    
+    @MainActor
+    let appStateStore: GlobalAppStateStore = .init()
     
     private let networkProvider: NetworkProvidable = NetworkProvider(
         configuration: NetworkConfiguration(baseUrlString: AppKeys.baseUrl)
