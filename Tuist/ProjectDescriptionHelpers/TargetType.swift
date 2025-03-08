@@ -7,6 +7,7 @@ public enum TargetType: String, Sendable {
     case thirdPartyAuth = "ThirdPartyAuth"
     case network = "VSNetwork"
     case repository = "Repository"
+    case commonUI = "CommonUI"
 }
 
 public extension TargetType {
@@ -32,6 +33,8 @@ public extension TargetType {
             coreBundleId
         case .repository:
             dataBundleId
+        case .commonUI:
+            sharedBundleId
         }
     }
     
@@ -55,5 +58,9 @@ private extension TargetType {
     
     var dataBundleId: String {
         "\(baseBundleId).Data.\(self.name)"
+    }
+    
+    var sharedBundleId: String {
+        "\(baseBundleId).Shared.\(self.name)"
     }
 }

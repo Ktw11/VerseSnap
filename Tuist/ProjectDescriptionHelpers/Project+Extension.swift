@@ -20,5 +20,9 @@ public extension TargetDependency {
     static func data(type: TargetType) -> TargetDependency {
         .project(target: type.name, path: .relativeToRoot("Data/\(type.name)"))
     }
+    
+    static func shared(type: TargetType) -> TargetDependency {
+        .project(target: type.name, path: .relativeToRoot("Shared/\(type.name)"))
+    }
 }
 

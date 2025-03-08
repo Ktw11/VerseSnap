@@ -31,6 +31,7 @@ let project = Project(
                 .feature(type: .signIn),
                 .core(type: .thirdPartyAuth),
                 .data(type: .repository),
+                .shared(type: .commonUI)
             ]
         )
     ],

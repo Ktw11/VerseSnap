@@ -9,5 +9,6 @@ let workspace = Workspace(
         "Domain/**",
         "Core/**",
         "Data/**",
+        "Shared/**",
     ]
 )
