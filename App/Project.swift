@@ -29,6 +29,7 @@ let project = Project(
             entitlements: .file(path: .relativeToManifest("VerseSnap.entitlements")),
             dependencies: [
                 .feature(type: .signIn),
+                .feature(type: .home),
                 .core(type: .thirdPartyAuth),
                 .data(type: .repository),
                 .shared(type: .commonUI)
