@@ -1,18 +1,28 @@
 import SwiftUI
 import SignInInterface
+import HomeInterface
 
-struct RootView<Builder: SignInBuilder>: View {
+struct RootView<
+    SignInComponent: SignInBuilder,
+    HomeComponent: HomeBuilder
+>: View {
     
     // MARK: Lifecycle
     
-    init(viewModel: RootViewModel, signInBuilder: Builder) {
+    init(
+        viewModel: RootViewModel,
+        signInBuilder: SignInComponent,
+        homeBuilder: HomeComponent
+    ) {
         self.viewModel = viewModel
         self.signInBuilder = signInBuilder
+        self.homeBuilder = homeBuilder
     }
     
     // MARK: Properites
     
-    private let signInBuilder: Builder
+    private let signInBuilder: SignInComponent
+    private let homeBuilder: HomeComponent
     private let viewModel: RootViewModel
 
     var body: some View {
@@ -28,9 +38,7 @@ struct RootView<Builder: SignInBuilder>: View {
             case .signIn:
                 signInBuilder.build()
             case .tabs:
-                #warning("Tab 화면 구현 필요")
-                Text("@@@ TAB")
-                    .font(.largeTitle)
+                RootTabView(homeBuilder: homeBuilder)
             }
         }
         .onAppear {
@@ -44,6 +52,7 @@ struct RootView<Builder: SignInBuilder>: View {
     let dependency = DependencyContainer()
     RootView(
         viewModel: dependency.mockRootViewModel,
-        signInBuilder: dependency.signInBuilder
+        signInBuilder: dependency.signInBuilder,
+        homeBuilder: dependency.homeBuilder
     )
 }
