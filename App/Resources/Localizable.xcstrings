@@ -1,10 +1,10 @@
 {
   "sourceLanguage" : "ko",
   "strings" : {
-    "@@@ SPLASH" : {
-      "shouldTranslate" : false
+    "@@@ PROFILE VIEW" : {
+
     },
-    "@@@ TAB" : {
+    "@@@ SPLASH" : {
       "shouldTranslate" : false
     }
   },
