@@ -24,11 +24,13 @@ struct RootTabView<HomeComponent: HomeBuilder>: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            switch selected {
-            case .home:
+            TabView(selection: $selected) {
                 homeBuilder.build()
                     .padding(.horizontal, 24)
-            case .profile:
+                    .tag(TabSelection.home)
+                    .toolbarVisibility(.hidden, for: .tabBar)
+                    .background(Color.black)
+                
                 #warning("Profile View 구현 필요")
                 VStack {
                     Spacer()
@@ -36,6 +38,9 @@ struct RootTabView<HomeComponent: HomeBuilder>: View {
                         .foregroundStyle(.white)
                     Spacer()
                 }
+                .tag(TabSelection.profile)
+                .toolbarVisibility(.hidden, for: .tabBar)
+                .background(Color.black)
             }
             
             CustomTabView(selected: $selected)
