@@ -23,20 +23,24 @@ public struct HomeView: View {
     
     public var body: some View {
         VStack {
-            viewModel.displayIcon
-                .frame(maxWidth: .infinity, maxHeight: 24, alignment: .trailing)
-                .foregroundStyle(.white)
-            
-            HStack {
-                Text(viewModel.yearMonthString)
-                    .font(.system(size: 24, weight: .bold))
+            ZStack {
+                HStack {
+                    Text(viewModel.yearMonthString)
+                        .font(.system(size: 24, weight: .bold))
+                    
+                    HomeAsset.Image.icDownArrow.swiftUIImage
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                }
+                .onTapGesture {
+                    isShowingPicker = true
+                }
                 
-                HomeAsset.Image.icDownArrow.swiftUIImage
+                viewModel.displayIcon
                     .resizable()
-                    .frame(width: 18, height: 18)
-            }
-            .onTapGesture {
-                isShowingPicker = true
+                    .frame(size: 24)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
             Spacer()
@@ -61,6 +65,7 @@ public struct HomeView: View {
             Spacer()
         }
         .foregroundStyle(.white)
+        .padding(.top, 20)
         .modalView($isShowingPicker) {
             YearMonthPickerView(
                 selectedYear: $viewModel.selectedYear,
