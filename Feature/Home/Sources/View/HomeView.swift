@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CommonUI
 
 public struct HomeView: View {
     
@@ -17,7 +18,8 @@ public struct HomeView: View {
     
     // MARK: Properties
     
-    private let viewModel: HomeViewModel
+    @State var isShowingPicker = false
+    @Bindable private var viewModel: HomeViewModel
     
     public var body: some View {
         VStack {
@@ -32,6 +34,9 @@ public struct HomeView: View {
                 HomeAsset.Image.icDownArrow.swiftUIImage
                     .resizable()
                     .frame(width: 18, height: 18)
+            }
+            .onTapGesture {
+                isShowingPicker = true
             }
             
             Spacer()
@@ -56,6 +61,14 @@ public struct HomeView: View {
             Spacer()
         }
         .foregroundStyle(.white)
+        .modalView($isShowingPicker) {
+            YearMonthPickerView(
+                selectedYear: .constant(2024),
+                selectedMonth: .constant(11),
+                isPresenting: $isShowingPicker,
+                limit: .init(minimumYear: 2020, minimumMonth: 1, currentYear: 2025, currentMonth: 3)
+            )
+        }
     }
 }
 
