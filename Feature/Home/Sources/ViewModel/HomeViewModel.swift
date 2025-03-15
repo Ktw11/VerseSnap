@@ -91,11 +91,18 @@ public final class HomeViewModel {
     var yearMonthString: String {
         "\(selectedYear).\(selectedMonth)"
     }
+    var displayStyle: DisplayStyle = .stack
     var displayIcon: Image {
-        if true { HomeAsset.Image.icGridDisplay.swiftUIImage } else { HomeAsset.Image.icStackDisplay.swiftUIImage }
+        displayStyle == .stack ? HomeAsset.Image.icGridDisplay.swiftUIImage : HomeAsset.Image.icStackDisplay.swiftUIImage
     }
     let pickerLimit: YearMonthPickerLimit
     let rowViewModels: [HomeContentRowViewModel]
+    
+    // MARK: Methods
+    
+    func didTapDisplayIcon() {
+        displayStyle.toggle()
+    }
 }
 
 #warning("임시 구조체 - 제거 필요")
@@ -121,5 +128,16 @@ extension Diary {
             timeString: "오후 12:30",
             actionIcon: isFavorite ? HomeAsset.Image.icHeartFill.swiftUIImage : HomeAsset.Image.icHeartEmpty.swiftUIImage
         )
+    }
+}
+
+extension DisplayStyle {
+    mutating func toggle() {
+        switch self {
+        case .grid:
+            self = .stack
+        case .stack:
+            self = .grid
+        }
     }
 }

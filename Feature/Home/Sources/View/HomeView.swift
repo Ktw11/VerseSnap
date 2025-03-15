@@ -41,6 +41,9 @@ public struct HomeView: View {
                     .frame(size: 24)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                    .onTapGesture {
+                        viewModel.didTapDisplayIcon()
+                    }
             }
             
             Spacer()
