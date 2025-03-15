@@ -12,12 +12,14 @@ public final class HomeComponent: HomeBuilder {
     
     // MARK: Lifecycle
     
-    public init(dependency: HomeDependency) {
+    public init(calendar: Calendar, dependency: HomeDependency) {
+        self.calendar = calendar
         self.dependency = dependency
     }
     
     // MARK: Properties
     
+    private let calendar: Calendar
     private let dependency: HomeDependency
     
     // MARK: Methods
@@ -25,7 +27,7 @@ public final class HomeComponent: HomeBuilder {
     @MainActor
     @ViewBuilder
     public func build() -> HomeView {
-        let viewModel = HomeViewModel()
+        let viewModel = HomeViewModel(calendar: calendar)
         HomeView(viewModel: viewModel)
     }
 }

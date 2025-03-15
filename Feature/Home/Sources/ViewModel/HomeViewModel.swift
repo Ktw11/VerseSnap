@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CommonUI
 
 @Observable
 @MainActor
@@ -13,7 +14,7 @@ public final class HomeViewModel {
     
     // MARK: Lifecycle
     
-    init() {
+    init(calendar: Calendar) {
         let diaries: [Diary] = [
             .init(
                 photo: HomeAsset.Image.testImage.swiftUIImage,
@@ -69,14 +70,31 @@ public final class HomeViewModel {
         result.append(contentsOf: diaries.map(\.toViewModel))
         
         self.rowViewModels = result
+
+        let currentYear = calendar.component(.year, from: Date())
+        let currentMonth = calendar.component(.month, from: Date())
+        self.selectedYear = currentYear
+        self.selectedMonth = currentMonth
+        self.pickerLimit = YearMonthPickerLimit(
+            minimumYear: 2020,
+            minimumMonth: 9,
+            currentYear: currentYear,
+            currentMonth: currentMonth
+        )
     }
     
     // MARK: Properties
     
-    let yearMonthString: String = "2025.6"
+    var selectedYear: Int
+    var selectedMonth: Int
+    
+    var yearMonthString: String {
+        "\(selectedYear).\(selectedMonth)"
+    }
     var displayIcon: Image {
         if true { HomeAsset.Image.icGridDisplay.swiftUIImage } else { HomeAsset.Image.icStackDisplay.swiftUIImage }
     }
+    let pickerLimit: YearMonthPickerLimit
     let rowViewModels: [HomeContentRowViewModel]
 }
 

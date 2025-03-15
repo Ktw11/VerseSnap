@@ -63,10 +63,10 @@ public struct HomeView: View {
         .foregroundStyle(.white)
         .modalView($isShowingPicker) {
             YearMonthPickerView(
-                selectedYear: .constant(2024),
-                selectedMonth: .constant(11),
+                selectedYear: $viewModel.selectedYear,
+                selectedMonth: $viewModel.selectedMonth,
                 isPresenting: $isShowingPicker,
-                limit: .init(minimumYear: 2020, minimumMonth: 1, currentYear: 2025, currentMonth: 3)
+                limit: viewModel.pickerLimit
             )
         }
     }
@@ -77,7 +77,7 @@ public struct HomeView: View {
         Color.black
             .ignoresSafeArea()
         
-        HomeView(viewModel: .init())
+        HomeView(viewModel: .init(calendar: Calendar.current))
             .padding(.top, 22)
             .padding(.horizontal, 24)
     }

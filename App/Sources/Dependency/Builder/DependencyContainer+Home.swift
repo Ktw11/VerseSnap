@@ -12,6 +12,6 @@ import HomeInterface
 extension DependencyContainer {
     @MainActor
     var homeBuilder: some HomeBuilder {
-        HomeComponent(dependency: HomeDependency())
+        HomeComponent(calendar: Calendar(identifier: .gregorian) ,dependency: HomeDependency())
     }
 }
