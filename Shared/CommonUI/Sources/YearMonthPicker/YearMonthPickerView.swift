@@ -55,50 +55,53 @@ public struct YearMonthPickerView: View {
     }
  
     public var body: some View {
-        ZStack(alignment: .bottom) {
-            Color.clear
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    isPresenting = false
-                }
+        VStack(spacing: 10) {
+            Pickers()
             
-            HStack(spacing: 0) {
-                Picker(
-                    selection: selectedYearWrapper,
-                    content: {
-                        ForEach(years, id: \.self) { year in
-                            Text(verbatim: "\(year)년")
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundStyle(.white)
-                        }
-                    }, label: {
-                        Color.clear
+            Button(action: {
+                isPresenting.toggle()
+            }, label: {
+                Color.white
+                    .clipShape(Capsule())
+                    .overlay {
+                        #warning("번역 필요")
+                        Text(verbatim: "확인")
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundStyle(.black)
                     }
-                )
-                .pickerStyle(.wheel)
-
-                Picker(
-                    selection: $selectedMonth,
-                    content: {
-                        ForEach(months, id: \.self) { months in
-                            Text(verbatim: "\(months)월")
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundStyle(.white)
-                        }
-                    }, label: {
-                        Color.clear
-                    }
-                )
-                .pickerStyle(.wheel)
-            }
-            .background(.black)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+            })
+            .frame(height: 50)
+            .padding([.horizontal, .bottom], 15)
         }
-        .ignoresSafeArea()
-        .presentationBackground(.clear)
     }
     
     // MARK: Methods
+    
+    @ViewBuilder
+    private func Pickers() -> some View {
+        HStack(spacing: 0) {
+            Group {
+                Picker(selection: selectedYearWrapper, label: EmptyView()) {
+                    ForEach(years, id: \.self) { year in
+                        #warning("번역 필요")
+                        Text(verbatim: "\(year)년")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                }
+
+                Picker(selection: $selectedMonth, label: EmptyView()) {
+                    ForEach(months, id: \.self) { months in
+                        #warning("번역 필요")
+                        Text(verbatim: "\(months)월")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
+            .pickerStyle(.wheel)
+        }
+    }
     
     private func availableMonths(_ selectedYear: Int) -> [Int] {
         if selectedYear == limit.minimumYear && selectedYear == limit.currentYear {
@@ -132,7 +135,13 @@ private struct PreviewWrapper: View {
                 Text(String(selectedYear))
                 Text(String(selectedMonth))
             }
+            .onTapGesture {
+                isShowingPicker = true
+            }
             
+            Spacer()
+        }
+        .modalView($isShowingPicker) {
             YearMonthPickerView(
                 selectedYear: $selectedYear,
                 selectedMonth: $selectedMonth,
