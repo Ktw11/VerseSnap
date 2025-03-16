@@ -11,7 +11,8 @@ let project = Project(
         Target.commonTarget(
             type: type,
             product: .framework,
-            sources: ["Sources/**"]
+            sources: ["Sources/**"],
+            resources: ["Resources/**"]
         )
     ]
 )

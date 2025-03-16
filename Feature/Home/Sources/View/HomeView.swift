@@ -30,7 +30,7 @@ public struct HomeView: View {
                         Text(viewModel.yearMonthString)
                             .font(.system(size: 24, weight: .bold))
                         
-                        HomeAsset.Image.icDownArrow.swiftUIImage
+                        HomeAsset.icDownArrow.swiftUIImage
                             .resizable()
                             .frame(width: 18, height: 18)
                     }
@@ -91,7 +91,7 @@ public struct HomeView: View {
                     if viewModel.rowViewModels.last != rowVM {
                         Divider()
                             .frame(height: 1)
-                            .overlay(HomeAsset.Color.gray2.swiftUIColor)
+                            .overlay(CommonUIAsset.thirdBackground.swiftUIColor)
                     }
                 }
             }
@@ -128,23 +128,23 @@ public struct HomeView: View {
     @ViewBuilder
     private func searchBarView() -> some View {
         
-        HomeAsset.Color.secondaryBackground.swiftUIColor
+        CommonUIAsset.secondaryBackground.swiftUIColor
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .frame(height: 33)
             .overlay {
                 HStack {
-                    HomeAsset.Image.icSearch.swiftUIImage
+                    HomeAsset.icSearch.swiftUIImage
                         .resizable()
                         .frame(size: 17)
                     
                     TextField("", text: $searchText)
                         .autocorrectionDisabled(true)
-                        .accentColor(HomeAsset.Color.gray1.swiftUIColor)
+                        .accentColor(CommonUIAsset.secondaryForeground.swiftUIColor)
                     
                     Image(systemName: "xmark.circle.fill")
                         .resizable()
                         .renderingMode(.template)
-                        .foregroundColor(HomeAsset.Color.gray1.swiftUIColor)
+                        .foregroundColor(CommonUIAsset.secondaryForeground.swiftUIColor)
                         .frame(size: 12)
                         .opacity(searchText.isEmpty ? 0.0 : 1.0)
                         .onTapGesture {

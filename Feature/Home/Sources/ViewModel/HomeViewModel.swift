@@ -17,31 +17,31 @@ public final class HomeViewModel {
     init(calendar: Calendar) {
         let diaries: [Diary] = [
             .init(
-                photo: HomeAsset.Image.testImage.swiftUIImage,
+                photo: HomeAsset.testImage.swiftUIImage,
                 createdAt: Date(),
                 isFavorite: false,
                 firstCharacters: "삼/행/시"
             ),
             .init(
-                photo: HomeAsset.Image.testImage.swiftUIImage,
+                photo: HomeAsset.testImage.swiftUIImage,
                 createdAt: Date(),
                 isFavorite: true,
                 firstCharacters: "삼/행/시"
             ),
             .init(
-                photo: HomeAsset.Image.testImage.swiftUIImage,
+                photo: HomeAsset.testImage.swiftUIImage,
                 createdAt: Date(),
                 isFavorite: false,
                 firstCharacters: "사/행/시/시"
             ),
             .init(
-                photo: HomeAsset.Image.testImage.swiftUIImage,
+                photo: HomeAsset.testImage.swiftUIImage,
                 createdAt: Date(),
                 isFavorite: false,
                 firstCharacters: "삼/행/1"
             ),
             .init(
-                photo: HomeAsset.Image.testImage.swiftUIImage,
+                photo: HomeAsset.testImage.swiftUIImage,
                 createdAt: Date(),
                 isFavorite: false,
                 firstCharacters: "삼/행/2"
@@ -75,7 +75,7 @@ public final class HomeViewModel {
         "\(selectedYear).\(selectedMonth)"
     }
     var displayIcon: Image {
-        displayStyle == .stack ? HomeAsset.Image.icGridDisplay.swiftUIImage : HomeAsset.Image.icStackDisplay.swiftUIImage
+        displayStyle == .stack ? HomeAsset.icGridDisplay.swiftUIImage : HomeAsset.icStackDisplay.swiftUIImage
     }
     var rowViewModels: [HomeContentRowViewModel] {
         makeRowViewModels()
@@ -146,7 +146,7 @@ extension Diary {
             title: "6월 17일",
             description: firstCharacters,
             timeString: "오후 12:30",
-            actionIcon: isFavorite ? HomeAsset.Image.icHeartFill.swiftUIImage : HomeAsset.Image.icHeartEmpty.swiftUIImage
+            actionIcon: isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
         )
     }
     
@@ -154,7 +154,7 @@ extension Diary {
         .init(
             id: id.uuidString,
             image: photo,
-            favoriteIcon: isFavorite ? HomeAsset.Image.icHeartFill.swiftUIImage : HomeAsset.Image.icHeartEmpty.swiftUIImage
+            favoriteIcon: isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
         )
     }
 }
@@ -167,7 +167,7 @@ extension HomeContentRowViewModel {
             title: String(localized: "오늘의 삼행시"),
             description: String(localized: "기록하기"),
             timeString: nil,
-            actionIcon: HomeAsset.Image.icPlus.swiftUIImage
+            actionIcon: HomeAsset.icPlus.swiftUIImage
         )
     }
 }

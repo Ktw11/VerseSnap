@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CommonUI
 
 struct HomeContentRowView: View {
     
@@ -37,7 +38,7 @@ struct HomeContentRowView: View {
                     Text(timeString)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 10, weight: .regular))
-                        .foregroundStyle(HomeAsset.Color.gray1.swiftUIColor)
+                        .foregroundStyle(CommonUIAsset.secondaryForeground.swiftUIColor)
                 }
             }
             .padding(.vertical, 7)
@@ -81,7 +82,7 @@ private struct PhotoContainerView: View {
                 Rectangle()
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
-                        HomeAsset.Color.placeholder.swiftUIColor
+                        CommonUIAsset.placeholder.swiftUIColor
                             .opacity(0.5)
                     }
                     .clipped()
@@ -113,7 +114,7 @@ private struct PhotoContainerView: View {
                     title: "오늘의 삼행시",
                     description: "기록하기",
                     timeString: nil,
-                    actionIcon: HomeAsset.Image.icPlus.swiftUIImage
+                    actionIcon: HomeAsset.icPlus.swiftUIImage
                 )
             )
             .frame(height: 84)
@@ -125,7 +126,7 @@ private struct PhotoContainerView: View {
                     title: "6월 17일",
                     description: "삼/행/시",
                     timeString: "오후 12:30",
-                    actionIcon: HomeAsset.Image.icHeartFill.swiftUIImage
+                    actionIcon: HomeAsset.icHeartFill.swiftUIImage
                 )
             )
             .frame(height: 84)
