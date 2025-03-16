@@ -1,0 +1,29 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "" : {
+      "shouldTranslate" : false
+    },
+    "기록하기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        }
+      }
+    },
+    "오늘의 삼행시" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today’s verse"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
