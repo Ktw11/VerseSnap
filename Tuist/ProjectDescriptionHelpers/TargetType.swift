@@ -5,6 +5,7 @@ public enum TargetType: String, Sendable {
     case domain = "Domain"
     case signIn = "SignIn"
     case home = "Home"
+    case newDiary = "NewDiary"
     case thirdPartyAuth = "ThirdPartyAuth"
     case network = "VSNetwork"
     case repository = "Repository"
@@ -29,6 +30,8 @@ public extension TargetType {
         case .signIn:
             featureBundleId
         case .home:
+            featureBundleId
+        case .newDiary:
             featureBundleId
         case .thirdPartyAuth:
             coreBundleId
