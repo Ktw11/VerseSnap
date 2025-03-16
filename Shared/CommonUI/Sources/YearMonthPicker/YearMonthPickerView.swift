@@ -27,6 +27,8 @@ public struct YearMonthPickerView: View {
     
     @Binding var selectedYear: Int
     @Binding var selectedMonth: Int
+    @State private var localSelectedYear: Int = .zero
+    @State private var localSelectedMonth: Int = .zero
     @Binding var isPresenting: Bool
     
     private let limit: YearMonthPickerLimit
@@ -35,20 +37,20 @@ public struct YearMonthPickerView: View {
         Array(limit.minimumYear...limit.currentYear)
     }
     private var months: [Int] {
-        availableMonths(selectedYear)
+        availableMonths(localSelectedYear)
     }
 
     private var selectedYearWrapper: Binding<Int> {
         Binding(
-            get: { self.selectedYear },
+            get: { self.localSelectedYear },
             set: { newValue in
                 let validMonths = availableMonths(newValue)
 
-                if validMonths.contains(selectedMonth) {
-                    self.selectedYear = newValue
+                if validMonths.contains(localSelectedMonth) {
+                    self.localSelectedYear = newValue
                 } else {
-                    self.selectedYear = newValue
-                    self.selectedMonth = validMonths.first ?? newValue
+                    self.localSelectedYear = newValue
+                    self.localSelectedMonth = validMonths.first ?? newValue
                 }
             }
         )
@@ -56,7 +58,7 @@ public struct YearMonthPickerView: View {
  
     public var body: some View {
         VStack(spacing: 10) {
-            Pickers()
+            pickers()
             
             Button(action: {
                 isPresenting.toggle()
@@ -73,12 +75,20 @@ public struct YearMonthPickerView: View {
             .frame(height: 50)
             .padding([.horizontal, .bottom], 15)
         }
+        .onAppear {
+            localSelectedYear = selectedYear
+            localSelectedMonth = selectedMonth
+        }
+        .onDisappear {
+            selectedYear = localSelectedYear
+            selectedMonth = localSelectedMonth
+        }
     }
     
     // MARK: Methods
     
     @ViewBuilder
-    private func Pickers() -> some View {
+    private func pickers() -> some View {
         HStack(spacing: 0) {
             Group {
                 Picker(selection: selectedYearWrapper, label: EmptyView()) {
@@ -90,7 +100,7 @@ public struct YearMonthPickerView: View {
                     }
                 }
 
-                Picker(selection: $selectedMonth, label: EmptyView()) {
+                Picker(selection: $localSelectedMonth, label: EmptyView()) {
                     ForEach(months, id: \.self) { months in
                         #warning("번역 필요")
                         Text(verbatim: "\(months)월")
