@@ -91,7 +91,7 @@ public struct HomeView: View {
                     if viewModel.rowViewModels.last != rowVM {
                         Divider()
                             .frame(height: 1)
-                            .overlay(HomeAsset.Color.description.swiftUIColor)
+                            .overlay(HomeAsset.Color.gray2.swiftUIColor)
                     }
                 }
             }
@@ -127,17 +127,31 @@ public struct HomeView: View {
     #warning("구현 필요")
     @ViewBuilder
     private func searchBarView() -> some View {
-        TextField("Search by name or symbol...", text: $searchText)
-            .autocorrectionDisabled(true)
-            .foregroundColor(Color.white)
-            .overlay(alignment: .trailing) {
-                Image(systemName: "xmark.circle.fill")
-                    .padding()
-                    .offset(x: 10)
-                    .opacity(searchText.isEmpty ? 0.0 : 1.0)
-                    .onTapGesture {
-                        searchText = ""
-                    }
+        
+        HomeAsset.Color.secondaryBackground.swiftUIColor
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .frame(height: 33)
+            .overlay {
+                HStack {
+                    HomeAsset.Image.icSearch.swiftUIImage
+                        .resizable()
+                        .frame(size: 17)
+                    
+                    TextField("", text: $searchText)
+                        .autocorrectionDisabled(true)
+                        .accentColor(HomeAsset.Color.gray1.swiftUIColor)
+                    
+                    Image(systemName: "xmark.circle.fill")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(HomeAsset.Color.gray1.swiftUIColor)
+                        .frame(size: 12)
+                        .opacity(searchText.isEmpty ? 0.0 : 1.0)
+                        .onTapGesture {
+                            searchText = ""
+                        }
+                }
+                .padding(.horizontal, 12)
             }
     }
 }

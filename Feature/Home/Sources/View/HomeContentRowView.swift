@@ -37,7 +37,7 @@ struct HomeContentRowView: View {
                     Text(timeString)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 10, weight: .regular))
-                        .foregroundStyle(HomeAsset.Color.description.swiftUIColor)
+                        .foregroundStyle(HomeAsset.Color.gray1.swiftUIColor)
                 }
             }
             .padding(.vertical, 7)
