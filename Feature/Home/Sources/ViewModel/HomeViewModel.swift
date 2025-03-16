@@ -33,46 +33,27 @@ public final class HomeViewModel {
                 createdAt: Date(),
                 isFavorite: false,
                 firstCharacters: "사/행/시/시"
+            ),
+            .init(
+                photo: HomeAsset.Image.testImage.swiftUIImage,
+                createdAt: Date(),
+                isFavorite: false,
+                firstCharacters: "삼/행/1"
+            ),
+            .init(
+                photo: HomeAsset.Image.testImage.swiftUIImage,
+                createdAt: Date(),
+                isFavorite: false,
+                firstCharacters: "삼/행/2"
             )
         ]
         
-        var result: [HomeContentRowViewModel] = []
-        
-        result.append(
-            .init(
-                id: "1",
-                photoContainerViewModel: .init(
-                    image: nil,
-                    topTitle: nil,
-                    bottomTitle: "Today"
-                ),
-                title: "오늘의 삼행시",
-                description: "기록하기",
-                timeString: nil,
-                actionIcon: HomeAsset.Image.icPlus.swiftUIImage
-            )
-        )
-        result.append(
-            .init(
-                id: "2",
-                photoContainerViewModel: .init(
-                    image: HomeAsset.Image.testImage.swiftUIImage,
-                    topTitle: nil,
-                    bottomTitle: "Today"
-                ),
-                title: "오늘",
-                description: "삼/행/시",
-                timeString: nil,
-                actionIcon: HomeAsset.Image.icHeartEmpty.swiftUIImage
-            )
-        )
-        
-        result.append(contentsOf: diaries.map(\.toViewModel))
-        
-        self.rowViewModels = result
-
+        self.calendar = calendar
+        self.diaries = diaries
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
+        self.currentYear = currentYear
+        self.currentMonth = currentMonth
         self.selectedYear = currentYear
         self.selectedMonth = currentMonth
         self.pickerLimit = YearMonthPickerLimit(
@@ -87,21 +68,60 @@ public final class HomeViewModel {
     
     var selectedYear: Int
     var selectedMonth: Int
+    var displayStyle: DisplayStyle = .stack
+    let pickerLimit: YearMonthPickerLimit
     
     var yearMonthString: String {
         "\(selectedYear).\(selectedMonth)"
     }
-    var displayStyle: DisplayStyle = .stack
     var displayIcon: Image {
         displayStyle == .stack ? HomeAsset.Image.icGridDisplay.swiftUIImage : HomeAsset.Image.icStackDisplay.swiftUIImage
     }
-    let pickerLimit: YearMonthPickerLimit
-    let rowViewModels: [HomeContentRowViewModel]
+    var rowViewModels: [HomeContentRowViewModel] {
+        makeRowViewModels()
+    }
+    var gridViewModels: [HomeContentGridViewModel] {
+        makeGridViewModels()
+    }
+    
+    private var isCurrentYearMonthSelected: Bool {
+        selectedYear == currentYear && selectedMonth == currentMonth
+    }
+    
+    private let currentYear: Int
+    private let currentMonth: Int
+    private let calendar: Calendar
+    private var diaries: [Diary]
     
     // MARK: Methods
     
     func didTapDisplayIcon() {
         displayStyle.toggle()
+    }
+}
+
+private extension HomeViewModel {
+    func makeRowViewModels() -> [HomeContentRowViewModel] {
+        var wroteDiaryToday: Bool = false
+        
+        var viewModels: [HomeContentRowViewModel] = diaries
+            .filter { selectedYear == calendar.component(.year, from: $0.createdAt) && selectedMonth == calendar.component(.month, from: $0.createdAt) }
+            .reduce(into: []) { result, diary in
+                if calendar.isDateInToday(diary.createdAt) {
+                    wroteDiaryToday = true
+                }
+                result.append(diary.toRowViewModel)
+            }
+        
+        if !wroteDiaryToday && isCurrentYearMonthSelected {
+            viewModels.insert(.placeholder, at: 0)
+        }
+        
+        return viewModels
+    }
+    
+    func makeGridViewModels() -> [HomeContentGridViewModel] {
+        diaries.map(\.toGridViewModel)
     }
 }
 
@@ -115,7 +135,7 @@ struct Diary: Equatable {
 }
 
 extension Diary {
-    var toViewModel: HomeContentRowViewModel {
+    var toRowViewModel: HomeContentRowViewModel {
         .init(
             id: id.uuidString,
             photoContainerViewModel: .init(
@@ -127,6 +147,27 @@ extension Diary {
             description: firstCharacters,
             timeString: "오후 12:30",
             actionIcon: isFavorite ? HomeAsset.Image.icHeartFill.swiftUIImage : HomeAsset.Image.icHeartEmpty.swiftUIImage
+        )
+    }
+    
+    var toGridViewModel: HomeContentGridViewModel {
+        .init(
+            id: id.uuidString,
+            image: photo,
+            favoriteIcon: isFavorite ? HomeAsset.Image.icHeartFill.swiftUIImage : HomeAsset.Image.icHeartEmpty.swiftUIImage
+        )
+    }
+}
+
+extension HomeContentRowViewModel {
+    static var placeholder: HomeContentRowViewModel {
+        .init(
+            id: UUID().uuidString,
+            photoContainerViewModel: .init(image: nil, topTitle: nil, bottomTitle: "Today"),
+            title: String(localized: "오늘의 삼행시"),
+            description: String(localized: "기록하기"),
+            timeString: nil,
+            actionIcon: HomeAsset.Image.icPlus.swiftUIImage
         )
     }
 }
