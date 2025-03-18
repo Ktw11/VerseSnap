@@ -167,7 +167,7 @@ extension HomeContentRowViewModel {
             title: String(localized: "오늘의 삼행시"),
             description: String(localized: "기록하기"),
             timeString: nil,
-            actionIcon: HomeAsset.icPlus.swiftUIImage
+            actionIcon: CommonUIAsset.Image.icPlus.swiftUIImage
         )
     }
 }

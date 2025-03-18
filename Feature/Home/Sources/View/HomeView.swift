@@ -91,7 +91,7 @@ public struct HomeView: View {
                     if viewModel.rowViewModels.last != rowVM {
                         Divider()
                             .frame(height: 1)
-                            .overlay(CommonUIAsset.thirdBackground.swiftUIColor)
+                            .overlay(CommonUIAsset.Color.thirdBackground.swiftUIColor)
                     }
                 }
             }
@@ -128,7 +128,7 @@ public struct HomeView: View {
     @ViewBuilder
     private func searchBarView() -> some View {
         
-        CommonUIAsset.secondaryBackground.swiftUIColor
+        CommonUIAsset.Color.secondaryBackground.swiftUIColor
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .frame(height: 33)
             .overlay {
@@ -139,12 +139,12 @@ public struct HomeView: View {
                     
                     TextField("", text: $searchText)
                         .autocorrectionDisabled(true)
-                        .accentColor(CommonUIAsset.secondaryForeground.swiftUIColor)
+                        .accentColor(CommonUIAsset.Color.secondaryForeground.swiftUIColor)
                     
                     Image(systemName: "xmark.circle.fill")
                         .resizable()
                         .renderingMode(.template)
-                        .foregroundColor(CommonUIAsset.secondaryForeground.swiftUIColor)
+                        .foregroundColor(CommonUIAsset.Color.secondaryForeground.swiftUIColor)
                         .frame(size: 12)
                         .opacity(searchText.isEmpty ? 0.0 : 1.0)
                         .onTapGesture {
