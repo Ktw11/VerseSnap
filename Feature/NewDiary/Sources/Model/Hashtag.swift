@@ -8,6 +8,6 @@
 import Foundation
 
 struct Hashtag: Identifiable {
-    var id: String { value }
-    let value: String
+    var id: UUID = UUID()
+    var value: String
 }

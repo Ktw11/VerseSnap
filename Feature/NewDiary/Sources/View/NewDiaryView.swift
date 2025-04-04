@@ -12,9 +12,12 @@ public struct NewDiaryView: View {
 
     // MARK: Properties
     
+    @State private var keyboard = KeyboardObserver()
     @State private var hashtags: [Hashtag] = [
-        .init(value: "#해시태그를 입력해주세요")
+        .init(value: "")
     ]
+    @State private var hashtagsViewMaxWidth: CGFloat = 0
+    @State private var isInputViewPresented: Bool = false
     
     public var body: some View {
         VStack {
@@ -34,12 +37,27 @@ public struct NewDiaryView: View {
             imagePickerView()
                 .padding(.bottom, 15)
             
-            hashtagView()
-                .containerRelativeFrame(.horizontal) { width, _ in width * 0.7 }
+            Spacer()
+
+            ScrollView {
+                hashtagView()
+                
+                Spacer()
+            }
+            .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+            .containerRelativeFrame(.horizontal) { width, _ in width * 0.7 }
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                proxy.size.width
+            } action: {
+                hashtagsViewMaxWidth = $0
+            }
             
             createButton()
                 .padding(.bottom, 20)
         }
+        .padding(.bottom, keyboard.currentHeight)
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .animation(.easeOut, value: keyboard.currentHeight)
     }
 }
 
@@ -59,17 +77,14 @@ private extension NewDiaryView {
     
     @ViewBuilder
     func hashtagView() -> some View {
-        ScrollView {
-            WrappingLayoutView(
-                items: $hashtags,
-                trailingContent: {
-                    HashtagView(text: nil, icon: CommonUIAsset.Image.icPlus.swiftUIImage)
-                }
-            ) { item in
-                HashtagView(text: item.value, icon: CommonUIAsset.Image.icExit.swiftUIImage)
+        WrappingLayout() {
+            ForEach($hashtags, id: \.id) { hashtag in
+                HashtagView(
+                    hashtag: hashtag,
+                    maxWidth: $hashtagsViewMaxWidth,
+                    icon: CommonUIAsset.Image.icExit.swiftUIImage
+                )
             }
-            
-            Spacer()
         }
     }
     

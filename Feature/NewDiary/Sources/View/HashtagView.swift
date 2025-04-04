@@ -10,49 +10,107 @@ import CommonUI
 
 struct HashtagView: View {
     
-    // MARK: Lifecycle
+    // MARK: Definitions
     
-    init(text: String?, icon: Image) {
-        self.text = text
-        self.icon = icon
+    private enum Constants {
+        static let textFont: Font = .system(size: 13, weight: .regular)
+        static let spacing: CGFloat = 3
+        static let iconSize: CGSize = CGSize(width: 16, height: 16)
+        static let leadingPadding: CGFloat = 10
+        static let trailingPadding: CGFloat = 5
+        
+        static func textWidth(
+            prefixWidth: CGFloat,
+            textWidth: CGFloat,
+            maxWidth: CGFloat
+        ) -> CGFloat {
+            let paddings: CGFloat = leadingPadding + trailingPadding + (spacing * 2)
+            let availableWidth = maxWidth - paddings - prefixWidth - iconSize.width - 0.1
+            return min(textWidth, availableWidth)
+        }
     }
     
     // MARK: Properties
     
-    let text: String?
+    @Binding var hashtag: Hashtag
+    @Binding var maxWidth: CGFloat
     let icon: Image
+    @FocusState private var isFocused: Bool
+    @State private var hashtagPrefixWidth = CGFloat.zero
+    @State private var textFieldWidth = CGFloat.zero
     
     var body: some View {
-        HStack(spacing: 3) {
-            if let text {
-                Text(text)
-                    .font(.system(size: 13, weight: .regular))
-                    .foregroundStyle(.white)
-            }
+        HStack(spacing: Constants.spacing) {
+            hashtagPrefixView()
             
-            icon
-                .resizable()
-                .frame(size: 16)
+            textFieldView()
+                .frame(width: textFieldWidth)
+            
+            iconView()
         }
-        .padding(.leading, text == nil ? 7 : 10)
-        .padding(.trailing, text == nil ? 7 : 5)
+        .padding(.leading, Constants.leadingPadding)
+        .padding(.trailing, Constants.trailingPadding)
         .padding(.vertical, 4)
         .background {
             Color.black.opacity(0.3)
                 .clipShape(Capsule())
         }
+        .onTapGesture {
+            isFocused = true
+        }
     }
 }
 
-#Preview {
-    ZStack {
-        Color.gray
-            .ignoresSafeArea()
-        
-        VStack(spacing: 10) {
-            HashtagView(text: "hashtag", icon: CommonUIAsset.Image.icExit.swiftUIImage)
+private extension HashtagView {
+    @ViewBuilder
+    func hashtagPrefixView() -> some View {
+        Text("#")
+            .foregroundStyle(.white)
+            .font(Constants.textFont)
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                proxy.size.width
+            } action: { newValue in
+                hashtagPrefixWidth = newValue
+            }
+    }
+    
+    @ViewBuilder
+    func textFieldView() -> some View {
+        ZStack(alignment: .leading) {
+            if hashtag.value.isEmpty {
+                Text("해시태그를 입력해주세요")
+                    .font(Constants.textFont)
+                    .foregroundStyle(Color.gray)
+            }
             
-            HashtagView(text: nil, icon: CommonUIAsset.Image.icPlus.swiftUIImage)
+            TextField("",text: $hashtag.value)
+                .lengthLimit(text: $hashtag.value, maxLength: 15)
+                .tint(Color.white)
+                .focused($isFocused)
+                .font(Constants.textFont)
+                .foregroundStyle(.white)
+                .background {
+                    Text(hashtag.value.isEmpty ? "해시태그를 입력해주세요" : hashtag.value)
+                        .font(Constants.textFont)
+                        .fixedSize()
+                        .hidden()
+                        .onGeometryChange(for: CGFloat.self) { proxy in
+                            proxy.size.width
+                        } action: { newValue in
+                            textFieldWidth = Constants.textWidth(
+                                prefixWidth: hashtagPrefixWidth,
+                                textWidth: newValue,
+                                maxWidth: maxWidth
+                            )
+                        }
+                }
         }
+    }
+    
+    @ViewBuilder
+    func iconView() -> some View {
+        icon
+            .resizable()
+            .frame(width: Constants.iconSize.width, height: Constants.iconSize.height)
     }
 }
