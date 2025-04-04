@@ -7,18 +7,30 @@
 
 import SwiftUI
 
-struct WrappingLayout: Layout {
-    var hSpacing: CGFloat
-    var vSpacing: CGFloat
+public struct WrappingLayout: Layout {
     
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+    // MARK: Lifecycle
+    
+    public init(hSpacing: CGFloat = 2, vSpacing: CGFloat = 2) {
+        self.hSpacing = hSpacing
+        self.vSpacing = vSpacing
+    }
+    
+    // MARK: Properties
+    
+    private var hSpacing: CGFloat
+    private var vSpacing: CGFloat
+    
+    // MARK: Methods
+    
+    public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         CGSize(
             width: proposal.width ?? .zero,
             height: calculateMaxHeight(proposal: proposal, subviews: subviews)
         )
     }
     
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+    public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         var origin = bounds.origin
         
         for subview in subviews {
