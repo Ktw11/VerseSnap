@@ -66,12 +66,12 @@ private extension NewDiaryView {
     @ViewBuilder
     func dateHeaderView() -> some View {
         Text("2025.6.17")
-            .font(.system(size: 20, weight: .bold))
+            .font(.suite(size: 20, weight: .bold))
             .foregroundStyle(.white)
             .padding(.bottom, 9)
         
         Text("오후 12:30")
-            .font(.system(size: 14, weight: .regular))
+            .font(.suite(size: 14, weight: .regular))
             .foregroundStyle(.white)
             .padding(.bottom, 30)
     }
@@ -85,7 +85,7 @@ private extension NewDiaryView {
             .overlay {
                 Text("사진 선택하기")
                     .foregroundStyle(.white)
-                    .font(.system(size: 15, weight: .regular))
+                    .font(.suite(size: 15, weight: .regular))
             }
     }
     
@@ -108,7 +108,7 @@ private extension NewDiaryView {
     @ViewBuilder
     func createButton() -> some View {
         Text("삼행시 생성하기")
-            .font(.system(size: 14, weight: .bold))
+            .font(.suite(size: 16, weight: .regular))
             .foregroundStyle(.white)
             .padding(.horizontal, 22)
             .padding(.vertical, 12)

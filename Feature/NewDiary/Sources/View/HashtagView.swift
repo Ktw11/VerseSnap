@@ -13,7 +13,7 @@ struct HashtagView: View {
     // MARK: Definitions
     
     private enum Constants {
-        static let textFont: Font = .system(size: 13, weight: .regular)
+        static let textFont: Font? = .suite(size: 13, weight: .regular)
         static let spacing: CGFloat = 3
         static let iconSize: CGSize = CGSize(width: 16, height: 16)
         static let leadingPadding: CGFloat = 10
