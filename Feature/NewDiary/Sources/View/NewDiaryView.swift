@@ -78,7 +78,7 @@ private extension NewDiaryView {
     
     @ViewBuilder
     func imagePickerView() -> some View {
-        CommonUIAsset.Color.secondaryBackground.swiftUIColor
+        CommonUIAsset.Color.placeholderBG.swiftUIColor
             .clipShape(RoundedRectangle(cornerRadius: 30))
             .aspectRatio(0.65, contentMode: .fill)
             .containerRelativeFrame(.horizontal) { width, _ in width * 0.7 }
@@ -113,7 +113,7 @@ private extension NewDiaryView {
             .padding(.horizontal, 22)
             .padding(.vertical, 12)
             .background {
-                CommonUIAsset.Color.secondaryBackground.swiftUIColor
+                Color.white.opacity(0.2)
                     .clipShape(Capsule())
             }
     }
@@ -121,7 +121,7 @@ private extension NewDiaryView {
 
 #Preview {
     ZStack {
-        Color.black
+        CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
         NewDiaryView(viewModel: NewDiaryViewModel())

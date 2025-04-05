@@ -53,7 +53,7 @@ struct HashtagView: View {
         .padding(.trailing, Constants.trailingPadding)
         .padding(.vertical, 4)
         .background {
-            Color.gray.opacity(0.3)
+            CommonUIAsset.Color.placeholderBG.swiftUIColor
                 .clipShape(Capsule())
         }
         .onTapGesture {

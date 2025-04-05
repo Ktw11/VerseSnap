@@ -7,7 +7,7 @@
 
 import SwiftUI
 import HomeInterface
-
+import CommonUI
 struct RootTabView<HomeComponent: HomeBuilder>: View {
     // MARK: Lifecycle
     
@@ -29,7 +29,7 @@ struct RootTabView<HomeComponent: HomeBuilder>: View {
                     .padding(.horizontal, 24)
                     .tag(TabSelection.home)
                     .toolbarVisibility(.hidden, for: .tabBar)
-                    .background(Color.black)
+                    .background(CommonUIAsset.Color.mainBG.swiftUIColor)
                 
                 #warning("Profile View 구현 필요")
                 VStack {
@@ -40,7 +40,7 @@ struct RootTabView<HomeComponent: HomeBuilder>: View {
                 }
                 .tag(TabSelection.profile)
                 .toolbarVisibility(.hidden, for: .tabBar)
-                .background(Color.black)
+                .background(CommonUIAsset.Color.mainBG.swiftUIColor)
             }
             
             CustomTabView(selected: $selected)

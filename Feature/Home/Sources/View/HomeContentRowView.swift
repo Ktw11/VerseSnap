@@ -38,7 +38,7 @@ struct HomeContentRowView: View {
                     Text(timeString)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 10, weight: .regular))
-                        .foregroundStyle(CommonUIAsset.Color.secondaryForeground.swiftUIColor)
+                        .foregroundStyle(CommonUIAsset.Color.minorText.swiftUIColor)
                 }
             }
             .padding(.vertical, 7)
@@ -68,7 +68,7 @@ private struct PhotoContainerView: View {
     var body: some View {
         ZStack {
             if let image = viewModel.image {
-                Rectangle()
+                Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
                         image
@@ -79,11 +79,10 @@ private struct PhotoContainerView: View {
                     }
                     .clipped()
             } else {
-                Rectangle()
+                Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
-                        CommonUIAsset.Color.placeholder.swiftUIColor
-                            .opacity(0.5)
+                        CommonUIAsset.Color.placeholderBG.swiftUIColor
                     }
                     .clipped()
             }
@@ -103,7 +102,7 @@ private struct PhotoContainerView: View {
 
 #Preview {
     ZStack {
-        Color.black
+        CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
         VStack(spacing: 20) {

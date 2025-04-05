@@ -1,4 +1,5 @@
 import SwiftUI
+import CommonUI
 import SignInInterface
 import HomeInterface
 
@@ -27,7 +28,7 @@ struct RootView<
 
     var body: some View {
         ZStack {
-            Color.black
+            CommonUIAsset.Color.mainBG.swiftUIColor
                 .ignoresSafeArea()
 
             switch viewModel.scene {

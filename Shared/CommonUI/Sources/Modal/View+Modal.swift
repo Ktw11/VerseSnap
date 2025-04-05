@@ -15,10 +15,9 @@ public extension View {
     ) -> some View {
         self
             .sheet(isPresented: isPresented) {
-                #warning("색상 재적용 필요")
                 content()
                     .safeAreaPadding()
-                    .background(Color(uiColor: .init(red: 51 / 255, green: 51 / 255, blue: 51 / 255, alpha: 1.0)))
+                    .background(CommonUIAsset.Color.placeholderBG.swiftUIColor)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .frame(maxHeight: .infinity, alignment: .bottom)
                     .ignoresSafeArea()
