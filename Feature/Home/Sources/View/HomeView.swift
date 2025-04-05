@@ -55,7 +55,7 @@ public struct HomeView: View {
             }
             
             Spacer()
-                .frame(height: 40)
+                .frame(height: 20)
             
             ZStack {
                 stackContentView()
@@ -152,6 +152,7 @@ public struct HomeView: View {
                         }
                 }
                 .padding(.horizontal, 12)
+                .padding(.vertical, 8)
             }
     }
 }
