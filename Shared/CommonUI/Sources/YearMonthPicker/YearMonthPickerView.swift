@@ -63,13 +63,13 @@ public struct YearMonthPickerView: View {
             Button(action: {
                 isPresenting.toggle()
             }, label: {
-                Color.white
+                CommonUIAsset.Color.buttonBG.swiftUIColor
                     .clipShape(Capsule())
                     .overlay {
                         #warning("번역 필요")
                         Text(verbatim: "확인")
                             .font(.system(size: 18, weight: .regular))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                     }
             })
             .frame(height: 50)
@@ -95,7 +95,7 @@ public struct YearMonthPickerView: View {
                     ForEach(years, id: \.self) { year in
                         #warning("번역 필요")
                         Text(verbatim: "\(year)년")
-                            .font(.system(size: 24, weight: .bold))
+                            .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.white)
                     }
                 }
@@ -104,7 +104,7 @@ public struct YearMonthPickerView: View {
                     ForEach(months, id: \.self) { months in
                         #warning("번역 필요")
                         Text(verbatim: "\(months)월")
-                            .font(.system(size: 24, weight: .bold))
+                            .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.white)
                     }
                 }

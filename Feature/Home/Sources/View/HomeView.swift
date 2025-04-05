@@ -28,7 +28,7 @@ public struct HomeView: View {
                 ZStack {
                     HStack {
                         Text(viewModel.yearMonthString)
-                            .font(.system(size: 24, weight: .bold))
+                            .font(.suite(size: 20, weight: .bold))
                         
                         HomeAsset.icDownArrow.swiftUIImage
                             .resizable()

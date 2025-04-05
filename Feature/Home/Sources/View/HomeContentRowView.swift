@@ -24,20 +24,20 @@ struct HomeContentRowView: View {
             VStack {
                 Text(viewModel.title)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.system(size: 11, weight: .regular))
+                    .font(.suite(size: 13, weight: .regular))
                 
                 Spacer().frame(height: 3)
                 
                 Text(viewModel.description)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.system(size: 12, weight: .regular))
+                    .font(.suite(size: 14, weight: .regular))
                 
                 Spacer().frame(height: 15)
                 
                 if let timeString = viewModel.timeString {
                     Text(timeString)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.system(size: 10, weight: .regular))
+                        .font(.suite(size: 12, weight: .regular))
                         .foregroundStyle(CommonUIAsset.Color.minorText.swiftUIColor)
                 }
             }
@@ -90,11 +90,11 @@ private struct PhotoContainerView: View {
             VStack {
                 if let title = viewModel.topTitle {
                     Text(title)
-                        .font(.system(size: 25, weight: .regular))
+                        .font(.urbanist(size: 27, weight: .semibold))
                 }
                 
                 Text(viewModel.bottomTitle)
-                    .font(.system(size: 15, weight: .regular))
+                    .font(.urbanist(size: 17, weight: .medium))
             }
         }
     }
