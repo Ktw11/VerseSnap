@@ -21,4 +21,16 @@ public extension Font {
             return nil
         }
     }
+    
+    static func urbanist(size: CGFloat, weight: Font.Weight) -> Font? {
+        switch weight {
+        case .medium:
+            return CommonUIFontFamily.Urbanist.medium.swiftUIFont(size: size)
+        case .semibold:
+            return CommonUIFontFamily.Urbanist.semiBold.swiftUIFont(size: size)
+        default:
+            assertionFailure()
+            return nil
+        }
+    }
 }
