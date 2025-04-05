@@ -34,8 +34,9 @@ struct HashtagView: View {
     
     @Binding var hashtag: Hashtag
     @Binding var maxWidth: CGFloat
+    @FocusState.Binding var isFocused: UUID?
     let icon: Image
-    @FocusState private var isFocused: Bool
+    let eventListener: HashtagEventListener
     @State private var hashtagPrefixWidth = CGFloat.zero
     @State private var textFieldWidth = CGFloat.zero
     
@@ -52,11 +53,11 @@ struct HashtagView: View {
         .padding(.trailing, Constants.trailingPadding)
         .padding(.vertical, 4)
         .background {
-            Color.black.opacity(0.3)
+            Color.gray.opacity(0.3)
                 .clipShape(Capsule())
         }
         .onTapGesture {
-            isFocused = true
+            isFocused = hashtag.id
         }
     }
 }
@@ -86,7 +87,7 @@ private extension HashtagView {
             TextField("",text: $hashtag.value)
                 .lengthLimit(text: $hashtag.value, maxLength: 15)
                 .tint(Color.white)
-                .focused($isFocused)
+                .focused($isFocused, equals: hashtag.id)
                 .font(Constants.textFont)
                 .foregroundStyle(.white)
                 .background {
@@ -104,6 +105,9 @@ private extension HashtagView {
                             )
                         }
                 }
+                .onSubmit {
+                    eventListener.didSubmitHashtag(hashtag)
+                }
         }
     }
     
@@ -112,5 +116,8 @@ private extension HashtagView {
         icon
             .resizable()
             .frame(width: Constants.iconSize.width, height: Constants.iconSize.height)
+            .onTapGesture {
+                eventListener.removeHashtag(id: hashtag.id)
+            }
     }
 }

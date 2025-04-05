@@ -1,0 +1,55 @@
+//
+//  NewDiaryViewModel.swift
+//  NewDiary
+//
+//  Created by 공태웅 on 4/4/25.
+//
+
+import Foundation
+
+@MainActor
+@Observable
+public final class NewDiaryViewModel {
+    
+    // MARK: Properties
+    
+    var hashtags: [Hashtag] = [.init(value: "")]
+    
+    // MARK: Definitions
+    
+    private enum Constants {
+        static let maxHastagCount: Int = 5
+    }
+}
+
+extension NewDiaryViewModel: HashtagEventListener {
+    func didSubmitHashtag(_ hashtag: Hashtag) {
+        if hashtag.value.isEmpty {
+            guard hashtags.filter({ $0.value.isEmpty }).count > 1 else { return }
+            removeHashtag(id: hashtag.id)
+        } else {
+            guard !hashtagsHasPlaceholder else { return }
+            guard hashtags.count < Constants.maxHastagCount else { return }
+            hashtags.append(Hashtag(value: ""))
+        }
+    }
+    
+    func removeHashtag(id: UUID) {
+        if hashtags.count > 1 {
+            var filtered = hashtags.filter { $0.id != id }
+            if filtered.count < Constants.maxHastagCount && !hashtagsHasPlaceholder {
+                filtered.append(Hashtag(value: ""))
+            }
+
+            hashtags = filtered
+        } else {
+            hashtags = [Hashtag(value: "")]
+        }
+    }
+}
+
+private extension NewDiaryViewModel {
+    var hashtagsHasPlaceholder: Bool {
+        hashtags.contains(where: { $0.value.isEmpty })
+    }
+}

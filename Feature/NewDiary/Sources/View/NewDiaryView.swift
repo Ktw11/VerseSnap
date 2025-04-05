@@ -9,59 +9,73 @@ import SwiftUI
 import CommonUI
 
 public struct NewDiaryView: View {
-
+    
     // MARK: Properties
     
+    @Bindable var viewModel: NewDiaryViewModel
+    @FocusState private var isHashtagFocused: UUID?
     @State private var keyboard = KeyboardObserver()
-    @State private var hashtags: [Hashtag] = [
-        .init(value: "")
-    ]
     @State private var hashtagsViewMaxWidth: CGFloat = 0
     @State private var isInputViewPresented: Bool = false
     
     public var body: some View {
-        VStack {
-            Spacer()
-                .frame(height: 45)
-            
-            Text("2025.6.17")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(.white)
-                .padding(.bottom, 9)
-            
-            Text("오후 12:30")
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(.white)
-                .padding(.bottom, 30)
-            
-            imagePickerView()
-                .padding(.bottom, 15)
-            
-            Spacer()
-
-            ScrollView {
-                hashtagView()
-                
+        ScrollView(.vertical) {
+            VStack {
                 Spacer()
+                    .frame(height: 45)
+
+                ZStack {
+                    if keyboard.currentHeight == 0 {
+                        VStack {
+                            dateHeaderView()
+                            
+                            imagePickerView()
+                                .padding(.bottom, 15)
+                        }
+                    } else {
+                        Spacer()
+                            .frame(height: 15)
+                    }
+                }
+                
+                hashtagView()
+                    .containerRelativeFrame(.horizontal) { width, _ in width * 0.7 }
+                    .onGeometryChange(for: CGFloat.self) { proxy in
+                        proxy.size.width
+                    } action: {
+                        hashtagsViewMaxWidth = $0
+                    }
+                
+                if keyboard.currentHeight > 0 {
+                    Spacer()
+                        .frame(minHeight: 15)
+                }
             }
-            .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
-            .containerRelativeFrame(.horizontal) { width, _ in width * 0.7 }
-            .onGeometryChange(for: CGFloat.self) { proxy in
-                proxy.size.width
-            } action: {
-                hashtagsViewMaxWidth = $0
-            }
-            
-            createButton()
-                .padding(.bottom, 20)
+            .frame(maxWidth: .infinity)
         }
-        .padding(.bottom, keyboard.currentHeight)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-        .animation(.easeOut, value: keyboard.currentHeight)
+        .onTapGesture {
+            isHashtagFocused = nil
+        }
+        .animation(.easeInOut, value: keyboard.currentHeight)
+        .transition(.opacity)
+        .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
     }
 }
 
 private extension NewDiaryView {
+    @ViewBuilder
+    func dateHeaderView() -> some View {
+        Text("2025.6.17")
+            .font(.system(size: 20, weight: .bold))
+            .foregroundStyle(.white)
+            .padding(.bottom, 9)
+        
+        Text("오후 12:30")
+            .font(.system(size: 14, weight: .regular))
+            .foregroundStyle(.white)
+            .padding(.bottom, 30)
+    }
+    
     @ViewBuilder
     func imagePickerView() -> some View {
         CommonUIAsset.Color.secondaryBackground.swiftUIColor
@@ -77,15 +91,18 @@ private extension NewDiaryView {
     
     @ViewBuilder
     func hashtagView() -> some View {
-        WrappingLayout() {
-            ForEach($hashtags, id: \.id) { hashtag in
+        WrappingLayout(hSpacing: 5, vSpacing: 5) {
+            ForEach($viewModel.hashtags, id: \.id) { hashtag in
                 HashtagView(
                     hashtag: hashtag,
                     maxWidth: $hashtagsViewMaxWidth,
-                    icon: CommonUIAsset.Image.icExit.swiftUIImage
+                    isFocused: $isHashtagFocused,
+                    icon: CommonUIAsset.Image.icExit.swiftUIImage,
+                    eventListener: viewModel
                 )
             }
         }
+        .padding(.all, 10)
     }
     
     @ViewBuilder
@@ -107,6 +124,6 @@ private extension NewDiaryView {
         Color.black
             .ignoresSafeArea()
         
-        NewDiaryView()
+        NewDiaryView(viewModel: NewDiaryViewModel())
     }
 }
