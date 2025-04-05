@@ -17,10 +17,24 @@ public struct NewDiaryView: View {
     @State private var keyboard = KeyboardObserver()
     @State private var hashtagsViewMaxWidth: CGFloat = 0
     @State private var isInputViewPresented: Bool = false
+    @Environment(\.dismiss) private var dismiss
     
     public var body: some View {
         ScrollView(.vertical) {
             VStack {
+                HStack {
+                    CommonUIAsset.Image.icExitBig.swiftUIImage
+                        .resizable()
+                        .frame(size: 24)
+                        .onTapGesture {
+                            dismiss()
+                        }
+                        .padding(.leading, 27)
+                    
+                    Spacer()
+                }
+                .padding(.top, 20)
+                
                 Spacer()
                     .frame(height: 45)
 
