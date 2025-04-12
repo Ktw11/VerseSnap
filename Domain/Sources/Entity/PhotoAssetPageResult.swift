@@ -11,4 +11,5 @@ import Photos
 public struct PhotoAssetPageResult: Sendable {
     public let assets: [PHAsset]
     public let nextIndex: Int
+    public let isFinished: Bool
 }

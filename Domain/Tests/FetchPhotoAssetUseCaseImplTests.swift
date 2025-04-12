@@ -141,6 +141,26 @@ final class FetchPhotoAssetUseCaseImplTests: XCTestCase {
         }
     }
     
+    func test_fetchAssets_when_index_is_same_with_total_asset_count_then_result_isFinished_is_true() async {
+        // given
+        let expectedAssets: [DummyPHAsset] = [
+            .init(identifier: "1"),
+            .init(identifier: "2"),
+        ]
+        let fetchResult: MockPHFetchResult = .init()
+        fetchResult.expectedEnumeratedAssets = expectedAssets
+        assetFetcher.expectedFetchPhotoAssets = fetchResult
+        
+        do {
+            // when
+            let result = try await sut.fetchAssets(at: 0, pageSize: 2)
+            
+            XCTAssertTrue(result.isFinished)
+        } catch {
+            XCTFail()
+        }
+    }
+    
     func test_fetchAssets_when_index_is_bigger_than_total_asset_count_then_should_not_call_enumeratedAssets_and_throw_FetchPhotoAssetError_finished() async {
         // given
         let expectedAssets: [DummyPHAsset] = [

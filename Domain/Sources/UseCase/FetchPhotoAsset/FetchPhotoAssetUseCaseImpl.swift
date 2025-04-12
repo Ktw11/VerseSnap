@@ -76,6 +76,10 @@ private extension FetchPhotoAssetUseCaseImpl {
         try Task.checkCancellation()
         
         let newAssets: [PHAsset] = await result.enumeratedAssets(at: IndexSet(integersIn: index..<nextIndex), options: [])
-        return PhotoAssetPageResult(assets: newAssets, nextIndex: nextIndex)
+        return PhotoAssetPageResult(
+            assets: newAssets,
+            nextIndex: nextIndex,
+            isFinished: nextIndex == totalCount
+        )
     }
 }
