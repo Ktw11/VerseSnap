@@ -37,4 +37,24 @@ public extension Target {
             dependencies: dependencies
         )
     }
+    
+    static func testTarget(
+        type: TargetType,
+        dependencies: [ProjectDescription.TargetDependency] = [],
+    ) -> Target {
+        var dependencies = dependencies
+        dependencies.append(.target(name: type.name))
+        dependencies.append(.xctest)
+        
+        return Target.target(
+            name: "\(type.name)Tests",
+            destinations: .iOS,
+            product: .unitTests,
+            bundleId: type.testBundleId,
+            sources: [
+                "Tests/**"
+            ],
+            dependencies: dependencies
+        )
+    }
 }

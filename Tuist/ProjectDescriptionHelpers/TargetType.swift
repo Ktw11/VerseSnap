@@ -45,6 +45,10 @@ public extension TargetType {
     var interfaceBundleId: String {
         "\(baseBundleId).Feature.\(interfaceName)"
     }
+    
+    var testBundleId: String {
+        "\(baseBundleId).\(bundleId).Test"
+    }
 }
 
 private extension TargetType {

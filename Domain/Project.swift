@@ -12,6 +12,7 @@ let project = Project(
             type: targetType,
             product: .framework,
             sources: ["Sources/**"]
-        )
+        ),
+        Target.testTarget(type: targetType)
     ]
 )
