@@ -1,0 +1,56 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "사진 선택" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select photo"
+          }
+        }
+      }
+    },
+    "설정으로 이동" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Settings"
+          }
+        }
+      }
+    },
+    "앨범 권한이 필요합니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album permission is required."
+          }
+        }
+      }
+    },
+    "앱에서 카메라를 사용하려면 카메라 권한이 필요합니다. 설정에서 권한을 변경해주세요." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To select the photo, you need to grant album permission. Please change the permission in Settings."
+          }
+        }
+      }
+    },
+    "취소" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cancel"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
