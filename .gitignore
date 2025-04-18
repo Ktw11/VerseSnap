@@ -78,3 +78,5 @@ Tuist/.build
 ### xcconfig ###
 Secret*.xcconfig
 
+### cursor ###
+.cursorrules
