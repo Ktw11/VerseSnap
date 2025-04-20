@@ -16,7 +16,8 @@ let project = Project(
             dependencies: [
                 .featureInterface(type: targetType),
                 .domain,
-                .shared(type: .commonUI)
+                .shared(type: .commonUI),
+                .shared(type: .utils),
             ]
         ),
         Target.interfaceTarget(type: targetType, product: .framework)
