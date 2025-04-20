@@ -12,18 +12,21 @@ public struct NewDiaryView: View {
     
     // MARK: Lifecycle
     
-    public init(viewModel: NewDiaryViewModel) {
+    public init(isPresented: Binding<Bool>, viewModel: NewDiaryViewModel) {
+        self._isPresented = isPresented
         self.viewModel = viewModel
     }
     
     // MARK: Properties
     
+    @Binding var isPresented: Bool
     @Bindable private var viewModel: NewDiaryViewModel
+    
     @FocusState private var isHashtagFocused: UUID?
     @State private var keyboardHeight: CGFloat = 0
     @State private var hashtagsViewMaxWidth: CGFloat = 0
     @State private var isInputViewPresented: Bool = false
-    @Environment(\.dismiss) private var dismiss
+    @State private var isPhotoPickerPresented: Bool = false
     
     public var body: some View {
         ScrollView(.vertical) {
@@ -33,7 +36,7 @@ public struct NewDiaryView: View {
                         .resizable()
                         .frame(size: 24)
                         .onTapGesture {
-                            dismiss()
+                            isPresented.toggle()
                         }
                         .padding(.leading, 27)
                     
@@ -140,6 +143,6 @@ private extension NewDiaryView {
         CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
-        NewDiaryView(viewModel: NewDiaryViewModel())
+        NewDiaryView(isPresented: .constant(true), viewModel: NewDiaryViewModel())
     }
 }
