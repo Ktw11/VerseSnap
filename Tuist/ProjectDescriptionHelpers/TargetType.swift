@@ -11,6 +11,7 @@ public enum TargetType: String, Sendable {
     case network = "VSNetwork"
     case repository = "Repository"
     case commonUI = "CommonUI"
+    case utils = "Utils"
 }
 
 public extension TargetType {
@@ -37,7 +38,7 @@ public extension TargetType {
             coreBundleId
         case .repository:
             dataBundleId
-        case .commonUI:
+        case .commonUI, .utils:
             sharedBundleId
         }
     }

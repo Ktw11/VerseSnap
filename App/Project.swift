@@ -32,7 +32,8 @@ let project = Project(
                 .feature(type: .home),
                 .core(type: .thirdPartyAuth),
                 .data(type: .repository),
-                .shared(type: .commonUI)
+                .shared(type: .commonUI),
+                .shared(type: .utils),
             ]
         )
     ],
