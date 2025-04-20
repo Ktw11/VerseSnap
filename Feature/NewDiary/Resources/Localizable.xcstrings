@@ -1,0 +1,48 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "" : {
+      "shouldTranslate" : false
+    },
+    "#" : {
+      "shouldTranslate" : false
+    },
+    "2025.6.17" : {
+      "shouldTranslate" : false
+    },
+    "사진 선택하기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Photo"
+          }
+        }
+      }
+    },
+    "삼행시 생성하기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Make Verse"
+          }
+        }
+      }
+    },
+    "오후 12:30" : {
+      "shouldTranslate" : false
+    },
+    "해시태그를 입력해주세요" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a hashtag"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
