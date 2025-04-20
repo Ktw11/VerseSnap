@@ -34,6 +34,7 @@ public struct HomeView: View {
                             .resizable()
                             .frame(width: 18, height: 18)
                     }
+                    .padding(.bottom, 15)
                     .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
                     .onTapGesture {
                         isShowingPicker = true
