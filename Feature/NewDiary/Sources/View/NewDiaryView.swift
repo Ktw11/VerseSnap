@@ -89,11 +89,6 @@ private extension NewDiaryView {
         Text("2025.6.17")
             .font(.suite(size: 20, weight: .bold))
             .foregroundStyle(.white)
-            .padding(.bottom, 9)
-        
-        Text("오후 12:30")
-            .font(.suite(size: 14, weight: .regular))
-            .foregroundStyle(.white)
             .padding(.bottom, 30)
     }
     

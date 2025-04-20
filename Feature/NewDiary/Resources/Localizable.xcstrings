@@ -30,9 +30,6 @@
         }
       }
     },
-    "오후 12:30" : {
-      "shouldTranslate" : false
-    },
     "해시태그를 입력해주세요" : {
       "localizations" : {
         "en" : {
