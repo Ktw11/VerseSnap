@@ -10,11 +10,17 @@ import CommonUI
 
 public struct NewDiaryView: View {
     
+    // MARK: Lifecycle
+    
+    public init(viewModel: NewDiaryViewModel) {
+        self.viewModel = viewModel
+    }
+    
     // MARK: Properties
     
-    @Bindable var viewModel: NewDiaryViewModel
+    @Bindable private var viewModel: NewDiaryViewModel
     @FocusState private var isHashtagFocused: UUID?
-    @State private var keyboard = KeyboardObserver()
+    @State private var keyboardHeight: CGFloat = 0
     @State private var hashtagsViewMaxWidth: CGFloat = 0
     @State private var isInputViewPresented: Bool = false
     @Environment(\.dismiss) private var dismiss
@@ -39,7 +45,7 @@ public struct NewDiaryView: View {
                     .frame(height: 45)
 
                 ZStack {
-                    if keyboard.currentHeight == 0 {
+                    if keyboardHeight == 0 {
                         VStack {
                             dateHeaderView()
                             
@@ -60,7 +66,7 @@ public struct NewDiaryView: View {
                         hashtagsViewMaxWidth = $0
                     }
                 
-                if keyboard.currentHeight > 0 {
+                if keyboardHeight > 0 {
                     Spacer()
                         .frame(minHeight: 15)
                 }
@@ -70,9 +76,10 @@ public struct NewDiaryView: View {
         .onTapGesture {
             isHashtagFocused = nil
         }
-        .animation(.easeInOut, value: keyboard.currentHeight)
+        .animation(.easeInOut, value: keyboardHeight)
         .transition(.opacity)
         .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+        .observeKeyboardHeight($keyboardHeight)
     }
 }
 

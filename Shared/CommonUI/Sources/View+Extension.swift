@@ -11,4 +11,8 @@ public extension View {
     func frame(size: CGFloat) -> some View {
         frame(width: size, height: size)
     }
+    
+    func observeKeyboardHeight(_ binding: Binding<CGFloat>) -> some View {
+        self.modifier(KeyboardHeightModifier(keyboardHeight: binding))
+    }
 }

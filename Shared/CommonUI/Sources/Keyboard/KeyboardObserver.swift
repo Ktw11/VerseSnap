@@ -11,10 +11,10 @@ import Combine
 
 @Observable
 @MainActor
-public final class KeyboardObserver: Sendable {
+final class KeyboardObserver: Sendable {
     // MARK: Lifecyle
     
-    public init() {
+    init() {
         setUpEvents()
     }
     
