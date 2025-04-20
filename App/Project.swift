@@ -37,6 +37,7 @@ let project = Project(
             dependencies: [
                 .feature(type: .signIn),
                 .feature(type: .home),
+                .feature(type: .newDiary),
                 .core(type: .thirdPartyAuth),
                 .data(type: .repository),
                 .shared(type: .commonUI),

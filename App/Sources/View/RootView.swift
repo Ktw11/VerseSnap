@@ -2,10 +2,12 @@ import SwiftUI
 import CommonUI
 import SignInInterface
 import HomeInterface
+import NewDiaryInterface
 
 struct RootView<
     SignInComponent: SignInBuilder,
-    HomeComponent: HomeBuilder
+    HomeComponent: HomeBuilder,
+    NewDiaryComponent: NewDiaryBuilder
 >: View {
     
     // MARK: Lifecycle
@@ -13,17 +15,20 @@ struct RootView<
     init(
         viewModel: RootViewModel,
         signInBuilder: SignInComponent,
-        homeBuilder: HomeComponent
+        homeBuilder: HomeComponent,
+        newDiaryBuilder: NewDiaryComponent
     ) {
         self.viewModel = viewModel
         self.signInBuilder = signInBuilder
         self.homeBuilder = homeBuilder
+        self.newDiaryBuilder = newDiaryBuilder
     }
     
     // MARK: Properites
     
     private let signInBuilder: SignInComponent
     private let homeBuilder: HomeComponent
+    private let newDiaryBuilder: NewDiaryComponent
     private let viewModel: RootViewModel
 
     var body: some View {
@@ -39,7 +44,7 @@ struct RootView<
             case .signIn:
                 signInBuilder.build()
             case .tabs:
-                RootTabView(homeBuilder: homeBuilder)
+                RootTabView(homeBuilder: homeBuilder, newDiaryBuilder: newDiaryBuilder)
             }
         }
         .onAppear {
@@ -54,6 +59,7 @@ struct RootView<
     RootView(
         viewModel: dependency.mockRootViewModel,
         signInBuilder: dependency.signInBuilder,
-        homeBuilder: dependency.homeBuilder
+        homeBuilder: dependency.homeBuilder,
+        newDiaryBuilder: dependency.newDiaryBuilder
     )
 }
