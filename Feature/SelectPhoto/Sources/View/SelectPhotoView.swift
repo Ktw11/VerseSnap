@@ -12,33 +12,55 @@ public struct SelectPhotoView: View {
     
     // MARK: Lifecycle
     
-    public init(viewModel: SelectPhotoViewModel) {
+    public init(croppedImage: Binding<Image?>,viewModel: SelectPhotoViewModel) {
+        self._croppedImage = croppedImage
         self.viewModel = viewModel
     }
     
     // MARK: Properties
 
     @Bindable private var viewModel: SelectPhotoViewModel
-    @State private var pushCropView = false
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
+    @Binding var croppedImage: Image?
+    @State var path = NavigationPath()
     @Environment(\.dismiss) private var dismiss
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
     
     public var body: some View {
-        NavigationStack {
+        Group {
             if viewModel.isAuthorized {
-                VStack {
-                    headerView()
-                    
-                    photosGridView()
+                NavigationStack(path: $path) {
+                    VStack {
+                        headerView()
+                        
+                        photosGridView()
+                    }
+                    .navigationDestination(for: UIImage.self) { uiImage in
+                        ImageCropView(uiImage: uiImage, config: Self.cropConfig) { cropped in
+                            croppedImage = cropped
+                            dismiss()
+                        }
+                    }
+                    .toolbarVisibility(.hidden, for: .navigationBar)
                 }
+                .tint(Color.white)
             } else {
                 loadingView()
             }
         }
+        .background(CommonUIAsset.Color.mainBG.swiftUIColor)
     }
 }
 
 private extension SelectPhotoView {
+    static var cropConfig: ImageCropView.Configuration {
+        .init(
+            minimumDistanceToSelect: 16,
+            minWidth: 100,
+            minHeight: 100,
+            ratio: 4 / 3
+        )
+    }
+    
     @ViewBuilder
     func headerView() -> some View {
         Text("사진 선택")
@@ -53,7 +75,7 @@ private extension SelectPhotoView {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 2) {
                 ForEach(viewModel.assets, id: \.localIdentifier) { asset in
-                    SelectPhotoPickerCell(asset: asset)
+                    SelectPhotoPickerCell(asset: asset, path: $path)
                         .environment(viewModel)
                 }
                 

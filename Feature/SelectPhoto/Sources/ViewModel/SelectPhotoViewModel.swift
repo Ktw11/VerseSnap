@@ -20,13 +20,33 @@ public final class SelectPhotoViewModel {
         self.useCase = dependency.useCase
     }
     
+    deinit {
+        cachingManager.stopCachingImagesForAllAssets()
+    }
+    
+    // MARK: Definitions
+    
+    private enum Constants {
+        static let cellImageContentMode: PHImageContentMode = .aspectFill
+        
+        @MainActor static let imageRequestOptions: PHImageRequestOptions = {
+            let options = PHImageRequestOptions()
+            options.deliveryMode = .opportunistic
+            options.isSynchronous = false
+            return options
+        }()
+    }
+    
     // MARK: Properites
     
+    var croppedImage: UIImage? = nil
+    var selectedImage: UIImage? = nil
     var isAuthAlertPresented: Bool = false
     private(set) var assets: [PHAsset] = []
     private(set) var isFinished: Bool = false
     private(set) var isAuthorized: Bool = false
     
+    private var isCachingStarted: Bool = false
     private var isFetching: Bool = false
     private var currentIndex: Int = 0
     private let pageSize: Int
@@ -36,12 +56,6 @@ public final class SelectPhotoViewModel {
         let manager = PHCachingImageManager()
         manager.allowsCachingHighQualityImages = true
         return manager
-    }()
-    private let imageRequestOptions: PHImageRequestOptions = {
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .opportunistic
-        options.isSynchronous = false
-        return options
     }()
     
     // MARK: Methods
@@ -85,15 +99,37 @@ public final class SelectPhotoViewModel {
         }
     }
     
-    func requestImage(from asset: PHAsset, cellSize: CGSize, resultHandler: @escaping ((Image) -> Void)) -> PHImageRequestID {
-        cachingManager.requestImage(
+    func requestImage(from asset: PHAsset, cellSize: CGSize, resultHandler: @escaping ((UIImage) -> Void)) -> PHImageRequestID {
+        let requestId: PHImageRequestID = cachingManager.requestImage(
             for: asset,
             targetSize: targetSize(requested: cellSize, scale: UIScreen.main.scale),
-            contentMode: .aspectFill,
-            options: imageRequestOptions
-        ) { uiImage, _ in
-            guard let uiImage else { return }
-            resultHandler(Image(uiImage: uiImage))
+            contentMode: Constants.cellImageContentMode,
+            options: Constants.imageRequestOptions
+        ) { image, _ in
+            guard let image else { return }
+            resultHandler(image)
+        }
+        
+        if !isCachingStarted {
+            isCachingStarted = true
+            startCachingImages(targetSize: cellSize)
+        }
+        
+        return requestId
+    }
+    
+    func requestImageWithHighQuality(from asset: PHAsset, resultHandler: @escaping ((UIImage?) -> Void)) {
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        options.isSynchronous = true
+        
+        cachingManager.requestImage(
+            for: asset,
+            targetSize: PHImageManagerMaximumSize,
+            contentMode: .aspectFit,
+            options: options
+        ) { image, _ in
+            resultHandler(image)
         }
     }
     
@@ -105,5 +141,14 @@ public final class SelectPhotoViewModel {
 private extension SelectPhotoViewModel {
     func targetSize(requested size: CGSize, scale: CGFloat) -> CGSize {
         CGSize(width: size.width * scale, height: size.height * scale)
+    }
+    
+    func startCachingImages(targetSize: CGSize) {
+        cachingManager.startCachingImages(
+            for: assets,
+            targetSize: targetSize,
+            contentMode: Constants.cellImageContentMode,
+            options: Constants.imageRequestOptions
+        )
     }
 }

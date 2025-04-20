@@ -11,7 +11,8 @@ import Photos
 
 struct SelectPhotoPickerCell: View {
     let asset: PHAsset
-    @State private var image: Image? = nil
+    @Binding var path: NavigationPath
+    @State private var image: UIImage? = nil
     @State private var imageRequestId: PHImageRequestID?
     @Environment(SelectPhotoViewModel.self) private var viewModel: SelectPhotoViewModel
     
@@ -21,11 +22,14 @@ struct SelectPhotoPickerCell: View {
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
-                        image
+                        Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
                     }
                     .clipped()
+                    .onTapGesture {
+                        didTapImage()
+                    }
             } else {
                 CommonUIAsset.Color.placeholderBG.swiftUIColor
                     .aspectRatio(1, contentMode: .fit)
@@ -53,6 +57,13 @@ private extension SelectPhotoPickerCell {
 
         imageRequestId = viewModel.requestImage(from: asset, cellSize: size) { image in
             self.image = image
+        }
+    }
+    
+    func didTapImage() {
+        viewModel.requestImageWithHighQuality(from: asset) { image in
+            guard let image else { return }
+            self.path.append(image)
         }
     }
 }
