@@ -21,7 +21,14 @@ let project = Project(
                     "BaseURL": "$(API_BASE_URL)",
                     "LSApplicationQueriesSchemes": [
                         "kakaokompassauth"
-                    ]
+                    ],
+                    "CFBundleURLTypes": [
+                        [
+                            "CFBundleURLSchemes": [
+                                "kakao$(KAKAO_APP_KEY)"
+                            ]
+                        ]
+                    ],
                 ]
             ),
             sources: ["Sources/**"],
