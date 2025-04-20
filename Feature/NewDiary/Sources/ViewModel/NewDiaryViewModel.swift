@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utils
 
 @MainActor
 @Observable
@@ -14,6 +15,11 @@ public final class NewDiaryViewModel {
     // MARK: Properties
     
     var hashtags: [Hashtag] = [.init(value: "")]
+    let dateString: String = dateFormatter.string(from: Date())
+    
+    private static var dateFormatter: DateFormatter = .init()
+        .dateFormat("yyyy.M.d")
+        .locale(Locale.current)
     
     // MARK: Definitions
     

@@ -86,7 +86,7 @@ public struct NewDiaryView: View {
 private extension NewDiaryView {
     @ViewBuilder
     func dateHeaderView() -> some View {
-        Text("2025.6.17")
+        Text(viewModel.dateString)
             .font(.suite(size: 20, weight: .bold))
             .foregroundStyle(.white)
             .padding(.bottom, 30)
