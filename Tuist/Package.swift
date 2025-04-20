@@ -15,6 +15,6 @@
 let package = Package(
     name: "VerseSnap",
     dependencies: [
-        .package(url: "https://github.com/kakao/kakao-ios-sdk", exact: "2.23.0"),
+        .package(url: "https://github.com/kakao/kakao-ios-sdk", exact: "2.24.0"),
     ]
 )
