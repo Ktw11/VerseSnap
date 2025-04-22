@@ -39,18 +39,7 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
     public var body: some View {
         ScrollView(.vertical) {
             VStack {
-                HStack {
-                    CommonUIAsset.Image.icExitBig.swiftUIImage
-                        .resizable()
-                        .frame(size: 24)
-                        .onTapGesture {
-                            isPresented.toggle()
-                        }
-                        .padding(.leading, 27)
-                    
-                    Spacer()
-                }
-                .padding(.top, 20)
+                headerView()
                 
                 Spacer()
                     .frame(height: 30)
@@ -61,7 +50,7 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
                             .frame(height: 15)
                     } else {
                         VStack {
-                            dateHeaderView()
+                            dateView()
                             
                             imagePickerView()
                                 .onTapGesture {
@@ -108,7 +97,23 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
 
 private extension NewDiaryView {
     @ViewBuilder
-    func dateHeaderView() -> some View {
+    func headerView() -> some View {
+        HStack {
+            CommonUIAsset.Image.icExitBig.swiftUIImage
+                .resizable()
+                .frame(size: 24)
+                .onTapGesture {
+                    isPresented.toggle()
+                }
+                .padding(.leading, 27)
+            
+            Spacer()
+        }
+        .padding(.top, 20)
+    }
+    
+    @ViewBuilder
+    func dateView() -> some View {
         Text(viewModel.dateString)
             .font(.suite(size: 20, weight: .bold))
             .foregroundStyle(.white)
