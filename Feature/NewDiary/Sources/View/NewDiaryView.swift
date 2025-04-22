@@ -161,12 +161,14 @@ private extension NewDiaryView {
 }
 
 #Preview {
+    @Previewable @State var isPresented: Bool = true
+    
     ZStack {
         CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
         NewDiaryView(
-            isPresented: .constant(true),
+            isPresented: $isPresented,
             viewModel: .init(),
             selectPhotoBuilder: SelectPhotoPreviewComponent()
         )
