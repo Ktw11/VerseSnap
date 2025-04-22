@@ -7,9 +7,6 @@
     "#" : {
       "shouldTranslate" : false
     },
-    "2025.6.17" : {
-      "shouldTranslate" : false
-    },
     "사진 선택하기" : {
       "localizations" : {
         "en" : {
