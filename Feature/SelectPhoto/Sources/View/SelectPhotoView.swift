@@ -63,11 +63,28 @@ private extension SelectPhotoView {
     
     @ViewBuilder
     func headerView() -> some View {
-        Text("사진 선택")
-            .font(.system(size: 17))
-            .foregroundStyle(Color.white)
-            .padding(.vertical, 15)
-            .frame(alignment: .center)
+        HStack(alignment: .center) {
+            CommonUIAsset.Image.icExitBig.swiftUIImage
+                .resizable()
+                .frame(size: 24)
+                .onTapGesture {
+                    dismiss()
+                }
+                .padding(.leading, 15)
+            
+            Spacer()
+            
+            Text("사진 선택")
+                .font(.system(size: 17))
+                .foregroundStyle(Color.white)
+            
+            Spacer()
+
+            Color.clear
+                .frame(width: 24)
+                .padding(.trailing, 15)
+        }
+        .frame(height: 44)
     }
     
     @ViewBuilder
