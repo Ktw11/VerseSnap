@@ -53,10 +53,13 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
                 .padding(.top, 20)
                 
                 Spacer()
-                    .frame(height: 45)
+                    .frame(height: 30)
 
                 ZStack {
-                    if keyboardHeight == 0 {
+                    if keyboardHeight > 0 {
+                        Spacer()
+                            .frame(height: 15)
+                    } else {
                         VStack {
                             dateHeaderView()
                             
@@ -66,9 +69,6 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
                                 }
                                 .padding(.bottom, 15)
                         }
-                    } else {
-                        Spacer()
-                            .frame(height: 15)
                     }
                 }
                 
@@ -79,6 +79,11 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
                     } action: {
                         hashtagsViewMaxWidth = $0
                     }
+                
+                createButton()
+                    .opacity(keyboardHeight > 0 || viewModel.croppedImage == nil ? 0 : 1)
+                    .animation(nil, value: keyboardHeight)
+                    .animation(.easeInOut, value: viewModel.croppedImage)
                 
                 if keyboardHeight > 0 {
                     Spacer()
@@ -152,7 +157,7 @@ private extension NewDiaryView {
             .font(.suite(size: 16, weight: .regular))
             .foregroundStyle(.white)
             .padding(.horizontal, 22)
-            .padding(.vertical, 12)
+            .padding(.vertical, 8)
             .background {
                 Color.white.opacity(0.2)
                     .clipShape(Capsule())
