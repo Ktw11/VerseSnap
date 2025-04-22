@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Hashtag: Identifiable {
+struct Hashtag: Identifiable, Equatable {
     var id: UUID = UUID()
     var value: String
 }

@@ -146,6 +146,7 @@ private extension NewDiaryView {
                     icon: CommonUIAsset.Image.icExit.swiftUIImage,
                     eventListener: viewModel
                 )
+                .animation(nil, value: keyboardHeight)
             }
         }
         .padding(.all, 10)
