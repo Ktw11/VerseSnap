@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Utils
 
 @MainActor
@@ -16,6 +17,8 @@ public final class NewDiaryViewModel {
     
     var hashtags: [Hashtag] = [.init(value: "")]
     let dateString: String = dateFormatter.string(from: Date())
+    var croppedImage: Image?
+    let imageRatio: CGFloat = 0.65
     
     private static var dateFormatter: DateFormatter = .init()
         .dateFormat("yyyy.M.d")

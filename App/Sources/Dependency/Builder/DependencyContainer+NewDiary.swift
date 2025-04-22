@@ -12,6 +12,10 @@ import NewDiaryInterface
 extension DependencyContainer {
     @MainActor
     var newDiaryBuilder: some NewDiaryBuilder {
-        NewDiaryComponent()
+        NewDiaryComponent(
+            dependency: NewDiaryDependency(
+                selectPhotoBuilder: selectPhotoBuilder
+            )
+        )
     }
 }

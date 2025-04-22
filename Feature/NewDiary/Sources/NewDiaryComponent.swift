@@ -7,18 +7,29 @@
 
 import SwiftUI
 import NewDiaryInterface
+import SelectPhotoInterface
 
-public final class NewDiaryComponent: NewDiaryBuilder {
+public final class NewDiaryComponent<SelectPhotoComponent: SelectPhotoBuilder>: NewDiaryBuilder {
     
     // MARK: Lifecycle
     
-    public init() { }
+    public init(dependency: NewDiaryDependency<SelectPhotoComponent>) {
+        self.dependency = dependency
+    }
+    
+    // MARK: Properties
+    
+    private let dependency: NewDiaryDependency<SelectPhotoComponent>
     
     // MARK: Methods
     
     @MainActor
     @ViewBuilder
-    public func build(isPresented: Binding<Bool>) -> NewDiaryView {
-        NewDiaryView(isPresented: isPresented, viewModel: NewDiaryViewModel())
+    public func build(isPresented: Binding<Bool>) -> some View {
+        NewDiaryView(
+            isPresented: isPresented,
+            viewModel: NewDiaryViewModel(),
+            selectPhotoBuilder: dependency.selectPhotoBuilder
+        )
     }
 }

@@ -7,14 +7,20 @@
 
 import SwiftUI
 import CommonUI
+import SelectPhotoInterface
 
-public struct NewDiaryView: View {
+public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
     
     // MARK: Lifecycle
     
-    public init(isPresented: Binding<Bool>, viewModel: NewDiaryViewModel) {
+    public init(
+        isPresented: Binding<Bool>,
+        viewModel: NewDiaryViewModel,
+        selectPhotoBuilder: SelectPhotoComponent
+    ) {
         self._isPresented = isPresented
         self.viewModel = viewModel
+        self.selectPhotoBuilder = selectPhotoBuilder
     }
     
     // MARK: Properties
@@ -27,6 +33,8 @@ public struct NewDiaryView: View {
     @State private var hashtagsViewMaxWidth: CGFloat = 0
     @State private var isInputViewPresented: Bool = false
     @State private var isPhotoPickerPresented: Bool = false
+    
+    private let selectPhotoBuilder: SelectPhotoComponent
     
     public var body: some View {
         ScrollView(.vertical) {
@@ -53,6 +61,9 @@ public struct NewDiaryView: View {
                             dateHeaderView()
                             
                             imagePickerView()
+                                .onTapGesture {
+                                    self.isPhotoPickerPresented = true
+                                }
                                 .padding(.bottom, 15)
                         }
                     } else {
@@ -83,6 +94,10 @@ public struct NewDiaryView: View {
         .transition(.opacity)
         .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
         .observeKeyboardHeight($keyboardHeight)
+        .fullScreenCover(isPresented: $isPhotoPickerPresented) {
+            selectPhotoBuilder.build(croppedImage: $viewModel.croppedImage, ratio: viewModel.imageRatio)
+                .presentationBackground(CommonUIAsset.Color.mainBG.swiftUIColor)
+        }
     }
 }
 
@@ -98,14 +113,21 @@ private extension NewDiaryView {
     @ViewBuilder
     func imagePickerView() -> some View {
         CommonUIAsset.Color.placeholderBG.swiftUIColor
-            .clipShape(RoundedRectangle(cornerRadius: 30))
-            .aspectRatio(0.65, contentMode: .fill)
+            .aspectRatio(viewModel.imageRatio, contentMode: .fit)
             .containerRelativeFrame(.horizontal) { width, _ in width * 0.7 }
             .overlay {
-                Text("사진 선택하기")
-                    .foregroundStyle(.white)
-                    .font(.suite(size: 15, weight: .regular))
+                if let image = viewModel.croppedImage {
+                    image
+                        .resizable()
+                        .aspectRatio(0.65, contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    Text("사진 선택하기")
+                        .foregroundStyle(.white)
+                        .font(.suite(size: 15, weight: .regular))
+                }
             }
+            .clipShape(RoundedRectangle(cornerRadius: 30))
     }
     
     @ViewBuilder
@@ -143,6 +165,10 @@ private extension NewDiaryView {
         CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
-        NewDiaryView(isPresented: .constant(true), viewModel: NewDiaryViewModel())
+        NewDiaryView(
+            isPresented: .constant(true),
+            viewModel: .init(),
+            selectPhotoBuilder: SelectPhotoPreviewComponent()
+        )
     }
 }
