@@ -29,6 +29,7 @@ let project = Project(
                             ]
                         ]
                     ],
+                    "NSPhotoLibraryUsageDescription": "need access to photo library"
                 ]
             ),
             sources: ["Sources/**"],
@@ -38,6 +39,7 @@ let project = Project(
                 .feature(type: .signIn),
                 .feature(type: .home),
                 .feature(type: .newDiary),
+                .feature(type: .selectPhoto),
                 .core(type: .thirdPartyAuth),
                 .data(type: .repository),
                 .shared(type: .commonUI),
