@@ -10,7 +10,7 @@ import Combine
 
 struct KeyboardHeightModifier: ViewModifier {
     @Binding var keyboardHeight: CGFloat
-    private let keyboardObserver = KeyboardObserver()
+    private let keyboardObserver: KeyboardObserver = .shared
     
     func body(content: Content) -> some View {
         content

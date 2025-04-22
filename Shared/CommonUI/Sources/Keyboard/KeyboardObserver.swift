@@ -14,11 +14,13 @@ import Combine
 final class KeyboardObserver: Sendable {
     // MARK: Lifecyle
     
-    init() {
+    private init() {
         setUpEvents()
     }
     
     // MARK: Properties
+    
+    public static let shared = KeyboardObserver()
     
     public private(set) var currentHeight: CGFloat = 0
     private var bag = Set<AnyCancellable>()
