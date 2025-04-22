@@ -128,7 +128,7 @@ private extension ImageCropView {
             }
             .overlay {
                 Color.clear
-                    .aspectRatio((1.0 / config.ratio), contentMode: .fit)
+                    .aspectRatio(config.ratio, contentMode: .fit)
                     .overlay {
                         GeometryReader { proxy in
                             Color.clear

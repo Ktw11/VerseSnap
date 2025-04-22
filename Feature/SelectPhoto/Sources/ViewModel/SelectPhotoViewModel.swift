@@ -15,7 +15,8 @@ public final class SelectPhotoViewModel {
     
     // MARK: Lifecycle
     
-    public init(dependency: SelectPhotoDependency) {
+    public init(ratio: CGFloat, dependency: SelectPhotoDependency) {
+        self.ratio = ratio
         self.pageSize = dependency.pageSize
         self.useCase = dependency.useCase
     }
@@ -45,6 +46,7 @@ public final class SelectPhotoViewModel {
     private(set) var assets: [PHAsset] = []
     private(set) var isFinished: Bool = false
     private(set) var isAuthorized: Bool = false
+    let ratio: CGFloat
     
     private var isCachingStarted: Bool = false
     private var isFetching: Bool = false

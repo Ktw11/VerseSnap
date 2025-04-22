@@ -35,7 +35,7 @@ public struct SelectPhotoView: View {
                         photosGridView()
                     }
                     .navigationDestination(for: UIImage.self) { uiImage in
-                        ImageCropView(uiImage: uiImage, config: Self.cropConfig) { cropped in
+                        ImageCropView(uiImage: uiImage, config: Self.cropConfig(ratio: viewModel.ratio)) { cropped in
                             croppedImage = cropped
                             dismiss()
                         }
@@ -52,12 +52,12 @@ public struct SelectPhotoView: View {
 }
 
 private extension SelectPhotoView {
-    static var cropConfig: ImageCropView.Configuration {
+    static func cropConfig(ratio: CGFloat) -> ImageCropView.Configuration {
         .init(
             minimumDistanceToSelect: 16,
             minWidth: 100,
             minHeight: 100,
-            ratio: 4 / 3
+            ratio: ratio
         )
     }
     
