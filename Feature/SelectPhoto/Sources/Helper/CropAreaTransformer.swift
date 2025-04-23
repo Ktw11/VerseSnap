@@ -53,9 +53,9 @@ struct CropAreaTransformer: Sendable {
         
         // decide dominating direction
         let widthFromWidth: CGFloat = abs(vectorX)
-        let widthFromHeight: CGFloat = abs(vectorY) / config.ratio
+        let widthFromHeight: CGFloat = abs(vectorY) * config.ratio
         let newWidth: CGFloat = max(widthFromWidth, widthFromHeight)
-        let newHeight: CGFloat = newWidth * config.ratio
+        let newHeight: CGFloat = newWidth / config.ratio
         
         // calculate new Rect
         guard let newRect: CGRect = calculateDraggedRect(
