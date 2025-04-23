@@ -56,7 +56,7 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
                                 .onTapGesture {
                                     self.isPhotoPickerPresented = true
                                 }
-                                .padding(.bottom, 15)
+                                .padding(.bottom, 5)
                         }
                     }
                 }
@@ -155,6 +155,7 @@ private extension NewDiaryView {
             }
         }
         .padding(.all, 10)
+        .padding(.bottom, 10)
     }
     
     @ViewBuilder
