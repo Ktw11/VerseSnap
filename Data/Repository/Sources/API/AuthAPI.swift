@@ -30,7 +30,7 @@ extension AuthAPI: API {
         }
     }
     
-    var bodyParameters: [String: String]? {
+    var bodyParameters: [String: Any]? {
         switch self {
         case let .signIn(token, _):
             return ["token": token]

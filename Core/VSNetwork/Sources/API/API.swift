@@ -12,7 +12,7 @@ public protocol API: Sendable {
     var method: HttpMethod { get }
     var headers: [String: String] { get }
     var queryParameters: [String: String]? { get }
-    var bodyParameters: [String: String]? { get }
+    var bodyParameters: [String: Any]? { get }
     var needsAuthorization: Bool { get }
 }
 
@@ -25,7 +25,7 @@ public extension API {
         nil
     }
     
-    var bodyParameters: [String: String]? {
+    var bodyParameters: [String: Any]? {
         nil
     }
 
