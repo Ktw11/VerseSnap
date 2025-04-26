@@ -8,12 +8,14 @@
 import SwiftUI
 import NewDiary
 import NewDiaryInterface
+import Domain
 
 extension DependencyContainer {
     @MainActor
     var newDiaryBuilder: some NewDiaryBuilder {
         NewDiaryComponent(
             dependency: NewDiaryDependency(
+                useCase: useCaseBuilder.verseUseCase,
                 selectPhotoBuilder: selectPhotoBuilder
             )
         )

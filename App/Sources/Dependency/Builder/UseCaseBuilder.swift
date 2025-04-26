@@ -10,6 +10,7 @@ import Domain
 
 protocol UseCaseBuilder {
     var signInUseCase: SignInUseCase { get }
+    var verseUseCase: VerseUseCase { get }
 }
 
 final class UseCaseComponent: UseCaseBuilder {
@@ -34,6 +35,14 @@ final class UseCaseComponent: UseCaseBuilder {
             authRepository: repositoryBuilder.authRepository,
             signInInfoRepository: repositoryBuilder.signInInfoRepository,
             thirdAuthProvider: thirdAuthProvider
+        )
+    }
+    
+    var verseUseCase: VerseUseCase {
+        VerseUseCaseImpl(
+            locale: Locale.current,
+            imageResizeProvider: ImageResizeProvider(),
+            repository: repositoryBuilder.verseRepository
         )
     }
 }

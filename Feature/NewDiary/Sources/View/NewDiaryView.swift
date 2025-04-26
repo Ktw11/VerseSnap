@@ -181,7 +181,7 @@ private extension NewDiaryView {
         
         NewDiaryView(
             isPresented: $isPresented,
-            viewModel: .init(),
+            viewModel: .init(useCase: VerseUseCasePreview()),
             selectPhotoBuilder: SelectPhotoPreviewComponent()
         )
     }

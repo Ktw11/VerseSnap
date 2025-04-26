@@ -13,6 +13,7 @@ import VSNetwork
 protocol RepositoryBuilder {
     var authRepository: AuthRepository { get }
     var signInInfoRepository: SignInInfoRepository { get }
+    var verseRepository: VerseRepository { get }
 }
 
 final class RepositoryComponent: RepositoryBuilder {
@@ -36,5 +37,9 @@ final class RepositoryComponent: RepositoryBuilder {
     
     var signInInfoRepository: SignInInfoRepository {
         SignInInfoRepositoryImpl(dataSource: signInInfoDataSource)
+    }
+    
+    var verseRepository: VerseRepository {
+        VerseRepositoryImpl(networkProvider: networkProvider)
     }
 }

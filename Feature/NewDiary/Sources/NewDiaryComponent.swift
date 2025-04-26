@@ -28,7 +28,7 @@ public final class NewDiaryComponent<SelectPhotoComponent: SelectPhotoBuilder>: 
     public func build(isPresented: Binding<Bool>) -> some View {
         NewDiaryView(
             isPresented: isPresented,
-            viewModel: NewDiaryViewModel(),
+            viewModel: NewDiaryViewModel(useCase: dependency.useCase),
             selectPhotoBuilder: dependency.selectPhotoBuilder
         )
     }

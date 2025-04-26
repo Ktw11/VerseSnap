@@ -8,10 +8,23 @@
 import Foundation
 import SwiftUI
 import Utils
+import Domain
 
 @MainActor
 @Observable
 public final class NewDiaryViewModel {
+    
+    // MARK: Lifecycle
+    
+    public init(useCase: VerseUseCase) {
+        self.useCase = useCase
+    }
+    
+    // MARK: Definitions
+    
+    private enum Constants {
+        static let maxHastagCount: Int = 5
+    }
     
     // MARK: Properties
     
@@ -19,16 +32,11 @@ public final class NewDiaryViewModel {
     let dateString: String = dateFormatter.string(from: Date())
     var croppedImage: Image?
     let imageRatio: CGFloat = 0.65
+    private let useCase: VerseUseCase
     
     private static var dateFormatter: DateFormatter = .init()
         .dateFormat("yyyy.M.d")
         .locale(Locale.current)
-    
-    // MARK: Definitions
-    
-    private enum Constants {
-        static let maxHastagCount: Int = 5
-    }
 }
 
 extension NewDiaryViewModel: HashtagEventListener {
