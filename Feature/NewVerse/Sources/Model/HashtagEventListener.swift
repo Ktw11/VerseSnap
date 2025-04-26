@@ -1,6 +1,6 @@
 //
 //  HashtagEventListener.swift
-//  NewDiary
+//  NewVerse
 //
 //  Created by 공태웅 on 4/4/25.
 //

@@ -1,6 +1,6 @@
 //
-//  NewDiaryViewModel.swift
-//  NewDiary
+//  NewVerseViewModel.swift
+//  NewVerse
 //
 //  Created by 공태웅 on 4/4/25.
 //
@@ -12,7 +12,7 @@ import Domain
 
 @MainActor
 @Observable
-public final class NewDiaryViewModel {
+public final class NewVerseViewModel {
     
     // MARK: Lifecycle
     
@@ -39,7 +39,7 @@ public final class NewDiaryViewModel {
         .locale(Locale.current)
 }
 
-extension NewDiaryViewModel: HashtagEventListener {
+extension NewVerseViewModel: HashtagEventListener {
     func didTapCreateButton() {
         // 24시간 내에 글을
         
@@ -70,7 +70,7 @@ extension NewDiaryViewModel: HashtagEventListener {
     }
 }
 
-private extension NewDiaryViewModel {
+private extension NewVerseViewModel {
     var hashtagsHasPlaceholder: Bool {
         hashtags.contains(where: { $0.value.isEmpty })
     }

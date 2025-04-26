@@ -1,6 +1,6 @@
 //
-//  NewDiaryDependency.swift
-//  NewDiary
+//  NewVerseDependency.swift
+//  NewVerse
 //
 //  Created by 공태웅 on 4/20/25.
 //
@@ -9,7 +9,7 @@ import Foundation
 import SelectPhotoInterface
 import Domain
 
-public struct NewDiaryDependency<SelectPhotoComponent: SelectPhotoBuilder> {
+public struct NewVerseDependency<SelectPhotoComponent: SelectPhotoBuilder> {
     
     // MARK: Lifecycle
     

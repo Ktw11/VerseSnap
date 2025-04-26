@@ -1,34 +1,34 @@
 //
-//  NewDiaryComponent.swift
-//  NewDiary
+//  NewVerseComponent.swift
+//  NewVerse
 //
 //  Created by 공태웅 on 3/18/25.
 //
 
 import SwiftUI
-import NewDiaryInterface
+import NewVerseInterface
 import SelectPhotoInterface
 
-public final class NewDiaryComponent<SelectPhotoComponent: SelectPhotoBuilder>: NewDiaryBuilder {
+public final class NewVerseComponent<SelectPhotoComponent: SelectPhotoBuilder>: NewVerseBuilder {
     
     // MARK: Lifecycle
     
-    public init(dependency: NewDiaryDependency<SelectPhotoComponent>) {
+    public init(dependency: NewVerseDependency<SelectPhotoComponent>) {
         self.dependency = dependency
     }
     
     // MARK: Properties
     
-    private let dependency: NewDiaryDependency<SelectPhotoComponent>
+    private let dependency: NewVerseDependency<SelectPhotoComponent>
     
     // MARK: Methods
     
     @MainActor
     @ViewBuilder
     public func build(isPresented: Binding<Bool>) -> some View {
-        NewDiaryView(
+        NewVerseView(
             isPresented: isPresented,
-            viewModel: NewDiaryViewModel(useCase: dependency.useCase),
+            viewModel: NewVerseViewModel(useCase: dependency.useCase),
             selectPhotoBuilder: dependency.selectPhotoBuilder
         )
     }

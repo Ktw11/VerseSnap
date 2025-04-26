@@ -1,6 +1,6 @@
 //
 //  VerseUseCasePreview.swift
-//  NewDiary
+//  NewVerse
 //
 //  Created by 공태웅 on 4/26/25.
 //

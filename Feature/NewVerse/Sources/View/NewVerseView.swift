@@ -1,6 +1,6 @@
 //
-//  NewDiaryView.swift
-//  NewDiary
+//  NewVerseView.swift
+//  NewVerse
 //
 //  Created by 공태웅 on 3/16/25.
 //
@@ -9,13 +9,13 @@ import SwiftUI
 import CommonUI
 import SelectPhotoInterface
 
-public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
+public struct NewVerseView<SelectPhotoComponent: SelectPhotoBuilder>: View {
     
     // MARK: Lifecycle
     
     public init(
         isPresented: Binding<Bool>,
-        viewModel: NewDiaryViewModel,
+        viewModel: NewVerseViewModel,
         selectPhotoBuilder: SelectPhotoComponent
     ) {
         self._isPresented = isPresented
@@ -26,7 +26,7 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
     // MARK: Properties
     
     @Binding var isPresented: Bool
-    @Bindable private var viewModel: NewDiaryViewModel
+    @Bindable private var viewModel: NewVerseViewModel
     
     @FocusState private var isHashtagFocused: UUID?
     @State private var keyboardHeight: CGFloat = 0
@@ -95,7 +95,7 @@ public struct NewDiaryView<SelectPhotoComponent: SelectPhotoBuilder>: View {
     }
 }
 
-private extension NewDiaryView {
+private extension NewVerseView {
     @ViewBuilder
     func headerView() -> some View {
         HStack {
@@ -183,7 +183,7 @@ private extension NewDiaryView {
         CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
-        NewDiaryView(
+        NewVerseView(
             isPresented: $isPresented,
             viewModel: .init(useCase: VerseUseCasePreview()),
             selectPhotoBuilder: SelectPhotoPreviewComponent()

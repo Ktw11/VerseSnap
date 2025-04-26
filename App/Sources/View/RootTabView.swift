@@ -8,28 +8,28 @@
 import SwiftUI
 import CommonUI
 import HomeInterface
-import NewDiaryInterface
+import NewVerseInterface
 
 struct RootTabView<
     HomeComponent: HomeBuilder,
-    NewDiaryComponent: NewDiaryBuilder
+    NewVerseComponent: NewVerseBuilder
 >: View {
     // MARK: Lifecycle
     
     init(
         homeBuilder: HomeComponent,
-        newDiaryBuilder: NewDiaryComponent
+        newVerseBuilder: NewVerseComponent
     ) {
         self.homeBuilder = homeBuilder
-        self.newDiaryBuilder = newDiaryBuilder
+        self.newVerseBuilder = newVerseBuilder
     }
     
     // MARK: Properties
     
     @State private var selected: TabSelection = .home
-    @State private var isNewDiaryPresented: Bool = false
+    @State private var isNewVersePresented: Bool = false
     private let homeBuilder: HomeComponent
-    private let newDiaryBuilder: NewDiaryComponent
+    private let newVerseBuilder: NewVerseComponent
     
     var body: some View {
         VStack(spacing: 0) {
@@ -53,14 +53,14 @@ struct RootTabView<
                 .background(CommonUIAsset.Color.mainBG.swiftUIColor)
             }
             
-            CustomTabView(selected: $selected, isNewDiaryPresented: $isNewDiaryPresented)
+            CustomTabView(selected: $selected, isNewVersePresented: $isNewVersePresented)
                 .padding(.bottom, 15)
                 .background(CommonUIAsset.Color.mainBG.swiftUIColor)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
         }
         .edgesIgnoringSafeArea(.bottom)
-        .fullScreenCover(isPresented: $isNewDiaryPresented) {
-            newDiaryBuilder.build(isPresented: $isNewDiaryPresented)
+        .fullScreenCover(isPresented: $isNewVersePresented) {
+            newVerseBuilder.build(isPresented: $isNewVersePresented)
                 .presentationBackground(CommonUIAsset.Color.mainBG.swiftUIColor)
         }
     }
@@ -77,7 +77,7 @@ private struct CustomTabView: View {
     // MARK: Properties
     
     @Binding var selected: TabSelection
-    @Binding var isNewDiaryPresented: Bool
+    @Binding var isNewVersePresented: Bool
 
     var body: some View {
         HStack(alignment: .center) {
@@ -96,7 +96,7 @@ private struct CustomTabView: View {
             Spacer()
             
             Button {
-                isNewDiaryPresented.toggle()
+                isNewVersePresented.toggle()
             } label: {
                 AppAsset.Image.icPlusTab.swiftUIImage
                     .resizable()

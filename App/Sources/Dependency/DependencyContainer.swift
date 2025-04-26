@@ -49,7 +49,7 @@ final class DependencyContainer {
             viewModel: viewModel,
             signInBuilder: signInBuilder,
             homeBuilder: homeBuilder,
-            newDiaryBuilder: newDiaryBuilder
+            newVerseBuilder: newVerseBuilder
         )
     }
 }

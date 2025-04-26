@@ -1,6 +1,6 @@
 //
 //  Hashtag.swift
-//  NewDiary
+//  NewVerse
 //
 //  Created by 공태웅 on 3/18/25.
 //

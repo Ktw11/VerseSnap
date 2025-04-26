@@ -2,12 +2,12 @@ import SwiftUI
 import CommonUI
 import SignInInterface
 import HomeInterface
-import NewDiaryInterface
+import NewVerseInterface
 
 struct RootView<
     SignInComponent: SignInBuilder,
     HomeComponent: HomeBuilder,
-    NewDiaryComponent: NewDiaryBuilder
+    NewVerseComponent: NewVerseBuilder
 >: View {
     
     // MARK: Lifecycle
@@ -16,19 +16,19 @@ struct RootView<
         viewModel: RootViewModel,
         signInBuilder: SignInComponent,
         homeBuilder: HomeComponent,
-        newDiaryBuilder: NewDiaryComponent
+        newVerseBuilder: NewVerseComponent
     ) {
         self.viewModel = viewModel
         self.signInBuilder = signInBuilder
         self.homeBuilder = homeBuilder
-        self.newDiaryBuilder = newDiaryBuilder
+        self.newVerseBuilder = newVerseBuilder
     }
     
     // MARK: Properites
     
     private let signInBuilder: SignInComponent
     private let homeBuilder: HomeComponent
-    private let newDiaryBuilder: NewDiaryComponent
+    private let newVerseBuilder: NewVerseComponent
     private let viewModel: RootViewModel
 
     var body: some View {
@@ -44,7 +44,7 @@ struct RootView<
             case .signIn:
                 signInBuilder.build()
             case .tabs:
-                RootTabView(homeBuilder: homeBuilder, newDiaryBuilder: newDiaryBuilder)
+                RootTabView(homeBuilder: homeBuilder, newVerseBuilder: newVerseBuilder)
             }
         }
         .onAppear {
@@ -60,6 +60,6 @@ struct RootView<
         viewModel: dependency.mockRootViewModel,
         signInBuilder: dependency.signInBuilder,
         homeBuilder: dependency.homeBuilder,
-        newDiaryBuilder: dependency.newDiaryBuilder
+        newVerseBuilder: dependency.newVerseBuilder
     )
 }
