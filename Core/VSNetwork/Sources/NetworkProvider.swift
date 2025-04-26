@@ -69,7 +69,7 @@ private extension NetworkProvider {
         case 401:
             throw NetworkError.authenticationFailed
         case 400...499:
-            throw NetworkError.badRequest
+            throw NetworkError.badRequest(code: httpResponse.statusCode)
         case 500...599:
             throw NetworkError.serverError
         default:
