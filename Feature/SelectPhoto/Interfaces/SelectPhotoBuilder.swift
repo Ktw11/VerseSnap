@@ -12,5 +12,5 @@ public protocol SelectPhotoBuilder {
     
     @MainActor
     @ViewBuilder
-    func build(croppedImage: Binding<Image?>, ratio: CGFloat) -> SomeView
+    func build(croppedImage: Binding<UIImage?>, ratio: CGFloat) -> SomeView
 }

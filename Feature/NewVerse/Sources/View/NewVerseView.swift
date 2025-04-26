@@ -126,8 +126,8 @@ private extension NewVerseView {
             .aspectRatio(viewModel.imageRatio, contentMode: .fit)
             .containerRelativeFrame(.horizontal) { width, _ in width * 0.7 }
             .overlay {
-                if let image = viewModel.croppedImage {
-                    image
+                if let uiImage = viewModel.croppedImage {
+                    Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(0.65, contentMode: .fit)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -30,7 +30,7 @@ public final class NewVerseViewModel {
     
     var hashtags: [Hashtag] = [.init(value: "")]
     let dateString: String = dateFormatter.string(from: Date())
-    var croppedImage: Image?
+    var croppedImage: UIImage?
     let imageRatio: CGFloat = 0.65
     private let useCase: VerseUseCase
     

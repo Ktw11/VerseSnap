@@ -24,7 +24,7 @@ public struct SelectPhotoComponent: SelectPhotoBuilder {
     
     @MainActor
     @ViewBuilder
-    public func build(croppedImage: Binding<Image?>, ratio: CGFloat) -> SelectPhotoView {
+    public func build(croppedImage: Binding<UIImage?>, ratio: CGFloat) -> SelectPhotoView {
         SelectPhotoView(
             croppedImage: croppedImage,
             viewModel: SelectPhotoViewModel(ratio: ratio, dependency: dependency)

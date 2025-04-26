@@ -16,7 +16,7 @@ struct ImageCropView: View {
     init(
         uiImage: UIImage,
         config: Configuration,
-        didCropImage: @MainActor @escaping (Image) -> Void
+        didCropImage: @MainActor @escaping (UIImage) -> Void
     ) {
         self.uiImage = uiImage
         self.config = config
@@ -59,7 +59,7 @@ struct ImageCropView: View {
     @State private var draggedCorner: UIRectCorner? = nil
     
     private let uiImage: UIImage
-    private let didCropImage: (Image) -> Void
+    private let didCropImage: (UIImage) -> Void
     private let config: Configuration
     private let cropAreaTransformer: CropAreaTransformer
     
@@ -205,7 +205,7 @@ private extension ImageCropView {
     
     func didTapDone() {
         guard let cropped = cropImage() else { return }
-        didCropImage(Image(uiImage: cropped))
+        didCropImage(cropped)
     }
     
     func closestCorner(at point: CGPoint, rect: CGRect) -> UIRectCorner? {

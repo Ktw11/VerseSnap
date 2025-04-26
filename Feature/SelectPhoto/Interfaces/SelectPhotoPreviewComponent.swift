@@ -16,8 +16,8 @@ public struct SelectPhotoPreviewComponent: SelectPhotoBuilder {
     
     @MainActor
     @ViewBuilder
-    public func build(croppedImage: Binding<Image?>, ratio: CGFloat) -> AnyView {
         AnyView(
+    public func build(croppedImage: Binding<UIImage?>, ratio: CGFloat) -> AnyView {
             Text(verbatim: "Injected Ratio: \(ratio)")
         )
     }

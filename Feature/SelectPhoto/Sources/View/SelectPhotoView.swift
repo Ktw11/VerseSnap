@@ -12,7 +12,7 @@ public struct SelectPhotoView: View {
     
     // MARK: Lifecycle
     
-    public init(croppedImage: Binding<Image?>,viewModel: SelectPhotoViewModel) {
+    public init(croppedImage: Binding<UIImage?>,viewModel: SelectPhotoViewModel) {
         self._croppedImage = croppedImage
         self.viewModel = viewModel
     }
@@ -20,7 +20,7 @@ public struct SelectPhotoView: View {
     // MARK: Properties
 
     @Bindable private var viewModel: SelectPhotoViewModel
-    @Binding var croppedImage: Image?
+    @Binding var croppedImage: UIImage?
     @State var path = NavigationPath()
     @Environment(\.dismiss) private var dismiss
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
