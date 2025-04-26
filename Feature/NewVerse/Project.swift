@@ -1,7 +1,7 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let targetType: TargetType = .newDiary
+let targetType: TargetType = .newVerse
 
 let project = Project(
     name: targetType.name,

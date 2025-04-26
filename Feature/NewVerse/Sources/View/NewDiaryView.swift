@@ -160,15 +160,19 @@ private extension NewDiaryView {
     
     @ViewBuilder
     func createButton() -> some View {
-        Text("삼행시 생성하기")
-            .font(.suite(size: 16, weight: .regular))
-            .foregroundStyle(.white)
-            .padding(.horizontal, 22)
-            .padding(.vertical, 8)
-            .background {
-                Color.white.opacity(0.2)
-                    .clipShape(Capsule())
-            }
+        Button(action: {
+            viewModel.didTapCreateButton()
+        }, label: {
+            Text("삼행시 생성하기")
+                .font(.suite(size: 16, weight: .regular))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 22)
+                .padding(.vertical, 8)
+                .background {
+                    Color.white.opacity(0.2)
+                        .clipShape(Capsule())
+                }
+        })
     }
 }
 

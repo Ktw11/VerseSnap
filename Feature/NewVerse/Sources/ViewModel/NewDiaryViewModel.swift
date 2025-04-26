@@ -40,6 +40,11 @@ public final class NewDiaryViewModel {
 }
 
 extension NewDiaryViewModel: HashtagEventListener {
+    func didTapCreateButton() {
+        // 24시간 내에 글을
+        
+    }
+    
     func didSubmitHashtag(_ hashtag: Hashtag) {
         if hashtag.value.isEmpty {
             guard hashtags.filter({ $0.value.isEmpty }).count > 1 else { return }
