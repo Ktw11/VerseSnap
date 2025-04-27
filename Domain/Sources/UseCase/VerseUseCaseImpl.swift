@@ -14,11 +14,11 @@ public final class VerseUseCaseImpl: VerseUseCase {
     
     public init(
         locale: LocaleGettable,
-        imageResizeProvider: ImageResizable,
+        imageConverter: ImageConvertable,
         repository: VerseRepository
     ) {
         self.locale = locale
-        self.imageResizeProvider = imageResizeProvider
+        self.imageConverter = imageConverter
         self.repository = repository
     }
     
@@ -31,22 +31,26 @@ public final class VerseUseCaseImpl: VerseUseCase {
     // MARK: Properties
     
     private let locale: LocaleGettable
-    private let imageResizeProvider: ImageResizable
+    private let imageConverter: ImageConvertable
     private let repository: VerseRepository
     
     // MARK: Methods
     
     public func generate(image: UIImage) async throws -> VerseResult {
-        guard let resizedImage = imageResizeProvider.resizeImage(image, minLength: Constants.minLength) else { throw VerseError.failedToResizeImage }
-        guard let imageData = resizedImage.pngData() else { throw VerseError.failedToConvertImageToData }
+        guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength) else { throw VerseError.failedToConvertImageToData }
         
         let encodedImage: String = imageData.base64EncodedString()
         return try await repository.generateVerse(encodedImage: encodedImage, isKorean: locale.isLanguageKorean)
     }
 }
 
-private extension ImageResizable {
-    func resizeImage(_ image: UIImage, minLength: CGFloat) -> UIImage? {
-        resizeImage(image, minLength: minLength, outputScale: 1.0)
+private extension ImageConvertable {
+    func convertToJpegData(_ image: UIImage, minLength: CGFloat) -> Data? {
+        convertToJpegData(
+            image,
+            minLength: minLength,
+            outputScale: 1.0,
+            maxKB: 200 * 1024
+        )
     }
 }

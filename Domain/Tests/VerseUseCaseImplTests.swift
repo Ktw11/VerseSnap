@@ -13,26 +13,26 @@ final class VerseUseCaseImplTests: XCTestCase {
     
     var sut: VerseUseCaseImpl!
     var locale: MockLocale!
-    var imageResizeProvider: MockImageResizeProvider!
+    var imageConverter: MockImageConverter!
     var repository: MockVerseRepository!
      
     override func setUp() {
         super.setUp()
         
         locale = MockLocale()
-        imageResizeProvider = MockImageResizeProvider()
+        imageConverter = MockImageConverter()
         repository = MockVerseRepository()
         
         sut = VerseUseCaseImpl(
             locale: locale,
-            imageResizeProvider: imageResizeProvider,
+            imageConverter: imageConverter,
             repository: repository
         )
     }
     
     override func tearDown() {
         repository = nil
-        imageResizeProvider = nil
+        imageConverter = nil
         locale = nil
         sut = nil
         
@@ -41,39 +41,21 @@ final class VerseUseCaseImplTests: XCTestCase {
     
     func test_generate_then_should_request_given_image_and_minLength() async {
         // given
-        imageResizeProvider.expectedResizeImage = UIImage()
+        imageConverter.expectedConvertToJpegData = Data()
         
         // when
         _ = try? await sut.generate(image: UIImage())
         
         // then
-        XCTAssertTrue(imageResizeProvider.isResizeImageCalled)
-        XCTAssertEqual(imageResizeProvider.requestedMinLength, VerseUseCaseImpl.Constants.minLength)
-        XCTAssertEqual(imageResizeProvider.requestedOutputScale, 1.0)
+        XCTAssertTrue(imageConverter.isConvertToJpegDataCalled)
+        XCTAssertEqual(imageConverter.requestedMinLength, VerseUseCaseImpl.Constants.minLength)
+        XCTAssertEqual(imageConverter.requestedOutputScale, 1.0)
+        XCTAssertEqual(imageConverter.requestedMaxKB, 200 * 1024)
     }
     
-    func test_generate_when_image_resize_retuns_nil_then_throw_VerseError_failedToResizeImage() async {
+    func test_generate_when_imageConverter_retuns_nil_then_throw_VerseError_failedToConvertImageToData() async {
         // given
-        imageResizeProvider.expectedResizeImage = nil
-        
-        // when
-        do {
-            _ = try await sut.generate(image: UIImage())
-            XCTFail()
-        } catch VerseError.failedToResizeImage {
-            // then
-            XCTAssert(true)
-        } catch {
-            XCTFail()
-        }
-    }
-    
-    func test_generate_when_image_resize_success_with_invalid_data_then_throw_VerseError_failedToConvertImageToData() async {
-        // given
-        let givenVerseResult: VerseResult = .init(verse: "verse", remainingLimit: 2)
-        repository.expectedGenerateVerse = givenVerseResult
-        imageResizeProvider.expectedResizeImage = UIImage()
-        locale.isLanguageKorean = true
+        imageConverter.expectedConvertToJpegData = nil
         
         // when
         do {
@@ -81,20 +63,18 @@ final class VerseUseCaseImplTests: XCTestCase {
             XCTFail()
         } catch VerseError.failedToConvertImageToData {
             // then
-            XCTAssertTrue(true)
-            XCTAssertTrue(imageResizeProvider.isResizeImageCalled)
-            XCTAssertFalse(repository.isGenerateVerseCalled)
+            XCTAssert(true)
         } catch {
             XCTFail()
         }
     }
     
     @MainActor
-    func test_generate_when_image_resize_success_with_valid_data_locale_isLanguageKorean_true_repository_success_then_return_VerseResult() async {
+    func test_generate_when_image_convert_success_locale_isLanguageKorean_true_repository_success_then_return_VerseResult() async {
         // given
         let givenVerseResult: VerseResult = .init(verse: "verse", remainingLimit: 2)
         repository.expectedGenerateVerse = givenVerseResult
-        imageResizeProvider.expectedResizeImage = makeTestImage()
+        imageConverter.expectedConvertToJpegData = Data()
         locale.isLanguageKorean = true
         
         // when
@@ -111,11 +91,11 @@ final class VerseUseCaseImplTests: XCTestCase {
     }
     
     @MainActor
-    func test_generate_when_image_resize_success_with_valid_data_locale_isLanguageKorean_false_repository_success_then_return_VerseResult() async {
+    func test_generate_when_image_convert_success_with_locale_isLanguageKorean_false_repository_success_then_return_VerseResult() async {
         // given
         let givenVerseResult: VerseResult = .init(verse: "verse", remainingLimit: 2)
         repository.expectedGenerateVerse = givenVerseResult
-        imageResizeProvider.expectedResizeImage = makeTestImage()
+        imageConverter.expectedConvertToJpegData = Data()
         locale.isLanguageKorean = false
         
         // when
@@ -132,11 +112,11 @@ final class VerseUseCaseImplTests: XCTestCase {
     }
     
     @MainActor
-    func test_generate_when_image_resize_success_with_valid_data_repository_fail_then_throw_error() async {
+    func test_generate_when_image_convert_success_with_repository_fail_then_throw_error() async {
         // given
         let givenError: Error = TestError.common
         repository.expectedGenerateVerseError = givenError
-        imageResizeProvider.expectedResizeImage = makeTestImage()
+        imageConverter.expectedConvertToJpegData = Data()
         
         // when
         do {
@@ -149,17 +129,6 @@ final class VerseUseCaseImplTests: XCTestCase {
             XCTAssertEqual(false, repository.requestedIsKorean)
         } catch {
             XCTFail()
-        }
-    }
-}
-
-private extension VerseUseCaseImplTests {
-    @MainActor
-    func makeTestImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
-        return renderer.image { context in
-            UIColor.red.setFill()
-            context.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
         }
     }
 }

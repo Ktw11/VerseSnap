@@ -9,7 +9,6 @@ import Foundation
 
 public enum VerseError: Error {
     case exceedDailyLimit
-    case failedToResizeImage
     case failedToConvertImageToData
     case unknown
 }

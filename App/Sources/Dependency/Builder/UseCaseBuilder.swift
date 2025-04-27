@@ -41,7 +41,7 @@ final class UseCaseComponent: UseCaseBuilder {
     var verseUseCase: VerseUseCase {
         VerseUseCaseImpl(
             locale: Locale.current,
-            imageResizeProvider: ImageResizeProvider(),
+            imageConverter: ImageConverter(),
             repository: repositoryBuilder.verseRepository
         )
     }
