@@ -19,22 +19,26 @@ final class UseCaseComponent: UseCaseBuilder {
     
     init(
         repositoryBuilder: RepositoryBuilder,
-        thirdAuthProvider: ThirdPartyAuthProvidable
+        thirdAuthProvider: ThirdPartyAuthProvidable,
+        tokenStore: TokenUpdatable
     ) {
         self.repositoryBuilder = repositoryBuilder
         self.thirdAuthProvider = thirdAuthProvider
+        self.tokenStore = tokenStore
     }
     
     // MARK: Properties
     
     private let repositoryBuilder: RepositoryBuilder
     private let thirdAuthProvider: ThirdPartyAuthProvidable
+    private let tokenStore: TokenUpdatable
     
     var signInUseCase: SignInUseCase {
         SignInUseCaseImpl(
             authRepository: repositoryBuilder.authRepository,
             signInInfoRepository: repositoryBuilder.signInInfoRepository,
-            thirdAuthProvider: thirdAuthProvider
+            thirdAuthProvider: thirdAuthProvider,
+            tokenUpdator: tokenStore
         )
     }
     

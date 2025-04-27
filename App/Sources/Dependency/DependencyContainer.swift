@@ -15,7 +15,11 @@ final class DependencyContainer {
     // MARK: LifeCycle
 
     @MainActor
-    init() { }
+    init() {
+        Task {
+            await networkProvider.setTokenStore(tokenStore)
+        }
+    }
     
     // MARK: Properties
     
@@ -28,12 +32,14 @@ final class DependencyContainer {
     lazy var useCaseBuilder: UseCaseBuilder = {
         UseCaseComponent(
             repositoryBuilder: repositoryBuilder,
-            thirdAuthProvider: thirdAuthProvider
+            thirdAuthProvider: thirdAuthProvider,
+            tokenStore: tokenStore
         )
     }()
     
     @MainActor
     let appStateStore: GlobalAppStateStore = .init()
+    let tokenStore: TokenStore = .init()
     
     private let networkProvider: NetworkProvidable = NetworkProvider(
         configuration: NetworkConfiguration(baseUrlString: AppKeys.baseUrl)
