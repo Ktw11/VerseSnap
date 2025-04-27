@@ -26,7 +26,7 @@ public extension API {
         switch contentType {
         case .json:
             ["Content-Type": "application/json"]
-        case .multipart(let multipartFormData):
+        case .multipart:
             [:]
         }
     }
