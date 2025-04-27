@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol VerseRepository: Sendable {
-    func generateVerse(encodedImage: String, isKorean: Bool) async throws -> VerseResult
+    func generateVerse(imageData: Data, isKorean: Bool) async throws -> VerseResult
 }

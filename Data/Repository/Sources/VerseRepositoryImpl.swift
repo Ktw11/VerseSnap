@@ -23,8 +23,8 @@ public final class VerseRepositoryImpl: VerseRepository {
     
     // MARK: Methods
     
-    public func generateVerse(encodedImage: String, isKorean: Bool) async throws -> VerseResult {
-        let api = VerseAPI.generate(encodedImage: encodedImage, isKorean: isKorean)
+    public func generateVerse(imageData: Data, isKorean: Bool) async throws -> VerseResult {
+        let api = VerseAPI.generate(imageData: imageData, isKorean: isKorean)
         
         do {
             return try await networkProvider.request(api: api)
