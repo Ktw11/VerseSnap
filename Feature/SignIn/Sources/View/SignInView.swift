@@ -61,7 +61,7 @@ public struct SignInView: View {
         viewModel: .init(
             dependency: .init(
                 accounts: [.apple, .kakao],
-                useCase: MockSignInUseCase.preview,
+                useCase: MockAuthUseCase.preview,
                 appStateUpdator: MockGlobalStateUpdator.preview
             )
         )

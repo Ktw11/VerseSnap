@@ -10,7 +10,7 @@ import Domain
 import VSNetwork
 
 protocol UseCaseBuilder {
-    var signInUseCase: SignInUseCase & TokenRefreshable{ get }
+    var authUseCase: AuthUseCase & TokenRefreshable{ get }
     var verseUseCase: VerseUseCase { get }
 }
 
@@ -34,8 +34,8 @@ final class UseCaseComponent: UseCaseBuilder {
     private let thirdAuthProvider: ThirdPartyAuthProvidable
     private let tokenStore: TokenUpdatable
     
-    var signInUseCase: SignInUseCase & TokenRefreshable {
-        SignInUseCaseImpl(
+    var authUseCase: AuthUseCase & TokenRefreshable {
+        AuthUseCaseImpl(
             authRepository: repositoryBuilder.authRepository,
             signInInfoRepository: repositoryBuilder.signInInfoRepository,
             thirdAuthProvider: thirdAuthProvider,

@@ -1,5 +1,5 @@
 //
-//  SignInUseCaseImpl.swift
+//  AuthUseCaseImpl.swift
 //  Domain
 //
 //  Created by 공태웅 on 3/2/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public actor SignInUseCaseImpl: SignInUseCase {
+public actor AuthUseCaseImpl: AuthUseCase {
     
     // MARK: Lifecycle
     
@@ -71,7 +71,7 @@ public actor SignInUseCaseImpl: SignInUseCase {
     }
 }
 
-private extension SignInUseCaseImpl {
+private extension AuthUseCaseImpl {
     func updateSignInInfo(refreshToken: String, account: ThirdPartyAccount) {
         Task.detached(priority: .medium) { [signInInfoRepository] in
             try? await signInInfoRepository.save(

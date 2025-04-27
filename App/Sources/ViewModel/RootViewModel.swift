@@ -14,7 +14,7 @@ final class RootViewModel {
     
     // MARK: Lifecycle
     
-    init(appStateStore: GlobalAppStateStore, useCase: SignInUseCase) {
+    init(appStateStore: GlobalAppStateStore, useCase: AuthUseCase) {
         self.appStateStore = appStateStore
         self.useCase = useCase
     }
@@ -25,7 +25,7 @@ final class RootViewModel {
         appStateStore.scene
     }
     private let appStateStore: GlobalAppStateStore
-    private let useCase: SignInUseCase
+    private let useCase: AuthUseCase
     
     // MARK: Methods
     

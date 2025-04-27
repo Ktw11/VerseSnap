@@ -18,7 +18,7 @@ final class DependencyContainer {
     init() {
         Task {
             await networkProvider.setTokenStore(tokenStore)
-            await networkProvider.setTokenRefresher(useCaseBuilder.signInUseCase)
+            await networkProvider.setTokenRefresher(useCaseBuilder.authUseCase)
         }
     }
     
@@ -53,7 +53,7 @@ final class DependencyContainer {
     func buildRootView() -> some View {
         let viewModel = RootViewModel(
             appStateStore: appStateStore,
-            useCase: useCaseBuilder.signInUseCase
+            useCase: useCaseBuilder.authUseCase
         )
         RootView(
             viewModel: viewModel,

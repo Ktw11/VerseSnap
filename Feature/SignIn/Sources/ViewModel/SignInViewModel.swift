@@ -25,7 +25,7 @@ public final class SignInViewModel {
     let accounts: [ThirdPartyAccount]
     var showProgressView: Bool { isLoading }
     
-    private let useCase: SignInUseCase
+    private let useCase: AuthUseCase
     private let appStateUpdator: GlobalAppStateUpdatable
     private var isLoading: Bool = false
     

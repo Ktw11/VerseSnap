@@ -1,5 +1,5 @@
 //
-//  MockSignInViewModel.swift
+//  MockAuthUseCase.swift
 //  SignIn
 //
 //  Created by 공태웅 on 3/2/25.
@@ -8,12 +8,12 @@
 import Foundation
 import Domain
 
-public final class MockSignInUseCase: SignInUseCase, @unchecked Sendable {
+public final class MockAuthUseCase: AuthUseCase, @unchecked Sendable {
     
     public init() { }
     
-    static var preview: MockSignInUseCase {
-        MockSignInUseCase()
+    static var preview: MockAuthUseCase {
+        MockAuthUseCase()
     }
     
     public var expectedSignInWithSavedToken: SignInResponse?
