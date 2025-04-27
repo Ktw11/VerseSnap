@@ -14,28 +14,32 @@ final class RootViewModel {
     
     // MARK: Lifecycle
     
-    init(useCase: SignInUseCase) {
+    init(appStateStore: GlobalAppStateStore, useCase: SignInUseCase) {
+        self.appStateStore = appStateStore
         self.useCase = useCase
     }
     
     // MARK: Properties
     
-    var scene: AppScene = .splash
+    var scene: AppScene {
+        appStateStore.scene
+    }
+    private let appStateStore: GlobalAppStateStore
     private let useCase: SignInUseCase
     
     // MARK: Methods
     
     func trySignIn() {
         Task { [weak self, useCase] in
-            if let result = await useCase.signInWithSavedToken() {
-                self?.scene = .tabs
+            if let _ = await useCase.signInWithSavedToken() {
+                self?.appStateStore.setScene(to: .tabs)
             } else {
-                self?.scene = .signIn
+                self?.appStateStore.setScene(to: .signIn)
             }
         }
     }
     
     func setScene(to scene: AppScene) {
-        self.scene = scene
+        appStateStore.setScene(to: scene)
     }
 }

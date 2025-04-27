@@ -44,7 +44,10 @@ final class DependencyContainer {
     @ViewBuilder
     @MainActor
     func buildRootView() -> some View {
-        let viewModel = RootViewModel(useCase: useCaseBuilder.signInUseCase)
+        let viewModel = RootViewModel(
+            appStateStore: appStateStore,
+            useCase: useCaseBuilder.signInUseCase
+        )
         RootView(
             viewModel: viewModel,
             signInBuilder: signInBuilder,

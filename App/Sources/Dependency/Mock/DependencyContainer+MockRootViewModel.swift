@@ -11,6 +11,6 @@ import SignIn
 extension DependencyContainer {
     @MainActor
     var mockRootViewModel: RootViewModel {
-        .init(useCase: MockSignInUseCase())
+        .init(appStateStore: GlobalAppStateStore(), useCase: MockSignInUseCase())
     }
 }

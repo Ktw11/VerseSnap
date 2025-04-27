@@ -13,7 +13,7 @@ class MockGlobalStateUpdator: GlobalAppStateUpdatable, @unchecked Sendable {
         MockGlobalStateUpdator()
     }
 
-    func addToast(info: ToastInfo) {
-        // do nothing
-    }
+    func addToast(info: ToastInfo) { }
+    
+    func setScene(to scene: AppScene) { }
 }

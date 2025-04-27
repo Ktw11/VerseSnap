@@ -16,12 +16,17 @@ final class GlobalAppStateStore {
         self.toasts = toasts
     }
 
+    var scene: AppScene = .splash
     var toasts: [Toast]
 }
 
 extension GlobalAppStateStore: GlobalAppStateUpdatable {
     func addToast(info: ToastInfo) {
         toasts.append(info.toToast)
+    }
+    
+    func setScene(to scene: AppScene) {
+        self.scene = scene
     }
 }
 
