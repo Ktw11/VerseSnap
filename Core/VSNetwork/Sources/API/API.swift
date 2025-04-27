@@ -10,6 +10,7 @@ import Foundation
 public protocol API: Sendable {
     var path: String { get }
     var method: HttpMethod { get }
+    var contentType: ContentType { get }
     var headers: [String: String] { get }
     var queryParameters: [String: String]? { get }
     var bodyParameters: [String: Any]? { get }
@@ -17,8 +18,17 @@ public protocol API: Sendable {
 }
 
 public extension API {
+    var contentType: ContentType {
+        .json
+    }
+    
     var headers: [String: String] {
-        ["Content-Type": "application/json"]
+        switch contentType {
+        case .json:
+            ["Content-Type": "application/json"]
+        case .multipart(let multipartFormData):
+            [:]
+        }
     }
     
     var queryParameters: [String: String]? {

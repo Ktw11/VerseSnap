@@ -24,8 +24,19 @@ extension API {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         
-        if let bodyParameters {
-            request.httpBody = try? JSONSerialization.data(withJSONObject: bodyParameters, options: [])
+        switch contentType {
+        case .json:
+            if let bodyParameters {
+                request.httpBody = try? JSONSerialization.data(withJSONObject: bodyParameters, options: [])
+            }
+        case let .multipart(files):
+            let boundary = "Boundary-\(UUID().uuidString)"
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            let form = MultipartFormData(
+                files: files,
+                parameters: bodyParameters?.compactMapValues { "\($0)" } ?? [:]
+            )
+            request.httpBody = makeMultipartBody(form, boundary: boundary)
         }
         
         headers.forEach {
@@ -37,5 +48,25 @@ extension API {
         }
 
         return request
+    }
+}
+
+private extension API {
+    func makeMultipartBody(_ form: MultipartFormData, boundary: String) -> Data {
+        var body = Data()
+        for (key, value) in form.parameters {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
+        }
+        for file in form.files {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(file.name)\"; filename=\"\(file.fileName)\"\r\n".data(using: .utf8)!)
+            body.append("Content-Type: \(file.mimeType)\r\n\r\n".data(using: .utf8)!)
+            body.append(file.data)
+            body.append("\r\n".data(using: .utf8)!)
+        }
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        return body
     }
 }
