@@ -53,7 +53,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         XCTAssertEqual(imageConverter.requestedMaxKB, 200 * 1024)
     }
     
-    func test_generate_when_imageConverter_retuns_nil_then_throw_VerseError_failedToConvertImageToData() async {
+    func test_generate_when_imageConverter_retuns_nil_then_throw_DomainError_failedToConvertImageToData() async {
         // given
         imageConverter.expectedConvertToJpegData = nil
         
@@ -61,7 +61,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         do {
             _ = try await sut.generate(image: UIImage())
             XCTFail()
-        } catch VerseError.failedToConvertImageToData {
+        } catch DomainError.failedToConvertImageToData {
             // then
             XCTAssert(true)
         } catch {

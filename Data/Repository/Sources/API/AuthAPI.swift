@@ -11,6 +11,7 @@ import VSNetwork
 enum AuthAPI {
     case signIn(token: String, account: String)
     case autoSignIn(refreshToken: String)
+    case refreshTokens(refreshToken: String)
 }
 
 extension AuthAPI: API {
@@ -20,12 +21,14 @@ extension AuthAPI: API {
             "auth/signIn/\(account)"
         case .autoSignIn:
             "auth/autoSignIn"
+        case .refreshTokens:
+            "auth/refresh_token"
         }
     }
     
     var method: HttpMethod {
         switch self {
-        case .signIn, .autoSignIn:
+        case .signIn, .autoSignIn, .refreshTokens:
             .post
         }
     }
@@ -36,6 +39,8 @@ extension AuthAPI: API {
             return ["token": token]
         case let .autoSignIn(refreshToken):
             return ["refreshToken": refreshToken]
+        case let .refreshTokens(refreshToken):
+            return ["refreshToken": refreshToken]
         }
     }
 
@@ -43,6 +48,8 @@ extension AuthAPI: API {
         switch self {
         case .signIn, .autoSignIn:
             false
+        case .refreshTokens:
+            true
         }
     }
 }

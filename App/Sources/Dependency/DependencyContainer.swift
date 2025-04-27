@@ -18,6 +18,7 @@ final class DependencyContainer {
     init() {
         Task {
             await networkProvider.setTokenStore(tokenStore)
+            await networkProvider.setTokenRefresher(useCaseBuilder.signInUseCase)
         }
     }
     

@@ -37,7 +37,7 @@ public final class VerseUseCaseImpl: VerseUseCase {
     // MARK: Methods
     
     public func generate(image: UIImage) async throws -> VerseResult {
-        guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength) else { throw VerseError.failedToConvertImageToData }
+        guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength) else { throw DomainError.failedToConvertImageToData }
 
         return try await repository.generateVerse(imageData: imageData, isKorean: locale.isLanguageKorean)
     }

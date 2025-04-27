@@ -31,9 +31,9 @@ public final class VerseRepositoryImpl: VerseRepository {
                 .map(VerseResult.self)
         } catch let error as NetworkError {
             if case let .badRequest(code) = error, code == 429 {
-                throw VerseError.exceedDailyLimit
+                throw DomainError.exceedDailyLimit
             } else {
-                throw VerseError.unknown
+                throw DomainError.unknown
             }
         }
     }

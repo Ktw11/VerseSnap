@@ -55,6 +55,20 @@ public actor SignInUseCaseImpl: SignInUseCase {
         updateSignInInfo(refreshToken: refreshToken, account: account)
         return response
     }
+    
+    public func refreshTokens() async throws {
+        guard let info = await signInInfoRepository.retrieve() else { throw DomainError.cancelled }
+        
+        let tokens = try await authRepository.refreshTokens(refreshToken: info.refreshToken)
+        await tokenUpdator.updateTokens(
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken
+        )
+        
+        if let account = ThirdPartyAccount(rawValue: info.signInType) {
+            updateSignInInfo(refreshToken: tokens.refreshToken, account: account)
+        }
+    }
 }
 
 private extension SignInUseCaseImpl {

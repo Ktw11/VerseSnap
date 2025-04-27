@@ -34,4 +34,10 @@ public actor AuthRepositoryImpl: AuthRepository {
         return try await networkProvider.request(api: api)
             .map(SignInResponse.self)
     }
+    
+    public func refreshTokens(refreshToken: String) async throws -> AuthTokens {
+        let api = AuthAPI.refreshTokens(refreshToken: refreshToken)
+        return try await networkProvider.request(api: api)
+            .map(AuthTokens.self)
+    }
 }

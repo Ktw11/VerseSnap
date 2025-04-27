@@ -1,14 +1,15 @@
 //
-//  VerseError.swift
+//  DomainError.swift
 //  Domain
 //
-//  Created by 공태웅 on 4/24/25.
+//  Created by 공태웅 on 4/27/25.
 //
 
 import Foundation
 
-public enum VerseError: Error {
+public enum DomainError: Error {
     case exceedDailyLimit
     case failedToConvertImageToData
     case unknown
+    case cancelled
 }
