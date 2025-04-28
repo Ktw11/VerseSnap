@@ -13,18 +13,20 @@ final class MockVerseRepository: VerseRepository, @unchecked Sendable {
     var isGenerateVerseCalled = false
     var requestedImageData: Data?
     var requestedIsKorean: Bool?
-    var expectedGenerateVerse: VerseResult?
+    var requestedHashtags: [String]?
+    var expectedGenerateVerseInfo: GeneratedVerseInfo?
     var expectedGenerateVerseError: Error?
     
-    func generateVerse(imageData: Data, isKorean: Bool) async throws -> VerseResult {
+    func generateVerse(imageData: Data, isKorean: Bool, hashtags: [String]) async throws -> GeneratedVerseInfo {
         isGenerateVerseCalled = true
         requestedImageData = imageData
         requestedIsKorean = isKorean
+        requestedHashtags = hashtags
         
         if let expectedGenerateVerseError {
             throw expectedGenerateVerseError
-        } else if let expectedGenerateVerse {
-            return expectedGenerateVerse
+        } else if let expectedGenerateVerseInfo {
+            return expectedGenerateVerseInfo
         } else {
             throw TestError.notImplemented
         }

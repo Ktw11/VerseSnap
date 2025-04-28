@@ -9,7 +9,17 @@ import Foundation
 import VSNetwork
 
 enum VerseAPI {
-    case generate(imageData: Data, isKorean: Bool)
+    case generate(Request.GenerateVerse)
+    
+    enum Request {}
+}
+
+extension VerseAPI.Request {
+    struct GenerateVerse {
+        let imageData: Data
+        let isKorean: Bool
+        let hashtags: [String]
+    }
 }
 
 extension VerseAPI: API {
@@ -23,17 +33,17 @@ extension VerseAPI: API {
     
     var bodyParameters: [String: Any]? {
         switch self {
-        case let .generate(_, isKorean):
-            ["isKorean": isKorean]
+        case let .generate(params):
+            ["isKorean": params.isKorean, "hashtags": params.hashtags]
         }
     }
     
     var contentType: ContentType {
         switch self {
-        case let .generate(imageData, isKorean):
+        case let .generate(params):
             return .multipart([
                 MultipartFormData.MultipartFile(
-                    data: imageData,
+                    data: params.imageData,
                     name: "image",
                     fileName: "image.jpg",
                     mimeType: "image/jpeg"

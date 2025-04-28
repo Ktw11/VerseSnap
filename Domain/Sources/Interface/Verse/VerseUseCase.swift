@@ -9,5 +9,5 @@ import Foundation
 import UIKit
 
 public protocol VerseUseCase: Sendable {
-    func generate(image: UIImage) async throws -> VerseResult
+    func generate(image: UIImage, hashtags: [String]) async throws -> GeneratedVerseInfo
 }

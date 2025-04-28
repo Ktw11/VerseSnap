@@ -44,7 +44,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         imageConverter.expectedConvertToJpegData = Data()
         
         // when
-        _ = try? await sut.generate(image: UIImage())
+        _ = try? await sut.generate(image: UIImage(), hashtags: [])
         
         // then
         XCTAssertTrue(imageConverter.isConvertToJpegDataCalled)
@@ -59,7 +59,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            _ = try await sut.generate(image: UIImage())
+            _ = try await sut.generate(image: UIImage(), hashtags: [])
             XCTFail()
         } catch DomainError.failedToConvertImageToData {
             // then
@@ -72,19 +72,28 @@ final class VerseUseCaseImplTests: XCTestCase {
     @MainActor
     func test_generate_when_image_convert_success_locale_isLanguageKorean_true_repository_success_then_return_VerseResult() async {
         // given
-        let givenVerseResult: VerseResult = .init(verse: "verse", remainingLimit: 2)
-        repository.expectedGenerateVerse = givenVerseResult
+        let givenVerseInfo: GeneratedVerseInfo = .init(
+            base64Image: "image",
+            hashtags: ["a", "c"],
+            createdAt: 14871,
+            verse: "asdasd",
+            isFavorite: true,
+            remainingLimit: 153
+        )
+        let givenHashtags: [String] = ["a", "b", "c"]
+        repository.expectedGenerateVerseInfo = givenVerseInfo
         imageConverter.expectedConvertToJpegData = Data()
         locale.isLanguageKorean = true
         
         // when
         do {
-            let result = try await sut.generate(image: UIImage())
+            let result = try await sut.generate(image: UIImage(), hashtags: givenHashtags)
             
             // then
-            XCTAssertEqual(result, givenVerseResult)
+            XCTAssertEqual(result, givenVerseInfo)
             XCTAssertTrue(repository.isGenerateVerseCalled)
             XCTAssertEqual(true, repository.requestedIsKorean)
+            XCTAssertEqual(givenHashtags, repository.requestedHashtags)
         } catch {
             XCTFail()
         }
@@ -93,19 +102,28 @@ final class VerseUseCaseImplTests: XCTestCase {
     @MainActor
     func test_generate_when_image_convert_success_with_locale_isLanguageKorean_false_repository_success_then_return_VerseResult() async {
         // given
-        let givenVerseResult: VerseResult = .init(verse: "verse", remainingLimit: 2)
-        repository.expectedGenerateVerse = givenVerseResult
+        let givenVerseInfo: GeneratedVerseInfo = .init(
+            base64Image: "image",
+            hashtags: ["a", "c"],
+            createdAt: 14871,
+            verse: "asdasd",
+            isFavorite: true,
+            remainingLimit: 153
+        )
+        let givenHashtags: [String] = ["1", "2", "3"]
+        repository.expectedGenerateVerseInfo = givenVerseInfo
         imageConverter.expectedConvertToJpegData = Data()
         locale.isLanguageKorean = false
         
         // when
         do {
-            let result = try await sut.generate(image: UIImage())
+            let result = try await sut.generate(image: UIImage(), hashtags: givenHashtags)
             
             // then
-            XCTAssertEqual(result, givenVerseResult)
+            XCTAssertEqual(result, givenVerseInfo)
             XCTAssertTrue(repository.isGenerateVerseCalled)
             XCTAssertEqual(false, repository.requestedIsKorean)
+            XCTAssertEqual(givenHashtags, repository.requestedHashtags)
         } catch {
             XCTFail()
         }
@@ -120,7 +138,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            _ = try await sut.generate(image: UIImage())
+            _ = try await sut.generate(image: UIImage(), hashtags: [])
             XCTFail()
         } catch TestError.common {
             // then

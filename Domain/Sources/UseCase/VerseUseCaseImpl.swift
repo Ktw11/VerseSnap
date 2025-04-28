@@ -36,10 +36,14 @@ public final class VerseUseCaseImpl: VerseUseCase {
     
     // MARK: Methods
     
-    public func generate(image: UIImage) async throws -> VerseResult {
+    public func generate(image: UIImage, hashtags: [String]) async throws -> GeneratedVerseInfo {
         guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength) else { throw DomainError.failedToConvertImageToData }
 
-        return try await repository.generateVerse(imageData: imageData, isKorean: locale.isLanguageKorean)
+        return try await repository.generateVerse(
+            imageData: imageData,
+            isKorean: locale.isLanguageKorean,
+            hashtags: hashtags
+        )
     }
 }
 

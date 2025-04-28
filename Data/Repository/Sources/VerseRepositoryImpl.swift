@@ -23,12 +23,17 @@ public final class VerseRepositoryImpl: VerseRepository {
     
     // MARK: Methods
     
-    public func generateVerse(imageData: Data, isKorean: Bool) async throws -> VerseResult {
-        let api = VerseAPI.generate(imageData: imageData, isKorean: isKorean)
+    public func generateVerse(imageData: Data, isKorean: Bool, hashtags: [String]) async throws -> GeneratedVerseInfo {
+        let request: VerseAPI.Request.GenerateVerse = .init(
+            imageData: imageData,
+            isKorean: isKorean,
+            hashtags: hashtags
+        )
+        let api: API = VerseAPI.generate(request)
         
         do {
             return try await networkProvider.request(api: api)
-                .map(VerseResult.self)
+                .map(GeneratedVerseInfo.self)
         } catch let error as NetworkError {
             if case let .badRequest(code) = error, code == 429 {
                 throw DomainError.exceedDailyLimit
