@@ -34,7 +34,7 @@ extension VerseAPI: API {
     var bodyParameters: [String: Any]? {
         switch self {
         case let .generate(params):
-            ["isKorean": params.isKorean, "hashtags": params.hashtags]
+            ["isKorean": params.isKorean, "hashtags": params.hashtags.joined(separator: ",")]
         }
     }
     
