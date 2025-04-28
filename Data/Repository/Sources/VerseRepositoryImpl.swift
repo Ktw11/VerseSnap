@@ -32,14 +32,18 @@ public final class VerseRepositoryImpl: VerseRepository {
         let api: API = VerseAPI.generate(request)
         
         do {
-            return try await networkProvider.request(api: api)
-                .map(GeneratedVerseInfo.self)
+            let data = try await networkProvider.request(api: api)
+            return try JSONDecoder().decode(GeneratedVerseInfo.self, from: data)
         } catch let error as NetworkError {
             if case let .badRequest(code) = error, code == 429 {
                 throw DomainError.exceedDailyLimit
             } else {
                 throw DomainError.unknown
             }
+        } catch let error as DecodingError {
+            throw DomainError.decodingFailed(error)
+        } catch {
+            throw DomainError.unknown
         }
     }
 }

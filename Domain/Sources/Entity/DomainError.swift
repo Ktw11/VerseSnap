@@ -12,4 +12,5 @@ public enum DomainError: Error {
     case failedToConvertImageToData
     case unknown
     case cancelled
+    case decodingFailed(Error)
 }

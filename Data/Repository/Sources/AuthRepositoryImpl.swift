@@ -25,19 +25,40 @@ public actor AuthRepositoryImpl: AuthRepository {
 
     public func signIn(token: String, account: String) async throws -> SignInResponse {
         let api = AuthAPI.signIn(token: token, account: account)
-        return try await networkProvider.request(api: api)
-            .map(SignInResponse.self)
+        
+        do {
+            let data = try await networkProvider.request(api: api)
+            return try JSONDecoder().decode(SignInResponse.self, from: data)
+        } catch let error as DecodingError {
+            throw DomainError.decodingFailed(error)
+        } catch {
+            throw DomainError.unknown
+        }
     }
     
     public func signIn(refreshToken: String) async throws -> SignInResponse {
         let api = AuthAPI.autoSignIn(refreshToken: refreshToken)
-        return try await networkProvider.request(api: api)
-            .map(SignInResponse.self)
+        
+        do {
+            let data = try await networkProvider.request(api: api)
+            return try JSONDecoder().decode(SignInResponse.self, from: data)
+        } catch let error as DecodingError {
+            throw DomainError.decodingFailed(error)
+        } catch {
+            throw DomainError.unknown
+        }
     }
     
     public func refreshTokens(refreshToken: String) async throws -> AuthTokens {
         let api = AuthAPI.refreshTokens(refreshToken: refreshToken)
-        return try await networkProvider.request(api: api)
-            .map(AuthTokens.self)
+        
+        do {
+            let data = try await networkProvider.request(api: api)
+            return try JSONDecoder().decode(AuthTokens.self, from: data)
+        } catch let error as DecodingError {
+            throw DomainError.decodingFailed(error)
+        } catch {
+            throw DomainError.unknown
+        }
     }
 }
