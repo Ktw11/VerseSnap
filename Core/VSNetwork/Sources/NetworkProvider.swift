@@ -49,31 +49,31 @@ private extension NetworkProvider {
         let (data, response): (Data, URLResponse)
         do {
             (data, response) = try await session.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw NetworkError.invalidResponse
+            }
+
+            if httpResponse.statusCode == 401 && retry, let tokenRefresher {
+                try await tokenRefresher.refreshTokens()
+                
+                return try await requestData(api: api, retry: false)
+            }
+            
+            switch httpResponse.statusCode {
+            case 200...299:
+                return data
+            case 401:
+                throw NetworkError.authenticationFailed
+            case 400...499:
+                throw NetworkError.badRequest(code: httpResponse.statusCode)
+            case 500...599:
+                throw NetworkError.serverError
+            default:
+                throw NetworkError.unknown
+            }
         } catch {
             throw NetworkError.failedInGeneral(error)
-        }
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw NetworkError.invalidResponse
-        }
-        
-        if httpResponse.statusCode == 401 && retry, let tokenRefresher {
-            try await tokenRefresher.refreshTokens()
-            
-            return try await requestData(api: api, retry: false)
-        }
-        
-        switch httpResponse.statusCode {
-        case 200...299:
-            return data
-        case 401:
-            throw NetworkError.authenticationFailed
-        case 400...499:
-            throw NetworkError.badRequest(code: httpResponse.statusCode)
-        case 500...599:
-            throw NetworkError.serverError
-        default:
-            throw NetworkError.unknown
         }
     }
 }
