@@ -34,6 +34,7 @@ public final class SelectPhotoViewModel {
             let options = PHImageRequestOptions()
             options.deliveryMode = .opportunistic
             options.isSynchronous = false
+            options.resizeMode = .exact
             return options
         }()
     }
@@ -107,9 +108,10 @@ public final class SelectPhotoViewModel {
             targetSize: targetSize(requested: cellSize, scale: UIScreen.main.scale),
             contentMode: Constants.cellImageContentMode,
             options: Constants.imageRequestOptions
-        ) { image, _ in
+        ) { image, info in
             guard let image else { return }
-            resultHandler(image)
+            guard let info, !(info[PHImageCancelledKey] as? Bool ?? false) else { return }
+            DispatchQueue.main.async { resultHandler(image) }
         }
         
         if !isCachingStarted {
