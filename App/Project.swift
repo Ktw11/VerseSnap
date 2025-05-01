@@ -41,6 +41,7 @@ let project = Project(
                 .feature(type: .newVerse),
                 .feature(type: .selectPhoto),
                 .core(type: .thirdPartyAuth),
+                .core(type: .remoteStorage),
                 .data(type: .repository),
                 .shared(type: .commonUI),
                 .shared(type: .utils),

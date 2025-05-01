@@ -8,6 +8,7 @@ public enum TargetType: String, Sendable {
     case newVerse = "NewVerse"
     case selectPhoto = "SelectPhoto"
     case thirdPartyAuth = "ThirdPartyAuth"
+    case remoteStorage = "RemoteStorage"
     case network = "VSNetwork"
     case repository = "Repository"
     case previewSupport = "PreviewSupport"
@@ -35,7 +36,7 @@ public extension TargetType {
                 .newVerse,
                 .selectPhoto:
             featureBundleId
-        case .thirdPartyAuth, .network:
+        case .thirdPartyAuth, .network, .remoteStorage:
             coreBundleId
         case .repository:
             dataBundleId
