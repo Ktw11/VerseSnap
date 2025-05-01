@@ -7,6 +7,36 @@
     "#" : {
       "shouldTranslate" : false
     },
+    "다시 만들기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regenerate"
+          }
+        }
+      }
+    },
+    "머리 굴리는 중.. 🗿" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Racking my brain... 🧐"
+          }
+        }
+      }
+    },
+    "머리 싸매는 중.. 🧐" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Racking my brain... 🧐"
+          }
+        }
+      }
+    },
     "사진 선택하기" : {
       "localizations" : {
         "en" : {
@@ -17,12 +47,72 @@
         }
       }
     },
-    "삼행시 생성하기" : {
+    "삼행시 만들기" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Make Verse"
+            "value" : "Generate"
+          }
+        }
+      }
+    },
+    "삼행시 뽑는 중.. 🔥" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thinking.. 🔥"
+          }
+        }
+      }
+    },
+    "삼행시 생각 중.. 🔥" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thinking.. 🔥"
+          }
+        }
+      }
+    },
+    "에러가 발생했습니다. 다시 시도해주세요." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred. Please try again."
+          }
+        }
+      }
+    },
+    "오늘의 삼행시 횟수 제한을 초과했어요." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have exceeded today’s limit."
+          }
+        }
+      }
+    },
+    "완료" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "진지하게 고민 중.. 🤔" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deep in thought... 🤔"
           }
         }
       }
@@ -32,7 +122,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please enter a hashtag"
+            "value" : "Please enter a hashtag."
           }
         }
       }
