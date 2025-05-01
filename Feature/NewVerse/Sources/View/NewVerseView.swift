@@ -38,8 +38,6 @@ public struct NewVerseView<SelectPhotoComponent: SelectPhotoBuilder>: View {
     
     public var body: some View {
         ZStack {
-            backgroundBlurImage()
-            
             ScrollView(.vertical) {
                 VStack {
                     headerView()
@@ -84,6 +82,9 @@ public struct NewVerseView<SelectPhotoComponent: SelectPhotoBuilder>: View {
                 }
                 .frame(maxWidth: .infinity)
             }
+            .background {
+                backgroundBlurImage()
+            }
             .onTapGesture {
                 isHashtagFocused = nil
             }
@@ -107,6 +108,7 @@ private extension NewVerseView {
         if let blurImage = viewModel.backgroundBlurImage {
             Image(uiImage: blurImage)
                 .resizable()
+                .aspectRatio(contentMode: .fill)
                 .blur(radius: 5)
                 .overlay {
                     Color.black.opacity(0.2)
