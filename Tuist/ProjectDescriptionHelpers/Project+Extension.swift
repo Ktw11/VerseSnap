@@ -24,5 +24,8 @@ public extension TargetDependency {
     static func shared(type: TargetType) -> TargetDependency {
         .project(target: type.name, path: .relativeToRoot("Shared/\(type.name)"))
     }
+    
+    static var previewSupport: TargetDependency {
+        .project(target: TargetType.previewSupport.name, path: .relativeToRoot("PreviewSupport"))
+    }
 }
-

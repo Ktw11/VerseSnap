@@ -10,6 +10,7 @@ public enum TargetType: String, Sendable {
     case thirdPartyAuth = "ThirdPartyAuth"
     case network = "VSNetwork"
     case repository = "Repository"
+    case previewSupport = "PreviewSupport"
     case commonUI = "CommonUI"
     case utils = "Utils"
 }
@@ -38,6 +39,8 @@ public extension TargetType {
             coreBundleId
         case .repository:
             dataBundleId
+        case .previewSupport:
+            "\(baseBundleId).PreviewSupport"
         case .commonUI, .utils:
             sharedBundleId
         }

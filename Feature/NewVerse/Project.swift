@@ -19,8 +19,10 @@ let project = Project(
                 .domain,
                 .shared(type: .commonUI),
                 .shared(type: .utils),
+                .previewSupport
             ]
         ),
         Target.interfaceTarget(type: targetType, product: .framework)
-    ]
+    ],
+    schemes: [.debug(name: targetType.name)]
 )

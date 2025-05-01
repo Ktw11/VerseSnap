@@ -53,13 +53,19 @@ struct RootView<
     }
 }
 
+#if DEBUG
+import PreviewSupport
 
 #Preview {
     let dependency = DependencyContainer()
     RootView(
-        viewModel: dependency.mockRootViewModel,
+        viewModel: RootViewModel(
+            appStateStore: GlobalAppStateStore(),
+            useCase: AuthUseCasePreview.preview
+        ),
         signInBuilder: dependency.signInBuilder,
         homeBuilder: dependency.homeBuilder,
         newVerseBuilder: dependency.newVerseBuilder
     )
 }
+#endif

@@ -10,5 +10,6 @@ let workspace = Workspace(
         "Core/**",
         "Data/**",
         "Shared/**",
+        "PreviewSupport/**"
     ]
 )

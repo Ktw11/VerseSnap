@@ -56,17 +56,21 @@ public struct SignInView: View {
     }
 }
 
+#if DEBUG
+import PreviewSupport
+
 #Preview {
     SignInView(
         viewModel: .init(
             dependency: .init(
                 accounts: [.apple, .kakao],
-                useCase: MockAuthUseCase.preview,
-                appStateUpdator: MockGlobalStateUpdator.preview
+                useCase: AuthUseCasePreview.preview,
+                appStateUpdator: GlobalStateUpdatorPreview.preview
             )
         )
     )
 }
+#endif
 
 private struct SignInButton: View {
     

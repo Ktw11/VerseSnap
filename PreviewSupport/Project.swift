@@ -1,7 +1,7 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let targetType: TargetType = .home
+let targetType: TargetType = .previewSupport
 
 let project = Project(
     name: targetType.name,
@@ -12,15 +12,9 @@ let project = Project(
             type: targetType,
             product: .framework,
             sources: ["Sources/**"],
-            resources: ["Resources/**"],
             dependencies: [
-                .featureInterface(type: targetType),
                 .domain,
-                .shared(type: .commonUI),
-                .previewSupport
             ]
-        ),
-        Target.interfaceTarget(type: targetType, product: .framework),
-    ],
-    schemes: [.debug(name: targetType.name)]
+        )
+    ]
 )
