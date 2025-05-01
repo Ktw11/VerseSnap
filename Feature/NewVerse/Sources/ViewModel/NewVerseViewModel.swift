@@ -96,13 +96,14 @@ public final class NewVerseViewModel {
         guard !isGeneratingVerse else { return }
         isGeneratingVerse = true
         
-        let validHashtags: [String] = hashtags.filter { !$0.value.isEmpty }.map(\.value)
+        let validHashtags: [Hashtag] = hashtags.filter { !$0.value.isEmpty }
+        let validHashtagValues: [String] = validHashtags.map(\.value)
         
         Task { [weak self, useCase] in
             defer { self?.isGeneratingVerse = false }
             
             do {
-                let result = try await useCase.generate(image: croppedImage, hashtags: validHashtags)
+                let result = try await useCase.generate(image: croppedImage, hashtags: validHashtagValues)
                 
                 self?.verseInfo = VerseInfo(
                     generatedTime: Date(timeIntervalSince1970: result.createdAt),
@@ -110,6 +111,7 @@ public final class NewVerseViewModel {
                     verse: result.verse,
                     hashtags: result.hashtags.map { Hashtag(value: $0) }
                 )
+                self?.hashtags = validHashtags
             } catch let error as DomainError {
                 self?.handleGenerateDomainError(error)
             } catch {
@@ -169,8 +171,8 @@ private extension NewVerseViewModel {
             
             let startIndex: AttributedString.Index = attributedLine.startIndex
             let endIndex: AttributedString.Index = attributedLine.index(afterCharacter: startIndex)
-            attributedLine[startIndex..<endIndex].font = .suite(size: 15, weight: .bold)
-            attributedLine[endIndex...].font = .suite(size: 15, weight: .regular)
+            attributedLine[startIndex..<endIndex].font = .suite(size: 14, weight: .bold)
+            attributedLine[endIndex...].font = .suite(size: 14, weight: .regular)
             
             result.append(attributedLine)
 

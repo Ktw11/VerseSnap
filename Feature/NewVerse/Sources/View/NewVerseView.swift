@@ -176,16 +176,6 @@ private extension NewVerseView {
                         .font(.suite(size: 15, weight: .regular))
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 30))
-            .overlay(alignment: .bottomLeading) {
-                if let verse = viewModel.verse {
-                    Text(verse)
-                        .foregroundStyle(Color.white)
-                        .minimumScaleFactor(0.7)
-                        .padding(.leading, 25)
-                        .padding(.bottom, 25)
-                }
-            }
             .overlay(alignment: .bottom) {
                 LinearGradient(
                     gradient: Gradient(colors: [Color.black.opacity(0.5), Color.clear]),
@@ -195,6 +185,16 @@ private extension NewVerseView {
                 .frame(height: 120)
                 .opacity(viewModel.verse == nil ? 0 : 1.0)
             }
+            .overlay(alignment: .bottomLeading) {
+                if let verse = viewModel.verse {
+                    Text(verse)
+                        .foregroundStyle(Color.white)
+                        .minimumScaleFactor(0.6)
+                        .padding(.leading, 17)
+                        .padding(.bottom, 17)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 30))
     }
     
     @ViewBuilder
