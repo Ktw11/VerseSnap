@@ -55,18 +55,18 @@ private extension API {
     func makeMultipartBody(_ form: MultipartFormData, boundary: String) -> Data {
         var body = Data()
         for (key, value) in form.parameters {
-            body.append("--\(boundary)\r\n".data(using: .utf8)!)
-            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
-            body.append("\(value)\r\n".data(using: .utf8)!)
+            body.append("--\(boundary)\r\n".data(using: .utf8) ?? Data())
+            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)  ?? Data())
+            body.append("\(value)\r\n".data(using: .utf8) ?? Data())
         }
         for file in form.files {
-            body.append("--\(boundary)\r\n".data(using: .utf8)!)
-            body.append("Content-Disposition: form-data; name=\"\(file.name)\"; filename=\"\(file.fileName)\"\r\n".data(using: .utf8)!)
-            body.append("Content-Type: \(file.mimeType)\r\n\r\n".data(using: .utf8)!)
+            body.append("--\(boundary)\r\n".data(using: .utf8) ?? Data())
+            body.append("Content-Disposition: form-data; name=\"\(file.name)\"; filename=\"\(file.fileName)\"\r\n".data(using: .utf8) ?? Data())
+            body.append("Content-Type: \(file.mimeType)\r\n\r\n".data(using: .utf8) ?? Data())
             body.append(file.data)
-            body.append("\r\n".data(using: .utf8)!)
+            body.append("\r\n".data(using: .utf8) ?? Data())
         }
-        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8) ?? Data())
         return body
     }
 }
