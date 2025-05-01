@@ -40,6 +40,7 @@ struct SelectPhotoPickerCell: View {
                     }
             }
         }
+        .contentShape(Rectangle())
         .onDisappear {
             if let imageRequestId {
                 viewModel.cancelImgeRequest(id: imageRequestId)
