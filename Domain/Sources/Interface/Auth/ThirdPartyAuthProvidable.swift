@@ -9,9 +9,6 @@ import Foundation
 
 public protocol ThirdPartyAuthProvidable: Sendable {
     @MainActor
-    func configure()
-    
-    @MainActor
     @discardableResult
     func handleURL(_ url: URL) -> Bool
     

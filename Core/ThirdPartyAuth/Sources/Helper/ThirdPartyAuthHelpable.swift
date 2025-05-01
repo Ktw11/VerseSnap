@@ -8,7 +8,6 @@
 import Foundation
 
 protocol ThirdPartyAccountAuthHelpable: Sendable {
-    @MainActor func configure()
     @MainActor func handleURL(_ url: URL) -> Bool
     func getToken() async throws -> String
     func signOut() async throws

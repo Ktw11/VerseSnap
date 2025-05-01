@@ -23,11 +23,6 @@ public actor ThirdPartyAuthProvider: ThirdPartyAuthProvidable {
     // MARK: Methods
     
     @MainActor
-    public func configure() {
-        helpers.values.forEach { $0.configure() }
-    }
-    
-    @MainActor
     @discardableResult
     public func handleURL(_ url: URL) -> Bool {
         helpers.values.first(where: { $0.handleURL(url) }) != nil

@@ -1,6 +1,8 @@
 import SwiftUI
 import Domain
 import CommonUI
+import Firebase
+import KakaoSDKCommon
 
 @main
 struct VerseSnapApp: App {
@@ -8,9 +10,10 @@ struct VerseSnapApp: App {
     // MARK: Lifecycle
     
     init() {
-        let dependency = DependencyContainer()
-        self.dependency = dependency
-        dependency.thirdAuthProvider.configure()
+        self.dependency = DependencyContainer()
+        
+        KakaoSDK.initSDK(appKey: AppKeys.kakaoAppKey)
+        FirebaseApp.configure()
     }
     
     // MARK: Properties

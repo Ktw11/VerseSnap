@@ -15,10 +15,6 @@ final class KakaoAccountAuthHelper: ThirdPartyAccountAuthHelpable {
     
     // MARK: Methods
     
-    func configure() {
-        KakaoSDK.initSDK(appKey: Environments.kakaoAppKey)
-    }
-    
     func handleURL(_ url: URL) -> Bool {
         guard AuthApi.isKakaoTalkLoginUrl(url) else { return false }
         return KakaoSDKAuth.AuthController.handleOpenUrl(url: url)

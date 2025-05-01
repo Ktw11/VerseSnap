@@ -26,10 +26,6 @@ final class AppleAccountAuthHelper: NSObject, ThirdPartyAccountAuthHelpable {
     
     // MARK: Methods
     
-    @MainActor func configure() {
-        // do nothing
-    }
-    
     @MainActor func handleURL(_ url: URL) -> Bool {
         false
     }
