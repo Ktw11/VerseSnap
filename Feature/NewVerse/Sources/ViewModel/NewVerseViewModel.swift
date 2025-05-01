@@ -50,7 +50,7 @@ public final class NewVerseViewModel {
         return Self.timeFormatter.string(from: verseInfo.generatedTime)
     }
     var backgroundBlurImage: UIImage? {
-        guard let verseInfo else { return nil }
+        guard verseInfo != nil else { return nil }
         guard let croppedImage else { return nil }
         return croppedImage
     }
