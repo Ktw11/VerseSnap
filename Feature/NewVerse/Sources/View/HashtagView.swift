@@ -17,14 +17,17 @@ struct HashtagView: View {
         static let spacing: CGFloat = 3
         static let iconSize: CGSize = CGSize(width: 16, height: 16)
         static let leadingPadding: CGFloat = 10
-        static let trailingPadding: CGFloat = 5
+        static func trailingPadding(isIconHidden: Bool) -> CGFloat {
+            isIconHidden ? 10 : 5
+        }
         
         static func textWidth(
             prefixWidth: CGFloat,
             textWidth: CGFloat,
-            maxWidth: CGFloat
+            maxWidth: CGFloat,
+            isIconHidden: Bool
         ) -> CGFloat {
-            let paddings: CGFloat = leadingPadding + trailingPadding + (spacing * 2)
+            let paddings: CGFloat = leadingPadding + trailingPadding(isIconHidden: isIconHidden) + (spacing * 2)
             let availableWidth = maxWidth - paddings - prefixWidth - iconSize.width - 0.1
             return min(textWidth, availableWidth)
         }
@@ -35,7 +38,7 @@ struct HashtagView: View {
     @Binding var hashtag: Hashtag
     @Binding var maxWidth: CGFloat
     @FocusState.Binding var isFocused: UUID?
-    let icon: Image
+    let icon: Image?
     let eventListener: HashtagEventListener
     @State private var hashtagPrefixWidth = CGFloat.zero
     @State private var textFieldWidth = CGFloat.zero
@@ -50,7 +53,7 @@ struct HashtagView: View {
             iconView()
         }
         .padding(.leading, Constants.leadingPadding)
-        .padding(.trailing, Constants.trailingPadding)
+        .padding(.trailing, Constants.trailingPadding(isIconHidden: icon == nil))
         .padding(.vertical, 4)
         .background {
             CommonUIAsset.Color.placeholderBG.swiftUIColor
@@ -101,7 +104,8 @@ private extension HashtagView {
                             textFieldWidth = Constants.textWidth(
                                 prefixWidth: hashtagPrefixWidth,
                                 textWidth: newValue,
-                                maxWidth: maxWidth
+                                maxWidth: maxWidth,
+                                isIconHidden: icon == nil
                             )
                         }
                 }
@@ -113,11 +117,13 @@ private extension HashtagView {
     
     @ViewBuilder
     func iconView() -> some View {
-        icon
-            .resizable()
-            .frame(width: Constants.iconSize.width, height: Constants.iconSize.height)
-            .onTapGesture {
-                eventListener.removeHashtag(id: hashtag.id)
-            }
+        if let icon {
+            icon
+                .resizable()
+                .frame(width: Constants.iconSize.width, height: Constants.iconSize.height)
+                .onTapGesture {
+                    eventListener.removeHashtag(id: hashtag.id)
+                }
+        }
     }
 }

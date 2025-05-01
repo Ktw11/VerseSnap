@@ -28,7 +28,7 @@ public final class NewVerseComponent<SelectPhotoComponent: SelectPhotoBuilder>: 
     public func build(isPresented: Binding<Bool>) -> some View {
         NewVerseView(
             isPresented: isPresented,
-            viewModel: NewVerseViewModel(useCase: dependency.useCase),
+            viewModel: NewVerseViewModel(useCase: dependency.useCase, appStateUpdator: dependency.appStateUpdator),
             selectPhotoBuilder: dependency.selectPhotoBuilder
         )
     }

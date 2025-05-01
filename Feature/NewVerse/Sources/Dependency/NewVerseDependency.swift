@@ -15,14 +15,17 @@ public struct NewVerseDependency<SelectPhotoComponent: SelectPhotoBuilder> {
     
     public init(
         useCase: VerseUseCase,
-        selectPhotoBuilder: SelectPhotoComponent
+        selectPhotoBuilder: SelectPhotoComponent,
+        appStateUpdator: GlobalAppStateUpdatable
     ) {
         self.selectPhotoBuilder = selectPhotoBuilder
         self.useCase = useCase
+        self.appStateUpdator = appStateUpdator
     }
     
     // MARK: Properties
 
     let selectPhotoBuilder: SelectPhotoComponent
     let useCase: VerseUseCase
+    let appStateUpdator: GlobalAppStateUpdatable
 }
