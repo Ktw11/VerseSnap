@@ -25,7 +25,7 @@ public actor ImageUploader: ImageUploadable {
     
     public func uploadImage(imageData: Data, pathRoot: String) async throws -> URL {
         let imageName = UUID().uuidString + String(Date().timeIntervalSince1970)
-        let reference = storage.reference().child("\(pathRoot)/(imageName)")
+        let reference = storage.reference().child("\(pathRoot)/\(imageName)")
         
         do {
             let metaData = StorageMetadata()
