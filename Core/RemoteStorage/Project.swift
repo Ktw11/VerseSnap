@@ -14,6 +14,7 @@ let project = Project(
             sources: ["Sources/**"],
             dependencies: [
                 .external(name: "FirebaseStorage"),
+                .domain
             ]
         )
     ]
