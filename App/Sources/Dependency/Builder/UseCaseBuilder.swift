@@ -8,6 +8,7 @@
 import Foundation
 import Domain
 import VSNetwork
+import RemoteStorage
 
 protocol UseCaseBuilder {
     var authUseCase: AuthUseCase & TokenRefreshable{ get }
@@ -47,6 +48,7 @@ final class UseCaseComponent: UseCaseBuilder {
         VerseUseCaseImpl(
             locale: Locale.current,
             imageConverter: ImageConverter(),
+            imageUploader: ImageUploader(),
             repository: repositoryBuilder.verseRepository
         )
     }

@@ -107,7 +107,7 @@ public final class NewVerseViewModel {
                 
                 self?.verseInfo = VerseInfo(
                     generatedTime: Date(timeIntervalSince1970: result.createdAt),
-                    base64Image: result.base64Image,
+                    imageURL: result.imageURL,
                     verse: result.verse,
                     hashtags: result.hashtags.map { Hashtag(value: $0) }
                 )

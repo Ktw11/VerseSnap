@@ -11,15 +11,15 @@ import Foundation
 final class MockVerseRepository: VerseRepository, @unchecked Sendable {
     
     var isGenerateVerseCalled = false
-    var requestedImageData: Data?
+    var requestedImageURLString: String?
     var requestedIsKorean: Bool?
     var requestedHashtags: [String]?
     var expectedGenerateVerseInfo: GeneratedVerseInfo?
     var expectedGenerateVerseError: Error?
     
-    func generateVerse(imageData: Data, isKorean: Bool, hashtags: [String]) async throws -> GeneratedVerseInfo {
+    func generateVerse(imageURLString: String, isKorean: Bool, hashtags: [String]) async throws -> GeneratedVerseInfo {
         isGenerateVerseCalled = true
-        requestedImageData = imageData
+        requestedImageURLString = imageURLString
         requestedIsKorean = isKorean
         requestedHashtags = hashtags
         

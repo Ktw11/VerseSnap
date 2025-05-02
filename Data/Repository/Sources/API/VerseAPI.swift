@@ -16,7 +16,7 @@ enum VerseAPI {
 
 extension VerseAPI.Request {
     struct GenerateVerse {
-        let imageData: Data
+        let imageURLString: String
         let isKorean: Bool
         let hashtags: [String]
     }
@@ -34,21 +34,11 @@ extension VerseAPI: API {
     var bodyParameters: [String: Any]? {
         switch self {
         case let .generate(params):
-            ["isKorean": params.isKorean, "hashtags": params.hashtags.joined(separator: ",")]
-        }
-    }
-    
-    var contentType: ContentType {
-        switch self {
-        case let .generate(params):
-            return .multipart([
-                MultipartFormData.MultipartFile(
-                    data: params.imageData,
-                    name: "image",
-                    fileName: "image.jpg",
-                    mimeType: "image/jpeg"
-                )
-            ])
+            [
+                "imageURL": params.imageURLString,
+                "isKorean": params.isKorean,
+                "hashtags": params.hashtags,
+            ]
         }
     }
     

@@ -11,14 +11,14 @@ public struct GeneratedVerseInfo: Decodable, Equatable, Sendable {
     // MARK: Lifecycle
     
     public init(
-        base64Image: String,
+        imageURL: String,
         hashtags: [String],
         createdAt: TimeInterval,
         verse: String,
         isFavorite: Bool,
         remainingLimit: Int
     ) {
-        self.base64Image = base64Image
+        self.imageURL = imageURL
         self.hashtags = hashtags
         self.createdAt = createdAt
         self.verse = verse
@@ -28,7 +28,7 @@ public struct GeneratedVerseInfo: Decodable, Equatable, Sendable {
     
     // MARK: Properties
     
-    public let base64Image: String
+    public let imageURL: String
     public let hashtags: [String]
     public let createdAt: TimeInterval
     public let verse: String

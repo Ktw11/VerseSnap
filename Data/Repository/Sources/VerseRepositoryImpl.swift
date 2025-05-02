@@ -23,9 +23,9 @@ public final class VerseRepositoryImpl: VerseRepository {
     
     // MARK: Methods
     
-    public func generateVerse(imageData: Data, isKorean: Bool, hashtags: [String]) async throws -> GeneratedVerseInfo {
+    public func generateVerse(imageURLString: String, isKorean: Bool, hashtags: [String]) async throws -> GeneratedVerseInfo {
         let request: VerseAPI.Request.GenerateVerse = .init(
-            imageData: imageData,
+            imageURLString: imageURLString,
             isKorean: isKorean,
             hashtags: hashtags
         )

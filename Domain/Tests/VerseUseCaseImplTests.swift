@@ -14,6 +14,7 @@ final class VerseUseCaseImplTests: XCTestCase {
     var sut: VerseUseCaseImpl!
     var locale: MockLocale!
     var imageConverter: MockImageConverter!
+    var imageUploader: MockImageUploader!
     var repository: MockVerseRepository!
      
     override func setUp() {
@@ -21,11 +22,13 @@ final class VerseUseCaseImplTests: XCTestCase {
         
         locale = MockLocale()
         imageConverter = MockImageConverter()
+        imageUploader = MockImageUploader()
         repository = MockVerseRepository()
         
         sut = VerseUseCaseImpl(
             locale: locale,
             imageConverter: imageConverter,
+            imageUploader: imageUploader,
             repository: repository
         )
     }
@@ -33,6 +36,7 @@ final class VerseUseCaseImplTests: XCTestCase {
     override func tearDown() {
         repository = nil
         imageConverter = nil
+        imageUploader = nil
         locale = nil
         sut = nil
         
@@ -50,7 +54,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         XCTAssertTrue(imageConverter.isConvertToJpegDataCalled)
         XCTAssertEqual(imageConverter.requestedMinLength, VerseUseCaseImpl.Constants.minLength)
         XCTAssertEqual(imageConverter.requestedOutputScale, 1.0)
-        XCTAssertEqual(imageConverter.requestedMaxKB, 200 * 1024)
+        XCTAssertEqual(imageConverter.requestedMaxKB, 900 * 1024)
     }
     
     func test_generate_when_imageConverter_retuns_nil_then_throw_DomainError_failedToConvertImageToData() async {
@@ -70,10 +74,28 @@ final class VerseUseCaseImplTests: XCTestCase {
     }
     
     @MainActor
-    func test_generate_when_image_convert_success_locale_isLanguageKorean_true_repository_success_then_return_VerseResult() async {
+    func test_generate_when_image_convert_success_image_upload_fail_then_throw_DomainError_failedToUploadImage() async {
+        // given
+        imageConverter.expectedConvertToJpegData = Data()
+        imageUploader.expectedUploadImageError = TestError.common
+        
+        // when
+        do {
+            _ = try await sut.generate(image: UIImage(), hashtags: [])
+            XCTFail()
+        } catch DomainError.failedToUploadImage {
+            // then
+            XCTAssert(true)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    @MainActor
+    func test_generate_when_image_convert_success_image_upload_success_locale_isLanguageKorean_true_repository_success_then_return_VerseResult() async {
         // given
         let givenVerseInfo: GeneratedVerseInfo = .init(
-            base64Image: "image",
+            imageURL: "image",
             hashtags: ["a", "c"],
             createdAt: 14871,
             verse: "asdasd",
@@ -83,6 +105,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         let givenHashtags: [String] = ["a", "b", "c"]
         repository.expectedGenerateVerseInfo = givenVerseInfo
         imageConverter.expectedConvertToJpegData = Data()
+        imageUploader.expectedUploadImage = URL(string: "www.google.com")
         locale.isLanguageKorean = true
         
         // when
@@ -100,10 +123,10 @@ final class VerseUseCaseImplTests: XCTestCase {
     }
     
     @MainActor
-    func test_generate_when_image_convert_success_with_locale_isLanguageKorean_false_repository_success_then_return_VerseResult() async {
+    func test_generate_when_image_convert_success_image_upload_success_with_locale_isLanguageKorean_false_repository_success_then_return_VerseResult() async {
         // given
         let givenVerseInfo: GeneratedVerseInfo = .init(
-            base64Image: "image",
+            imageURL: "image",
             hashtags: ["a", "c"],
             createdAt: 14871,
             verse: "asdasd",
@@ -113,6 +136,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         let givenHashtags: [String] = ["1", "2", "3"]
         repository.expectedGenerateVerseInfo = givenVerseInfo
         imageConverter.expectedConvertToJpegData = Data()
+        imageUploader.expectedUploadImage = URL(string: "www.google.com")
         locale.isLanguageKorean = false
         
         // when
@@ -130,11 +154,12 @@ final class VerseUseCaseImplTests: XCTestCase {
     }
     
     @MainActor
-    func test_generate_when_image_convert_success_with_repository_fail_then_throw_error() async {
+    func test_generate_when_image_convert_success_image_upload_success_with_repository_fail_then_throw_error() async {
         // given
         let givenError: Error = TestError.common
         repository.expectedGenerateVerseError = givenError
         imageConverter.expectedConvertToJpegData = Data()
+        imageUploader.expectedUploadImage = URL(string: "www.google.com")
         
         // when
         do {

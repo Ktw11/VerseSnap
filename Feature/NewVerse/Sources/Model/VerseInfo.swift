@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import UIKit
 
 struct VerseInfo {
     let generatedTime: Date
-    let base64Image: String
+    let imageURL: String
     let verse: String
     let hashtags: [Hashtag]
 }

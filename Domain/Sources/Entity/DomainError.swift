@@ -13,4 +13,5 @@ public enum DomainError: Error {
     case unknown
     case cancelled
     case decodingFailed(Error)
+    case failedToUploadImage
 }

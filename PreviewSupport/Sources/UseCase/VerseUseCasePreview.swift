@@ -38,7 +38,7 @@ public extension VerseUseCasePreview {
     
     static var dummy: GeneratedVerseInfo {
         GeneratedVerseInfo(
-            base64Image: "",
+            imageURL: "",
             hashtags: ["a", "bsada"],
             createdAt: Date().timeIntervalSince1970,
             verse: "삼: 삼삼삼\n행: 행행행\n시: 시시시",

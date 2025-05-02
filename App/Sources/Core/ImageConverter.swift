@@ -52,8 +52,8 @@ private extension ImageConverter {
     
     func compressedJpegData(_ image: UIImage, compressTo maxKB: Int) -> Data? {
         let maxBytes: Int = maxKB * 1024
-        var minQuality: CGFloat = 0.3
-        var maxQuality: CGFloat = 0.9
+        var minQuality: CGFloat = 0.6
+        var maxQuality: CGFloat = 0.8
 
         guard var data = image.jpegData(compressionQuality: maxQuality) else { return nil }
         guard data.count > maxBytes else { return data }
