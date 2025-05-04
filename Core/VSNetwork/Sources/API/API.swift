@@ -23,12 +23,7 @@ public extension API {
     }
     
     var headers: [String: String] {
-        switch contentType {
-        case .json:
-            ["Content-Type": "application/json"]
-        case .multipart:
-            [:]
-        }
+        [:]
     }
     
     var queryParameters: [String: String]? {

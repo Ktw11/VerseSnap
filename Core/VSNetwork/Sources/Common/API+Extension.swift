@@ -29,6 +29,7 @@ extension API {
             if let bodyParameters {
                 request.httpBody = try? JSONSerialization.data(withJSONObject: bodyParameters, options: [])
             }
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         case let .multipart(files):
             let boundary = "Boundary-\(UUID().uuidString)"
             request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
