@@ -21,10 +21,12 @@ public final class VerseRepositoryImpl: VerseRepository {
     
     private let networkProvider: NetworkProvidable
     
+    private typealias Request = VerseAPI.Request
+    
     // MARK: Methods
     
     public func generate(imageData: Data, isKorean: Bool) async throws -> GeneratedVerseInfo {
-        let request: VerseAPI.Request.GenerateVerse = .init(
+        let request: Request.GenerateVerse = .init(
             imageData: imageData,
             isKorean: isKorean
         )
@@ -46,8 +48,17 @@ public final class VerseRepositoryImpl: VerseRepository {
         }
     }
     
-    #warning("구현 필요")
     public func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
-        VerseDiary(imageURL: "", hashtags: [], createdAt: 1, verse: "", isFavorite: false)
+        let request: Request.SaveVerseDiary = .init(verse: verse, imageURL: imageURL, hashtags: hashtags)
+        let api: API = VerseAPI.save(request)
+        
+        do {
+            let data = try await networkProvider.request(api: api)
+            return try JSONDecoder().decode(VerseDiary.self, from: data)
+        } catch let error as DecodingError {
+            throw DomainError.decodingFailed(error)
+        } catch {
+            throw DomainError.unknown
+        }
     }
 }

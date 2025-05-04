@@ -10,6 +10,7 @@ import VSNetwork
 
 enum VerseAPI {
     case generate(Request.GenerateVerse)
+    case save(Request.SaveVerseDiary)
     
     enum Request {}
 }
@@ -19,11 +20,22 @@ extension VerseAPI.Request {
         let imageData: Data
         let isKorean: Bool
     }
+    
+    struct SaveVerseDiary {
+        let verse: String
+        let imageURL: String
+        let hashtags: [String]
+    }
 }
 
 extension VerseAPI: API {
     var path: String {
-        "verse/generate"
+        switch self {
+        case .generate:
+            "verse/generate"
+        case .save:
+            "verse/save"
+        }
     }
     
     var method: HttpMethod {
@@ -36,6 +48,12 @@ extension VerseAPI: API {
             [
                 "imageURL": params.imageData,
                 "isKorean": params.isKorean,
+            ]
+        case let .save(params):
+            [
+                "verse": params.verse,
+                "imageURL": params.imageURL,
+                "hashtags": params.hashtags,
             ]
         }
     }
@@ -51,6 +69,8 @@ extension VerseAPI: API {
                     mimeType: "image/jpeg"
                 )
             ])
+        case .save:
+            return .json
         }
     }
     
