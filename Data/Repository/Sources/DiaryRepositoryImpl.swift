@@ -48,6 +48,35 @@ public actor DiaryRepositoryImpl: DiaryRepository {
             try? await localDataSource.save(result.toDTO)
         }
     }
+    
+    public func fetchDiariesByMonth(
+        startTimestamp: TimeInterval,
+        endTimestamp: TimeInterval,
+        after cursor: DiaryCursor
+    ) async throws -> [VerseDiary] {
+        let localResult = try await localDataSource.retreiveDiariesByMonth(
+            startTimestamp: startTimestamp,
+            endTimestamp: endTimestamp,
+            after: cursor.lastCreatedAt,
+            size: cursor.size
+        )
+    
+        if localResult.isEmpty {
+            let request: Request.ListFilter = .init(
+                startTimestamp: startTimestamp,
+                endTimestamp: endTimestamp,
+                lastCreatedAt: cursor.lastCreatedAt,
+                size: cursor.size
+            )
+            let api: API = VerseAPI.listFilter(request)
+            let data = try await networkProvider.request(api: api)
+            let remoteResult = try JSONDecoder().decode([VerseDiary].self, from: data)
+            try await localDataSource.save(remoteResult.map(\.toDTO))
+            return remoteResult
+        } else {
+            return localResult.map { $0.toDomain }
+        }
+    }
 }
 
 private extension VerseDiary {

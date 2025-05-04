@@ -15,6 +15,13 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var requestedSaveHashtags: [String]?
     var expectedSaveError: Error?
     
+    var isFetchDiariesByMonthCalled: Bool = false
+    var requestedFetchDiariesByMonthStartTimestamp: TimeInterval?
+    var requestedFetchDiariesByMonthEndTimestamp: TimeInterval?
+    var requestedFetchDiariesByMonthCursor: DiaryCursor?
+    var expectedFetchDiariesByMonth: [VerseDiary]?
+    var expectedFetchDiariesByMonthError: Error?
+    
     func save(verse: String, imageURL: String, hashtags: [String]) async throws {
         isSaveCalled = true
         requestedSaveVerse = verse
@@ -23,6 +30,25 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
         
         if let expectedSaveError {
             throw expectedSaveError
+        }
+    }
+    
+    func fetchDiariesByMonth(
+        startTimestamp: TimeInterval,
+        endTimestamp: TimeInterval,
+        after cursor: DiaryCursor
+    ) async throws -> [VerseDiary] {
+        isFetchDiariesByMonthCalled = true
+        requestedFetchDiariesByMonthStartTimestamp = startTimestamp
+        requestedFetchDiariesByMonthEndTimestamp = endTimestamp
+        requestedFetchDiariesByMonthCursor = cursor
+        
+        if let expectedFetchDiariesByMonth {
+            return expectedFetchDiariesByMonth
+        } else if let expectedFetchDiariesByMonthError {
+            throw expectedFetchDiariesByMonthError
+        } else {
+            throw TestError.notImplemented
         }
     }
 }

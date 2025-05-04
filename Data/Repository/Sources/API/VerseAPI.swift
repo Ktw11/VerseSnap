@@ -11,20 +11,28 @@ import VSNetwork
 enum VerseAPI {
     case generate(Request.GenerateVerse)
     case save(Request.SaveVerseDiary)
+    case listFilter(Request.ListFilter)
     
     enum Request {}
 }
 
 extension VerseAPI.Request {
-    struct GenerateVerse {
+    struct GenerateVerse: Encodable {
         let imageData: Data
         let isKorean: Bool
     }
     
-    struct SaveVerseDiary {
+    struct SaveVerseDiary: Encodable {
         let verse: String
         let imageURL: String
         let hashtags: [String]
+    }
+    
+    struct ListFilter: Encodable {
+        let startTimestamp: TimeInterval
+        let endTimestamp: TimeInterval
+        let lastCreatedAt: TimeInterval?
+        let size: Int
     }
 }
 
@@ -35,26 +43,30 @@ extension VerseAPI: API {
             "verse/generate"
         case .save:
             "verse/save"
+        case .listFilter:
+            "verse/list/filter"
         }
     }
     
     var method: HttpMethod {
-        .post
+        switch self {
+        case .generate, .save:
+            .post
+        case .listFilter:
+            .get
+        }
     }
     
     var bodyParameters: [String: Any]? {
         switch self {
         case let .generate(params):
-            [
-                "imageURL": params.imageData,
-                "isKorean": params.isKorean,
-            ]
+            var dict = params.asDictionary
+            dict.removeValue(forKey: "imageData")
+            return dict
         case let .save(params):
-            [
-                "verse": params.verse,
-                "imageURL": params.imageURL,
-                "hashtags": params.hashtags,
-            ]
+            return params.asDictionary
+        case let .listFilter(params):
+            return [:]
         }
     }
     
@@ -69,8 +81,17 @@ extension VerseAPI: API {
                     mimeType: "image/jpeg"
                 )
             ])
-        case .save:
+        case .save, .listFilter:
             return .json
+        }
+    }
+    
+    var headers: [String: String] {
+        switch self {
+        case let .listFilter(params):
+            params.asDictionary.compactMapValues { "\($0)" }
+        case .generate, .save:
+            [:]
         }
     }
     
