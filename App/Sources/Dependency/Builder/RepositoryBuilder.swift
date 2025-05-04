@@ -31,6 +31,9 @@ final class RepositoryComponent: RepositoryBuilder {
     private lazy var signInInfoDataSource: SignInInfoDataSource = {
         SignInInfoLocalDataSource()
     }()
+    private lazy var diaryLocalDataSource: DiaryLocalDataSource = {
+        DiaryLocalDataSourceImpl()
+    }()
     
     var authRepository: AuthRepository {
         AuthRepositoryImpl(networkProvider: networkProvider)
@@ -45,6 +48,9 @@ final class RepositoryComponent: RepositoryBuilder {
     }
     
     var diaryRepository: DiaryRepository {
-        DiaryRepositoryImpl(networkProvider: networkProvider)
+        DiaryRepositoryImpl(
+            networkProvider: networkProvider,
+            localDataSource: diaryLocalDataSource
+        )
     }
 }

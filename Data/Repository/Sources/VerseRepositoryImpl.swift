@@ -9,7 +9,7 @@ import Foundation
 import VSNetwork
 import Domain
 
-public final class VerseRepositoryImpl: VerseRepository {
+public actor VerseRepositoryImpl: VerseRepository {
     
     // MARK: Lifecycle
     

@@ -13,10 +13,9 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var requestedSaveVerse: String?
     var requestedSaveImageURL: String?
     var requestedSaveHashtags: [String]?
-    var expectedSaveResult: VerseDiary?
     var expectedSaveError: Error?
     
-    func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
+    func save(verse: String, imageURL: String, hashtags: [String]) async throws {
         isSaveCalled = true
         requestedSaveVerse = verse
         requestedSaveImageURL = imageURL
@@ -24,10 +23,6 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
         
         if let expectedSaveError {
             throw expectedSaveError
-        } else if let expectedSaveResult {
-            return expectedSaveResult
-        } else {
-            throw TestError.notImplemented
         }
     }
 }

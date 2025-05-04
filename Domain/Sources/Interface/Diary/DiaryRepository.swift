@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol DiaryRepository: Sendable {
-    func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary
+    func save(verse: String, imageURL: String, hashtags: [String]) async throws
 }
