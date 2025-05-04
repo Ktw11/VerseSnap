@@ -10,4 +10,5 @@ import UIKit
 
 public protocol VerseUseCase: Sendable {
     func generate(image: UIImage) async throws -> GeneratedVerseInfo
+    func save(verse: String, image: UIImage, hashtags: [String]) async throws
 }

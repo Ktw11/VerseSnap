@@ -133,7 +133,9 @@ private extension NewVerseView {
             Spacer()
             
             Button(action: {
-                isPresented.toggle()
+                viewModel.didTapDone() {
+                    isPresented.toggle()
+                }
             }, label: {
                 Text("완료")
                     .font(.suite(size: 17, weight: .regular))
@@ -228,19 +230,25 @@ private extension NewVerseView {
     
     @ViewBuilder
     func loadingView() -> some View {
-        ZStack {
-            Color.black.opacity(0.7)
-            
-            VStack(spacing: 25) {
-                LoadingView()
+        let isGenerating: Bool = viewModel.isGeneratingVerse
+        let isSaving: Bool = viewModel.isSavingVerseDiary
+        
+        if isGenerating || isSaving {
+            ZStack {
+                Color.black.opacity(0.7)
                 
-                Text(viewModel.loadingText)
-                    .font(.suite(size: 16, weight: .regular))
-                    .foregroundColor(.white)
+                VStack(spacing: 25) {
+                    LoadingView()
+                 
+                    if !isSaving {
+                        Text(viewModel.loadingText)
+                            .font(.suite(size: 16, weight: .regular))
+                            .foregroundColor(.white)
+                    }
+                }
             }
+            .ignoresSafeArea()
         }
-        .ignoresSafeArea()
-        .opacity(viewModel.isGeneratingVerse ? 1 : 0)
     }
 }
 
@@ -251,7 +259,7 @@ import PreviewSupport
     @Previewable @State var isPresented: Bool = true
     let useCase: VerseUseCasePreview = {
         let mock = VerseUseCasePreview.preview
-        mock.sleepingSecond = 1
+        mock.saveLoadingSeconds = 3
         mock.verseResult = VerseUseCasePreview.dummy
         return mock
     }()

@@ -44,6 +44,7 @@ public final class NewVerseViewModel {
     var hashtags: [Hashtag] = [.init(value: "")]
     var croppedImage: UIImage?
     private(set) var isGeneratingVerse: Bool = false
+    private(set) var isSavingVerseDiary: Bool = false
     
     var backgroundBlurImage: UIImage? {
         guard generatedVerse != nil else { return nil }
@@ -98,6 +99,30 @@ public final class NewVerseViewModel {
                 self?.generatedVerse = result.verse
             } catch let error as DomainError {
                 self?.handleGenerateDomainError(error)
+            } catch {
+                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+            }
+        }
+    }
+    
+    func didTapDone(completion: @escaping (() -> Void)) {
+        guard let croppedImage, let generatedVerse else { return }
+        guard !isSavingVerseDiary else { return }
+        isSavingVerseDiary = true
+        
+        let hashtagValues: [String] = hashtags.map(\.value).filter { !$0.isEmpty }
+        Task { [weak self, useCase] in
+            defer {
+                self?.isSavingVerseDiary = false
+                completion()
+            }
+            
+            do {
+                try await useCase.save(
+                    verse: generatedVerse,
+                    image: croppedImage,
+                    hashtags: hashtagValues
+                )
             } catch {
                 self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
             }

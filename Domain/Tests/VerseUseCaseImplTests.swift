@@ -200,7 +200,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         }
     }
     
-    func test_save_success_then_return_VerseDiary() async {
+    func test_save_success() async {
         // given
         let givenVerseDiary: VerseDiary = VerseDiary(
             imageURL: URL(string: "www.google.com")!.absoluteString,
@@ -216,10 +216,12 @@ final class VerseUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            let result = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
+            let _ = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
             
             // then
-            XCTAssertEqual(result, givenVerseDiary)
+            XCTAssertTrue(imageConverter.isConvertToJpegDataCalled)
+            XCTAssertTrue(imageUploader.isUploadImageCalled)
+            XCTAssertTrue(repository.isSaveCalled)
         } catch {
             XCTFail()
         }

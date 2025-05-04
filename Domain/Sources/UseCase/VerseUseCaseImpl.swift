@@ -50,7 +50,7 @@ public final class VerseUseCaseImpl: VerseUseCase {
         )
     }
 
-    public func save(verse: String, image: UIImage, hashtags: [String]) async throws -> VerseDiary {
+    public func save(verse: String, image: UIImage, hashtags: [String]) async throws {
         guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength, maxKB: 900 * 1024) else {
             throw DomainError.failedToConvertImageToData
         }
@@ -58,7 +58,7 @@ public final class VerseUseCaseImpl: VerseUseCase {
             throw DomainError.failedToUploadImage
         }
 
-        return try await repository.save(
+        _ = try await repository.save(
             verse: verse,
             imageURL: imageURL.absoluteString,
             hashtags: hashtags

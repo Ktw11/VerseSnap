@@ -14,19 +14,26 @@ public final class VerseUseCasePreview: VerseUseCase, @unchecked Sendable {
     // MARK: Properties
     
     public var verseResult: GeneratedVerseInfo?
-    public var sleepingSecond: Int?
+    public var generateLoadingSeconds: Int?
+    public var saveLoadingSeconds: Int?
     
     // MARK: Methods
     
     public func generate(image: UIImage) async throws -> GeneratedVerseInfo {
-        if let sleepingSecond {
-            try await Task.sleep(nanoseconds: UInt64(sleepingSecond * 1000_000_000))
+        if let generateLoadingSeconds {
+            try await Task.sleep(nanoseconds: UInt64(generateLoadingSeconds * 1000_000_000))
         }
         
         if let verseResult {
             return verseResult
         } else {
             throw DomainError.unknown
+        }
+    }
+    
+    public func save(verse: String, image: UIImage, hashtags: [String]) async throws {
+        if let saveLoadingSeconds {
+            try await Task.sleep(nanoseconds: UInt64(saveLoadingSeconds * 1000_000_000))
         }
     }
 }
