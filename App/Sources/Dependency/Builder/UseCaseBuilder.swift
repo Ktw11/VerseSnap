@@ -13,6 +13,7 @@ import RemoteStorage
 protocol UseCaseBuilder {
     var authUseCase: AuthUseCase & TokenRefreshable{ get }
     var verseUseCase: VerseUseCase { get }
+    var diaryUseCase: DiaryUseCase { get }
 }
 
 final class UseCaseComponent: UseCaseBuilder {
@@ -22,11 +23,13 @@ final class UseCaseComponent: UseCaseBuilder {
     init(
         repositoryBuilder: RepositoryBuilder,
         thirdAuthProvider: ThirdPartyAuthProvidable,
-        tokenStore: TokenUpdatable
+        tokenStore: TokenUpdatable,
+        minimumImageLength: CGFloat
     ) {
         self.repositoryBuilder = repositoryBuilder
         self.thirdAuthProvider = thirdAuthProvider
         self.tokenStore = tokenStore
+        self.minimumImageLength = minimumImageLength
     }
     
     // MARK: Properties
@@ -34,6 +37,7 @@ final class UseCaseComponent: UseCaseBuilder {
     private let repositoryBuilder: RepositoryBuilder
     private let thirdAuthProvider: ThirdPartyAuthProvidable
     private let tokenStore: TokenUpdatable
+    private let minimumImageLength: CGFloat
     
     var authUseCase: AuthUseCase & TokenRefreshable {
         AuthUseCaseImpl(
@@ -48,8 +52,17 @@ final class UseCaseComponent: UseCaseBuilder {
         VerseUseCaseImpl(
             locale: Locale.current,
             imageConverter: ImageConverter(),
+            repository: repositoryBuilder.verseRepository,
+            minImageLength: minimumImageLength
+        )
+    }
+    
+    var diaryUseCase: DiaryUseCase {
+        DiaryUseCaseImpl(
+            imageConverter: ImageConverter(),
             imageUploader: ImageUploader(),
-            repository: repositoryBuilder.verseRepository
+            repository: repositoryBuilder.diaryRepository,
+            minImageLength: minimumImageLength
         )
     }
 }

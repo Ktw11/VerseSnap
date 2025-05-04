@@ -22,6 +22,12 @@ final class DependencyContainer {
         }
     }
     
+    // MARK: Definitions
+    
+    private enum Constants {
+        static let minimumImageLength: CGFloat = 512
+    }
+    
     // MARK: Properties
     
     lazy var thirdAuthProvider: ThirdPartyAuthProvidable = {
@@ -34,7 +40,8 @@ final class DependencyContainer {
         UseCaseComponent(
             repositoryBuilder: repositoryBuilder,
             thirdAuthProvider: thirdAuthProvider,
-            tokenStore: tokenStore
+            tokenStore: tokenStore,
+            minimumImageLength: Constants.minimumImageLength
         )
     }()
     

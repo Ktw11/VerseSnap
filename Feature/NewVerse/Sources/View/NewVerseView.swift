@@ -257,11 +257,10 @@ import PreviewSupport
 
 #Preview {
     @Previewable @State var isPresented: Bool = true
-    let useCase: VerseUseCasePreview = {
-        let mock = VerseUseCasePreview.preview
-        mock.saveLoadingSeconds = 3
-        mock.verseResult = VerseUseCasePreview.dummy
-        return mock
+    let verseUseCase: VerseUseCasePreview = {
+        let useCase = VerseUseCasePreview.preview
+        useCase.verseResult = VerseUseCasePreview.dummy
+        return useCase
     }()
 
     ZStack {
@@ -270,7 +269,11 @@ import PreviewSupport
 
         NewVerseView(
             isPresented: $isPresented,
-            viewModel: .init(useCase: useCase, appStateUpdator: GlobalStateUpdatorPreview.preview),
+            viewModel: .init(
+                verseUseCase: verseUseCase,
+                diaryUseCase: DiaryUseCasePreview.preview,
+                appStateUpdator: GlobalStateUpdatorPreview.preview
+            ),
             selectPhotoBuilder: SelectPhotoPreviewComponent()
         )
     }

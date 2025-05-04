@@ -15,7 +15,6 @@ public final class VerseUseCasePreview: VerseUseCase, @unchecked Sendable {
     
     public var verseResult: GeneratedVerseInfo?
     public var generateLoadingSeconds: Int?
-    public var saveLoadingSeconds: Int?
     
     // MARK: Methods
     
@@ -28,12 +27,6 @@ public final class VerseUseCasePreview: VerseUseCase, @unchecked Sendable {
             return verseResult
         } else {
             throw DomainError.unknown
-        }
-    }
-    
-    public func save(verse: String, image: UIImage, hashtags: [String]) async throws {
-        if let saveLoadingSeconds {
-            try await Task.sleep(nanoseconds: UInt64(saveLoadingSeconds * 1000_000_000))
         }
     }
 }

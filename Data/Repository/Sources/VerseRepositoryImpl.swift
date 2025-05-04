@@ -47,18 +47,4 @@ public final class VerseRepositoryImpl: VerseRepository {
             throw DomainError.unknown
         }
     }
-    
-    public func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
-        let request: Request.SaveVerseDiary = .init(verse: verse, imageURL: imageURL, hashtags: hashtags)
-        let api: API = VerseAPI.save(request)
-        
-        do {
-            let data = try await networkProvider.request(api: api)
-            return try JSONDecoder().decode(VerseDiary.self, from: data)
-        } catch let error as DecodingError {
-            throw DomainError.decodingFailed(error)
-        } catch {
-            throw DomainError.unknown
-        }
-    }
 }

@@ -14,6 +14,7 @@ protocol RepositoryBuilder {
     var authRepository: AuthRepository { get }
     var signInInfoRepository: SignInInfoRepository { get }
     var verseRepository: VerseRepository { get }
+    var diaryRepository: DiaryRepository { get }
 }
 
 final class RepositoryComponent: RepositoryBuilder {
@@ -41,5 +42,9 @@ final class RepositoryComponent: RepositoryBuilder {
     
     var verseRepository: VerseRepository {
         VerseRepositoryImpl(networkProvider: networkProvider)
+    }
+    
+    var diaryRepository: DiaryRepository {
+        DiaryRepositoryImpl(networkProvider: networkProvider)
     }
 }

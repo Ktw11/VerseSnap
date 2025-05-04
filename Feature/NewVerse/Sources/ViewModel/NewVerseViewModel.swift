@@ -17,8 +17,13 @@ public final class NewVerseViewModel {
     
     // MARK: Lifecycle
     
-    public init(useCase: VerseUseCase, appStateUpdator: GlobalAppStateUpdatable) {
-        self.useCase = useCase
+    public init(
+        verseUseCase: VerseUseCase,
+        diaryUseCase: DiaryUseCase,
+        appStateUpdator: GlobalAppStateUpdatable
+    ) {
+        self.verseUseCase = verseUseCase
+        self.diaryUseCase = diaryUseCase
         self.appStateUpdator = appStateUpdator
     }
     
@@ -73,7 +78,8 @@ public final class NewVerseViewModel {
     
     private var generatedVerse: String? = nil
 
-    private let useCase: VerseUseCase
+    private let verseUseCase: VerseUseCase
+    private let diaryUseCase: DiaryUseCase
     private let appStateUpdator: GlobalAppStateUpdatable
     
     private static var dateFormatter: DateFormatter = .init()
@@ -90,11 +96,11 @@ public final class NewVerseViewModel {
         guard !isGeneratingVerse else { return }
         isGeneratingVerse = true
         
-        Task { [weak self, useCase] in
+        Task { [weak self, verseUseCase] in
             defer { self?.isGeneratingVerse = false }
             
             do {
-                let result = try await useCase.generate(image: croppedImage)
+                let result = try await verseUseCase.generate(image: croppedImage)
                 
                 self?.generatedVerse = result.verse
             } catch let error as DomainError {
@@ -111,14 +117,14 @@ public final class NewVerseViewModel {
         isSavingVerseDiary = true
         
         let hashtagValues: [String] = hashtags.map(\.value).filter { !$0.isEmpty }
-        Task { [weak self, useCase] in
+        Task { [weak self, diaryUseCase] in
             defer {
                 self?.isSavingVerseDiary = false
                 completion()
             }
             
             do {
-                try await useCase.save(
+                try await diaryUseCase.save(
                     verse: generatedVerse,
                     image: croppedImage,
                     hashtags: hashtagValues

@@ -14,18 +14,21 @@ public struct NewVerseDependency<SelectPhotoComponent: SelectPhotoBuilder> {
     // MARK: Lifecycle
     
     public init(
-        useCase: VerseUseCase,
+        verseUseCase: VerseUseCase,
+        diaryUseCase: DiaryUseCase,
         selectPhotoBuilder: SelectPhotoComponent,
         appStateUpdator: GlobalAppStateUpdatable
     ) {
         self.selectPhotoBuilder = selectPhotoBuilder
-        self.useCase = useCase
+        self.verseUseCase = verseUseCase
+        self.diaryUseCase = diaryUseCase
         self.appStateUpdator = appStateUpdator
     }
     
     // MARK: Properties
 
     let selectPhotoBuilder: SelectPhotoComponent
-    let useCase: VerseUseCase
+    let verseUseCase: VerseUseCase
+    let diaryUseCase: DiaryUseCase
     let appStateUpdator: GlobalAppStateUpdatable
 }

@@ -1,0 +1,13 @@
+//
+//  DiaryUseCase.swift
+//  Domain
+//
+//  Created by 공태웅 on 5/4/25.
+//
+
+import Foundation
+import UIKit
+
+public protocol DiaryUseCase {
+    func save(verse: String, image: UIImage, hashtags: [String]) async throws
+}

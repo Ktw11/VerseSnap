@@ -15,7 +15,8 @@ extension DependencyContainer {
     var newVerseBuilder: some NewVerseBuilder {
         NewVerseComponent(
             dependency: NewVerseDependency(
-                useCase: useCaseBuilder.verseUseCase,
+                verseUseCase: useCaseBuilder.verseUseCase,
+                diaryUseCase: useCaseBuilder.diaryUseCase,
                 selectPhotoBuilder: selectPhotoBuilder,
                 appStateUpdator: appStateStore
             )
