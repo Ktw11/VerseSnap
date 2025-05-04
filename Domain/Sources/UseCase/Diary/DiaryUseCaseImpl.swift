@@ -16,12 +16,14 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
         imageConverter: ImageConvertable,
         imageUploader: ImageUploadable,
         repository: DiaryRepository,
-        minImageLength: CGFloat
+        minImageLength: CGFloat,
+        calendar: Calendar
     ) {
         self.imageConverter = imageConverter
         self.imageUploader = imageUploader
         self.repository = repository
         self.minImageLength = minImageLength
+        self.calendar = calendar
     }
     
     // MARK: Properties
@@ -30,6 +32,7 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
     private let imageUploader: ImageUploadable
     private let repository: DiaryRepository
     private let minImageLength: CGFloat
+    private let calendar: Calendar
     
     // MARK: Methods
 
@@ -45,6 +48,20 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
             verse: verse,
             imageURL: imageURL.absoluteString,
             hashtags: hashtags
+        )
+    }
+    
+    public func fetchDiariesByMonth(year: Int, month: Int, after cursor: DiaryCursor) async throws -> [VerseDiary] {
+        let dateComponents: DateComponents = .init(year: year, month: month, day: 1)
+        guard let startDate = calendar.date(from: dateComponents) else { throw DiaryUseCaseError.failedToConvertDate }
+        guard let endDate = calendar.date(byAdding: .month, value: 1, to: startDate) else { throw DiaryUseCaseError.failedToConvertDate }
+
+        let startTimestamp = startDate.timeIntervalSince1970
+        let endTimestamp = endDate.timeIntervalSince1970
+        return try await repository.fetchDiariesByMonth(
+            startTimestamp: startTimestamp,
+            endTimestamp: endTimestamp,
+            after: cursor
         )
     }
 }

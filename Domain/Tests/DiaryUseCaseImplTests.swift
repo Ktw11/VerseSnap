@@ -28,7 +28,8 @@ final class DiaryUseCaseImplTests: XCTestCase {
             imageConverter: imageConverter,
             imageUploader: imageUploader,
             repository: repository,
-            minImageLength: minImageLength
+            minImageLength: minImageLength,
+            calendar: Calendar(identifier: .gregorian)
         )
     }
     
@@ -104,17 +105,8 @@ final class DiaryUseCaseImplTests: XCTestCase {
     
     func test_save_success() async {
         // given
-        let givenVerseDiary: VerseDiary = VerseDiary(
-            imageURL: URL(string: "www.google.com")!.absoluteString,
-            hashtags: ["tag", "tag2"],
-            createdAt: 123,
-            verse: "test",
-            isFavorite: [true, false].randomElement()!
-        )
-        
         imageConverter.expectedConvertToJpegData = Data()
         imageUploader.expectedUploadImage = URL(string: "www.google.com")
-        repository.expectedSaveResult = givenVerseDiary
         
         // when
         do {
@@ -127,5 +119,45 @@ final class DiaryUseCaseImplTests: XCTestCase {
         } catch {
             XCTFail()
         }
+    }
+    
+    func test_fetchDiariesByMonth_when_year_month_is_valid_repository_fails_then_throw_error() async {
+        // given
+        repository.expectedFetchDiariesByMonthError = TestError.common
+
+        // when
+        do {
+            _ = try await sut.fetchDiariesByMonth(
+                year: 1010,
+                month: 12,
+                after: DiaryCursor(size: 10, lastCreatedAt: 200)
+            )
+            XCTFail()
+        } catch TestError.common {
+            // then
+            XCTAssertTrue(repository.isFetchDiariesByMonthCalled)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_fetchDiariesByMonth_when_year_month_is_valid_repository_returns_data_then_return_data() async {
+        // given
+        let expectedDiaries = [
+            VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verse: "v1", isFavorite: false),
+            VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verse: "v2", isFavorite: true)
+        ]
+        repository.expectedFetchDiariesByMonth = expectedDiaries
+        
+        // when
+        let result = try? await sut.fetchDiariesByMonth(
+            year: 2000,
+            month: 2,
+            after: DiaryCursor(size: 10, lastCreatedAt: 200)
+        )
+        
+        // then
+        XCTAssertEqual(result, expectedDiaries)
+        XCTAssertTrue(repository.isFetchDiariesByMonthCalled)
     }
 }

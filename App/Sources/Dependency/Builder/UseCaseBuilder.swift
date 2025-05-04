@@ -62,7 +62,8 @@ final class UseCaseComponent: UseCaseBuilder {
             imageConverter: ImageConverter(),
             imageUploader: ImageUploader(),
             repository: repositoryBuilder.diaryRepository,
-            minImageLength: minimumImageLength
+            minImageLength: minimumImageLength,
+            calendar: Calendar(identifier: .gregorian)
         )
     }
 }
