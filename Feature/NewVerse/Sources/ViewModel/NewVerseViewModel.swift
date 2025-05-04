@@ -45,39 +45,32 @@ public final class NewVerseViewModel {
     var croppedImage: UIImage?
     private(set) var isGeneratingVerse: Bool = false
     
-    var timeString: String? {
-        guard let verseInfo else { return nil }
-        return Self.timeFormatter.string(from: verseInfo.generatedTime)
-    }
     var backgroundBlurImage: UIImage? {
-        guard verseInfo != nil else { return nil }
+        guard generatedVerse != nil else { return nil }
         guard let croppedImage else { return nil }
         return croppedImage
     }
     var isVerseGenerated: Bool {
-        verseInfo != nil
+        generatedVerse != nil
     }
     var loadingText: LocalizedStringKey {
         Constants.loadingText
     }
     var buttonText: LocalizedStringKey {
-        if verseInfo == nil {
+        if generatedVerse == nil {
             "삼행시 만들기"
         } else {
             "다시 만들기"
         }
     }
-    var canEditHashtags: Bool {
-        verseInfo == nil
-    }
     var verse: AttributedString? {
-        boldFirstCharacterOfEachLine(from: verseInfo?.verse)
+        boldFirstCharacterOfEachLine(from: generatedVerse)
     }
     
     let dateString: String = dateFormatter.string(from: Date())
     let imageRatio: CGFloat = 0.65
     
-    private var verseInfo: VerseInfo? = nil
+    private var generatedVerse: String? = nil
 
     private let useCase: VerseUseCase
     private let appStateUpdator: GlobalAppStateUpdatable
@@ -96,22 +89,13 @@ public final class NewVerseViewModel {
         guard !isGeneratingVerse else { return }
         isGeneratingVerse = true
         
-        let validHashtags: [Hashtag] = hashtags.filter { !$0.value.isEmpty }
-        let validHashtagValues: [String] = validHashtags.map(\.value)
-        
         Task { [weak self, useCase] in
             defer { self?.isGeneratingVerse = false }
             
             do {
-                let result = try await useCase.generate(image: croppedImage, hashtags: validHashtagValues)
+                let result = try await useCase.generate(image: croppedImage)
                 
-                self?.verseInfo = VerseInfo(
-                    generatedTime: Date(timeIntervalSince1970: result.createdAt),
-                    imageURL: result.imageURL,
-                    verse: result.verse,
-                    hashtags: result.hashtags.map { Hashtag(value: $0) }
-                )
-                self?.hashtags = validHashtags
+                self?.generatedVerse = result.verse
             } catch let error as DomainError {
                 self?.handleGenerateDomainError(error)
             } catch {

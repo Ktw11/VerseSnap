@@ -147,18 +147,10 @@ private extension NewVerseView {
     
     @ViewBuilder
     func dateView() -> some View {
-        VStack {
-            Text(viewModel.dateString)
-                .font(.suite(size: 20, weight: .bold))
-                .foregroundStyle(.white)
-                .padding(.bottom, 10)
-
-            Text(viewModel.timeString ?? "")
-                .font(.system(size: 13, weight: .regular))
-                .foregroundStyle(.white)
-                .opacity(viewModel.timeString == nil ? 0 : 1.0)
-                .padding(.bottom, 10)
-        }
+        Text(viewModel.dateString)
+            .font(.suite(size: 20, weight: .bold))
+            .foregroundStyle(.white)
+            .padding(.bottom, 30)
     }
     
     @ViewBuilder
@@ -207,13 +199,12 @@ private extension NewVerseView {
                     hashtag: hashtag,
                     maxWidth: $hashtagsViewMaxWidth,
                     isFocused: $isHashtagFocused,
-                    icon: viewModel.canEditHashtags ? CommonUIAsset.Image.icExit.swiftUIImage : nil,
+                    icon: CommonUIAsset.Image.icExit.swiftUIImage,
                     eventListener: viewModel
                 )
                 .animation(nil, value: keyboardHeight)
             }
         }
-        .allowsHitTesting(viewModel.canEditHashtags)
         .padding(.all, 10)
         .padding(.bottom, 10)
     }

@@ -39,16 +39,12 @@ public final class VerseUseCaseImpl: VerseUseCase {
     
     // MARK: Methods
     
-    public func generate(image: UIImage, hashtags: [String]) async throws -> GeneratedVerseInfo {
+    public func generate(image: UIImage) async throws -> GeneratedVerseInfo {
         guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength) else { throw DomainError.failedToConvertImageToData }
-        guard let imageURL = try? await imageUploader.uploadImage(imageData: imageData, pathRoot: "images") else {
-            throw DomainError.failedToUploadImage
-        }
 
-        return try await repository.generateVerse(
-            imageURLString: imageURL.absoluteString,
-            isKorean: locale.isLanguageKorean,
-            hashtags: hashtags
+        return try await repository.generate(
+            imageData: imageData,
+            isKorean: locale.isLanguageKorean
         )
     }
 }
@@ -59,7 +55,7 @@ private extension ImageConvertable {
             image,
             minLength: minLength,
             outputScale: 1.0,
-            maxKB: 900 * 1024
+            maxKB: 200 * 1024
         )
     }
 }

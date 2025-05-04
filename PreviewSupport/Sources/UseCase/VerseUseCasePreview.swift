@@ -18,7 +18,7 @@ public final class VerseUseCasePreview: VerseUseCase, @unchecked Sendable {
     
     // MARK: Methods
     
-    public func generate(image: UIImage, hashtags: [String]) async throws -> GeneratedVerseInfo {
+    public func generate(image: UIImage) async throws -> GeneratedVerseInfo {
         if let sleepingSecond {
             try await Task.sleep(nanoseconds: UInt64(sleepingSecond * 1000_000_000))
         }
@@ -38,11 +38,7 @@ public extension VerseUseCasePreview {
     
     static var dummy: GeneratedVerseInfo {
         GeneratedVerseInfo(
-            imageURL: "",
-            hashtags: ["a", "bsada"],
-            createdAt: Date().timeIntervalSince1970,
             verse: "삼: 삼삼삼\n행: 행행행\n시: 시시시",
-            isFavorite: false,
             remainingLimit: 3
         )
     }
