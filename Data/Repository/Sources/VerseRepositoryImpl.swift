@@ -45,4 +45,9 @@ public final class VerseRepositoryImpl: VerseRepository {
             throw DomainError.unknown
         }
     }
+    
+    #warning("구현 필요")
+    public func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
+        VerseDiary(imageURL: "", hashtags: [], createdAt: 1, verse: "", isFavorite: false)
+    }
 }

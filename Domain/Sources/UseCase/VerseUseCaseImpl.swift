@@ -40,22 +40,39 @@ public final class VerseUseCaseImpl: VerseUseCase {
     // MARK: Methods
     
     public func generate(image: UIImage) async throws -> GeneratedVerseInfo {
-        guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength) else { throw DomainError.failedToConvertImageToData }
+        guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength, maxKB: 200 * 1024) else {
+            throw DomainError.failedToConvertImageToData
+        }
 
         return try await repository.generate(
             imageData: imageData,
             isKorean: locale.isLanguageKorean
         )
     }
+
+    public func save(verse: String, image: UIImage, hashtags: [String]) async throws -> VerseDiary {
+        guard let imageData = imageConverter.convertToJpegData(image, minLength: Constants.minLength, maxKB: 900 * 1024) else {
+            throw DomainError.failedToConvertImageToData
+        }
+        guard let imageURL = try? await imageUploader.uploadImage(imageData: imageData, pathRoot: "images") else {
+            throw DomainError.failedToUploadImage
+        }
+
+        return try await repository.save(
+            verse: verse,
+            imageURL: imageURL.absoluteString,
+            hashtags: hashtags
+        )
+    }
 }
 
 private extension ImageConvertable {
-    func convertToJpegData(_ image: UIImage, minLength: CGFloat) -> Data? {
+    func convertToJpegData(_ image: UIImage, minLength: CGFloat, maxKB: Int) -> Data? {
         convertToJpegData(
             image,
             minLength: minLength,
             outputScale: 1.0,
-            maxKB: 200 * 1024
+            maxKB: maxKB
         )
     }
 }

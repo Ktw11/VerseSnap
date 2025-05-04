@@ -9,4 +9,5 @@ import Foundation
 
 public protocol VerseRepository: Sendable {
     func generate(imageData: Data, isKorean: Bool) async throws -> GeneratedVerseInfo
+    func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary
 }

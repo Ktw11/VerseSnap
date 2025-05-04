@@ -73,7 +73,6 @@ final class VerseUseCaseImplTests: XCTestCase {
         }
     }
 
-    @MainActor
     func test_generate_when_image_convert_success_image_upload_success_locale_isLanguageKorean_true_repository_success_then_return_VerseResult() async {
         // given
         let givenVerseInfo: GeneratedVerseInfo = .init(
@@ -91,13 +90,12 @@ final class VerseUseCaseImplTests: XCTestCase {
             // then
             XCTAssertEqual(result, givenVerseInfo)
             XCTAssertTrue(repository.isGenerateCalled)
-            XCTAssertEqual(true, repository.requestedIsKorean)
+            XCTAssertEqual(true, repository.requestedGenerateIsKorean)
         } catch {
             XCTFail()
         }
     }
     
-    @MainActor
     func test_generate_when_image_convert_success_image_upload_success_with_locale_isLanguageKorean_false_repository_success_then_return_VerseResult() async {
         // given
         let givenVerseInfo: GeneratedVerseInfo = .init(
@@ -115,13 +113,12 @@ final class VerseUseCaseImplTests: XCTestCase {
             // then
             XCTAssertEqual(result, givenVerseInfo)
             XCTAssertTrue(repository.isGenerateCalled)
-            XCTAssertEqual(false, repository.requestedIsKorean)
+            XCTAssertEqual(false, repository.requestedGenerateIsKorean)
         } catch {
             XCTFail()
         }
     }
     
-    @MainActor
     func test_generate_when_image_convert_success_image_upload_success_with_repository_fail_then_throw_error() async {
         // given
         let givenError: Error = TestError.common
@@ -136,7 +133,93 @@ final class VerseUseCaseImplTests: XCTestCase {
             // then
             XCTAssertTrue(true)
             XCTAssertTrue(repository.isGenerateCalled)
-            XCTAssertEqual(false, repository.requestedIsKorean)
+            XCTAssertEqual(false, repository.requestedGenerateIsKorean)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_save_when_image_convert_fails_then_throw_DomainError_failedToConvertImageToData() async {
+        // given
+        imageConverter.expectedConvertToJpegData = nil
+        
+        // when
+        do {
+            _ = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
+            XCTFail()
+        } catch DomainError.failedToConvertImageToData {
+            // then
+            XCTAssertTrue(imageConverter.isConvertToJpegDataCalled)
+            XCTAssertEqual(imageConverter.requestedMinLength, VerseUseCaseImpl.Constants.minLength)
+            XCTAssertEqual(imageConverter.requestedOutputScale, 1.0)
+            XCTAssertEqual(imageConverter.requestedMaxKB, 900 * 1024)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_save_when_image_convert_success_and_image_upload_fails_throw_DomainError_failedToUploadImage() async {
+        // given
+        imageConverter.expectedConvertToJpegData = Data()
+        imageUploader.expectedUploadImage = nil
+        
+        // when
+        do {
+            _ = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
+            XCTFail()
+        } catch DomainError.failedToUploadImage {
+            // then
+            XCTAssertTrue(imageUploader.isUploadImageCalled)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_save_when_image_convert_success_and_image_upload_success_and_repository_fails_then_throw_error() async {
+        // given
+        let givenVerse: String = "test"
+        let givenImageURL: URL = URL(string: "www.google.com")!
+        let givenHashtags: [String] = ["tag", "tag2"]
+        
+        imageConverter.expectedConvertToJpegData = Data()
+        imageUploader.expectedUploadImage = givenImageURL
+        repository.expectedSaveError = TestError.common
+        
+        // when
+        do {
+            _ = try await sut.save(verse: givenVerse, image: UIImage(), hashtags: givenHashtags)
+            XCTFail()
+        } catch TestError.common {
+            // then
+            XCTAssertTrue(repository.isSaveCalled)
+            XCTAssertEqual(givenVerse, repository.requestedSaveVerse)
+            XCTAssertEqual(givenImageURL.absoluteString, repository.requestedSaveImageURL)
+            XCTAssertEqual(givenHashtags, repository.requestedSaveHashtags)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_save_success_then_return_VerseDiary() async {
+        // given
+        let givenVerseDiary: VerseDiary = VerseDiary(
+            imageURL: URL(string: "www.google.com")!.absoluteString,
+            hashtags: ["tag", "tag2"],
+            createdAt: 123,
+            verse: "test",
+            isFavorite: [true, false].randomElement()!
+        )
+        
+        imageConverter.expectedConvertToJpegData = Data()
+        imageUploader.expectedUploadImage = URL(string: "www.google.com")
+        repository.expectedSaveResult = givenVerseDiary
+        
+        // when
+        do {
+            let result = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
+            
+            // then
+            XCTAssertEqual(result, givenVerseDiary)
         } catch {
             XCTFail()
         }

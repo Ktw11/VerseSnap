@@ -10,10 +10,13 @@ import Foundation
 
 final class MockImageUploader: ImageUploadable, @unchecked Sendable {
     
+    var isUploadImageCalled: Bool = false
     var expectedUploadImage: URL?
     var expectedUploadImageError: Error?
     
     func uploadImage(imageData: Data, pathRoot: String) async throws -> URL {
+        isUploadImageCalled = true
+        
         if let expectedUploadImage {
             return expectedUploadImage
         } else if let expectedUploadImageError {
