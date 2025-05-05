@@ -27,7 +27,7 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
     
     public init() {
         let schema = Schema([
-            PersistDiary.self,
+            PermanentDiary.self,
         ])
         let modelConfiguration = ModelConfiguration(
             schema: schema,
@@ -46,13 +46,15 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
     }
     
     public func save(_ diary: DiaryDTO) async throws {
-        modelContext.insert(diary.toPersist)
+        try Task.checkCancellation()
+        
+        modelContext.insert(diary.toPermanent)
         try modelContext.save()
     }
     
     public func save(_ diaries: [DiaryDTO]) async throws {
         for diary in diaries {
-            modelContext.insert(diary.toPersist)
+            modelContext.insert(diary.toPermanent)
         }
         try modelContext.save()
     }
@@ -63,7 +65,7 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         after: TimeInterval?,
         size: Int
     ) async throws -> [DiaryDTO] {
-        let predicate: Predicate<PersistDiary>
+        let predicate: Predicate<PermanentDiary>
         if let after = after {
             predicate = #Predicate {
                 $0.createdAt >= startTimestamp &&
@@ -77,7 +79,7 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
             }
         }
         
-        let fetchDescriptor = FetchDescriptor<PersistDiary>(
+        let fetchDescriptor = FetchDescriptor<PermanentDiary>(
             predicate: predicate,
             sortBy: [.init(\.createdAt, order: .reverse),]
         )
@@ -89,11 +91,11 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
 
 private extension DiaryLocalDataSourceImpl {
     func reset() throws {
-        try modelContext.delete(model: PersistDiary.self)
+        try modelContext.delete(model: PermanentDiary.self)
     }
 }
 
-private extension PersistDiary {
+private extension PermanentDiary {
     var toDTO: DiaryDTO {
         .init(id: id,
               imageURL: imageURL,
@@ -106,14 +108,13 @@ private extension PersistDiary {
 }
 
 private extension DiaryDTO {
-    var toPersist: PersistDiary {
+    var toPermanent: PermanentDiary {
         .init(id: id, imageURL: imageURL, hashtags: hashtags, createdAt: createdAt, verse: verse, isFavorite: isFavorite)
     }
 }
 
-
 @Model
-private final class PersistDiary {
+private final class PermanentDiary {
     @Attribute(.unique)
     private(set) var id: String
     private(set) var imageURL: String

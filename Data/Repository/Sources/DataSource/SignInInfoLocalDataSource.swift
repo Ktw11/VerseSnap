@@ -21,7 +21,7 @@ public actor SignInInfoLocalDataSource: SignInInfoDataSource {
     
     public init() {
         let schema = Schema([
-            PersistSignInInfo.self,
+            PermanentSignInInfo.self,
         ])
         let modelConfiguration = ModelConfiguration(
             schema: schema,
@@ -42,23 +42,23 @@ public actor SignInInfoLocalDataSource: SignInInfoDataSource {
     // MARK: Methods
     
     public func retrieve() -> SignInInfoDTO? {
-        let descriptor = FetchDescriptor<PersistSignInInfo>()
+        let descriptor = FetchDescriptor<PermanentSignInInfo>()
         return try? modelContext.fetch(descriptor).first?.toDTO
     }
 
     public func save(info: SignInInfoDTO) throws {
         try reset()
-        modelContext.insert(info.toPersist)
+        modelContext.insert(info.toPermanent)
         try modelContext.save()
     }
     
     public func reset() throws {
-        try modelContext.delete(model: PersistSignInInfo.self)
+        try modelContext.delete(model: PermanentSignInInfo.self)
     }
 }
 
 @Model
-private final class PersistSignInInfo {
+private final class PermanentSignInInfo {
     @Attribute(.unique)
     @Attribute(.allowsCloudEncryption)
     var refreshToken: String
@@ -70,14 +70,14 @@ private final class PersistSignInInfo {
     }
 }
 
-private extension PersistSignInInfo {
+private extension PermanentSignInInfo {
     var toDTO: SignInInfoDTO {
         .init(refreshToken: refreshToken, signInType: signInType)
     }
 }
 
 private extension SignInInfoDTO {
-    var toPersist: PersistSignInInfo {
+    var toPermanent: PermanentSignInInfo {
         .init(refreshToken: refreshToken, signInType: signInType)
     }
 }
