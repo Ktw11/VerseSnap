@@ -29,7 +29,11 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         let schema = Schema([
             PersistDiary.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .none
+        )
         
         do {
             let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -91,7 +95,13 @@ private extension DiaryLocalDataSourceImpl {
 
 private extension PersistDiary {
     var toDTO: DiaryDTO {
-        .init(id: id, imageURL: imageURL, hashtags: hashtags, createdAt: createdAt, verse: verse, isFavorite: isFavorite)
+        .init(id: id,
+              imageURL: imageURL,
+              hashtags: hashtags.components(separatedBy: ","),
+              createdAt: createdAt,
+              verse: verse,
+              isFavorite: isFavorite
+        )
     }
 }
 
@@ -107,7 +117,7 @@ private final class PersistDiary {
     @Attribute(.unique)
     private(set) var id: String
     private(set) var imageURL: String
-    private(set) var hashtags: [String]
+    private(set) var hashtags: String
     private(set) var createdAt: TimeInterval
     private(set) var verse: String
     var isFavorite: Bool
@@ -115,7 +125,7 @@ private final class PersistDiary {
     init(id: String, imageURL: String, hashtags: [String], createdAt: TimeInterval, verse: String, isFavorite: Bool) {
         self.id = id
         self.imageURL = imageURL
-        self.hashtags = hashtags
+        self.hashtags = hashtags.joined(separator: ",")
         self.createdAt = createdAt
         self.verse = verse
         self.isFavorite = isFavorite

@@ -23,7 +23,11 @@ public actor SignInInfoLocalDataSource: SignInInfoDataSource {
         let schema = Schema([
             PersistSignInInfo.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .none
+        )
         
         do {
             let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
