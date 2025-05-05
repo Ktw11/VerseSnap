@@ -19,24 +19,9 @@ public actor SignInInfoLocalDataSource: SignInInfoDataSource {
     
     // MARK: Lifecycle
     
-    public init() {
-        let schema = Schema([
-            PermanentSignInInfo.self,
-        ])
-        let modelConfiguration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            cloudKitDatabase: .none
-        )
-        
-        do {
-            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            let modelContext = ModelContext(container)
-            self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
-            self.modelContainer = container
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
+    public init(container: ModelContainer) {
+        self.modelContainer = container
+        self.modelExecutor = DefaultSerialModelExecutor(modelContext: ModelContext(container))
     }
     
     // MARK: Methods
@@ -54,19 +39,6 @@ public actor SignInInfoLocalDataSource: SignInInfoDataSource {
     
     public func reset() throws {
         try modelContext.delete(model: PermanentSignInInfo.self)
-    }
-}
-
-@Model
-private final class PermanentSignInInfo {
-    @Attribute(.unique)
-    @Attribute(.allowsCloudEncryption)
-    var refreshToken: String
-    var signInType: String
-    
-    init(refreshToken: String, signInType: String) {
-        self.refreshToken = refreshToken
-        self.signInType = signInType
     }
 }
 

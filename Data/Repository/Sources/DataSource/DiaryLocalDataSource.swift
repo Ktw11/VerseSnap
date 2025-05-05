@@ -25,24 +25,9 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
     
     // MARK: Lifecycle
     
-    public init() {
-        let schema = Schema([
-            PermanentDiary.self,
-        ])
-        let modelConfiguration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            cloudKitDatabase: .none
-        )
-        
-        do {
-            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            let modelContext = ModelContext(container)
-            self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
-            self.modelContainer = container
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
+    public init(container: ModelContainer) {
+        self.modelContainer = container
+        self.modelExecutor = DefaultSerialModelExecutor(modelContext: ModelContext(container))
     }
     
     public func save(_ diary: DiaryDTO) async throws {
@@ -114,25 +99,5 @@ private extension PermanentDiary {
 private extension DiaryDTO {
     var toPermanent: PermanentDiary {
         .init(id: id, imageURL: imageURL, hashtags: hashtags, createdAt: createdAt, verse: verse, isFavorite: isFavorite)
-    }
-}
-
-@Model
-private final class PermanentDiary {
-    @Attribute(.unique)
-    private(set) var id: String
-    private(set) var imageURL: String
-    private(set) var hashtags: String
-    private(set) var createdAt: TimeInterval
-    private(set) var verse: String
-    var isFavorite: Bool
-    
-    init(id: String, imageURL: String, hashtags: [String], createdAt: TimeInterval, verse: String, isFavorite: Bool) {
-        self.id = id
-        self.imageURL = imageURL
-        self.hashtags = hashtags.joined(separator: ",")
-        self.createdAt = createdAt
-        self.verse = verse
-        self.isFavorite = isFavorite
     }
 }

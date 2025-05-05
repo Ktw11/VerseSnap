@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 import Domain
 import Repository
 import VSNetwork
@@ -28,11 +29,20 @@ final class RepositoryComponent: RepositoryBuilder {
     // MARK: Properties
     
     private let networkProvider: NetworkProvidable
+    
+    private lazy var modelContainer: ModelContainer = {
+        let schema = Schema([
+            PermanentDiary.self,
+            PermanentSignInInfo.self
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        return try! ModelContainer(for: schema, configurations: [modelConfiguration])
+    }()
     private lazy var signInInfoDataSource: SignInInfoDataSource = {
-        SignInInfoLocalDataSource()
+        SignInInfoLocalDataSource(container: modelContainer)
     }()
     private lazy var diaryLocalDataSource: DiaryLocalDataSource = {
-        DiaryLocalDataSourceImpl()
+        DiaryLocalDataSourceImpl(container: modelContainer)
     }()
     
     var authRepository: AuthRepository {
