@@ -38,6 +38,8 @@ public final class VerseUseCaseImpl: VerseUseCase {
             throw DomainError.failedToConvertImageToData
         }
 
+        try Task.checkCancellation()
+        
         return try await repository.generate(
             imageData: imageData,
             isKorean: locale.isLanguageKorean

@@ -53,6 +53,8 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
     }
     
     public func save(_ diaries: [DiaryDTO]) async throws {
+        try Task.checkCancellation()
+        
         for diary in diaries {
             modelContext.insert(diary.toPermanent)
         }
@@ -83,6 +85,8 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
             predicate: predicate,
             sortBy: [.init(\.createdAt, order: .reverse),]
         )
+        
+        try Task.checkCancellation()
         
         let results = try modelContext.fetch(fetchDescriptor)
         return Array(results.map { $0.toDTO }.prefix(size))

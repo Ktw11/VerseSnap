@@ -32,6 +32,8 @@ public actor VerseRepositoryImpl: VerseRepository {
         )
         let api: API = VerseAPI.generate(request)
         
+        try Task.checkCancellation()
+        
         do {
             let data = try await networkProvider.request(api: api)
             return try JSONDecoder().decode(GeneratedVerseInfo.self, from: data)

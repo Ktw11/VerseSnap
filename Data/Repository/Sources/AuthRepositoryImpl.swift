@@ -26,6 +26,8 @@ public actor AuthRepositoryImpl: AuthRepository {
     public func signIn(token: String, account: String) async throws -> SignInResponse {
         let api = AuthAPI.signIn(token: token, account: account)
         
+        try Task.checkCancellation()
+        
         do {
             let data = try await networkProvider.request(api: api)
             return try JSONDecoder().decode(SignInResponse.self, from: data)
@@ -39,6 +41,8 @@ public actor AuthRepositoryImpl: AuthRepository {
     public func signIn(refreshToken: String) async throws -> SignInResponse {
         let api = AuthAPI.autoSignIn(refreshToken: refreshToken)
         
+        try Task.checkCancellation()
+        
         do {
             let data = try await networkProvider.request(api: api)
             return try JSONDecoder().decode(SignInResponse.self, from: data)
@@ -51,6 +55,8 @@ public actor AuthRepositoryImpl: AuthRepository {
     
     public func refreshTokens(refreshToken: String) async throws -> AuthTokens {
         let api = AuthAPI.refreshTokens(refreshToken: refreshToken)
+        
+        try Task.checkCancellation()
         
         do {
             let data = try await networkProvider.request(api: api)

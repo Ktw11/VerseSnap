@@ -58,6 +58,9 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
 
         let startTimestamp = startDate.timeIntervalSince1970
         let endTimestamp = endDate.timeIntervalSince1970
+        
+        try Task.checkCancellation()
+        
         return try await repository.fetchDiariesByMonth(
             startTimestamp: startTimestamp,
             endTimestamp: endTimestamp,
