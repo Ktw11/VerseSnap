@@ -15,4 +15,17 @@ public extension View {
     func observeKeyboardHeight(_ binding: Binding<CGFloat>) -> some View {
         self.modifier(KeyboardHeightModifier(keyboardHeight: binding))
     }
+    
+    @ViewBuilder
+    func conditional(_ condition: Bool, transform: (Self) -> Self) -> Self {
+        condition ? transform(self) : self
+    }
+    
+    @ViewBuilder
+    func `switch`<T, Content: View>(
+        on value: T,
+        @ViewBuilder cases: (Self, T) -> Content
+    ) -> some View {
+        cases(self, value)
+    }
 }
