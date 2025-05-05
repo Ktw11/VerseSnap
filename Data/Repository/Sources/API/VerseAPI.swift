@@ -17,7 +17,7 @@ enum VerseAPI {
 }
 
 extension VerseAPI.Request {
-    struct GenerateVerse: Encodable {
+    struct GenerateVerse {
         let imageData: Data
         let isKorean: Bool
     }
@@ -57,16 +57,23 @@ extension VerseAPI: API {
         }
     }
     
+    var queryParameters: [String: String]? {
+        switch self {
+        case .generate, .save:
+            return nil
+        case let .listFilter(params):
+            return params.asDictionary.compactMapValues { "\($0)" }
+        }
+    }
+    
     var bodyParameters: [String: Any]? {
         switch self {
         case let .generate(params):
-            var dict = params.asDictionary
-            dict.removeValue(forKey: "imageData")
-            return dict
+            return ["isKorean": params.isKorean]
         case let .save(params):
             return params.asDictionary
-        case let .listFilter(params):
-            return [:]
+        case .listFilter:
+            return nil
         }
     }
     
@@ -83,15 +90,6 @@ extension VerseAPI: API {
             ])
         case .save, .listFilter:
             return .json
-        }
-    }
-    
-    var headers: [String: String] {
-        switch self {
-        case let .listFilter(params):
-            params.asDictionary.compactMapValues { "\($0)" }
-        case .generate, .save:
-            [:]
         }
     }
     
