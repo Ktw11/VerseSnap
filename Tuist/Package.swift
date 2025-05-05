@@ -9,7 +9,8 @@
     let packageSettings = PackageSettings(
         productTypes: [
             PackageProduct.kakaoSDK.rawValue: .staticLibrary,
-            PackageProduct.firebase.rawValue: .framework
+            PackageProduct.firebase.rawValue: .staticLibrary,
+            PackageProduct.kingfisher.rawValue: .staticLibrary
         ],
         baseSettings: .settings(configurations: Configuration.common)
     )
@@ -19,6 +20,7 @@ let package = Package(
     name: "VerseSnap",
     dependencies: [
         .package(url: "https://github.com/kakao/kakao-ios-sdk", exact: "2.24.0"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", exact: "11.12.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", exact: "11.12.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", exact: "8.3.2")
     ]
 )

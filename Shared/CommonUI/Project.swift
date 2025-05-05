@@ -12,7 +12,10 @@ let project = Project(
             type: type,
             product: .framework,
             sources: ["Sources/**"],
-            resources: ["Resources/**"]
+            resources: ["Resources/**"],
+            dependencies: [
+                .external(name: PackageProduct.kingfisher.rawValue),
+            ]
         )
     ]
 )
