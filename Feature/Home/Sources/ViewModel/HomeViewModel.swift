@@ -126,6 +126,8 @@ public final class HomeViewModel {
 
                 let lastCreatedAt: TimeInterval? = result.diaries.last?.createdAt
                 self?.update(viewModels, lastCreatedAt: lastCreatedAt, isLastPage: result.isLastPage)
+            } catch _ as CancellationError {
+                // do nothing
             } catch {
                 self?.isMonthlyErrorOccured = true
             }
