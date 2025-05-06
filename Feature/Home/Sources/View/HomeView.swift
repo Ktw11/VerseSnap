@@ -90,6 +90,12 @@ public struct HomeView: View {
                 LoadingView()
                     .frame(alignment: .center)
             }
+        } else if viewModel.isMonthlyDiaryEmpty {
+            ZStack {
+                Text("아직 생성한 삼행시가 없습니다.")
+                    .font(.suite(size: 14, weight: .regular))
+                    .frame(alignment: .center)
+            }
         } else {
             ScrollView {
                 LazyVStack {

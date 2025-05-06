@@ -77,6 +77,7 @@ public final class HomeViewModel {
     }
     private(set) var isFetchingMonthlyDiary: Bool = false
     private(set) var isMonthlyErrorOccured: Bool = false
+    private(set) var isMonthlyDiaryEmpty: Bool = false
     private var isMonthlyDiaryLastPage: Bool = false
     private var internalRowViewModels: [HomeContentRowViewModel] = []
     private var monthlyCursor: DiaryCursor = .init(size: Constants.cursorSize, lastCreatedAt: nil)
@@ -123,9 +124,8 @@ public final class HomeViewModel {
                 
                 try Task.checkCancellation()
 
-                self?.internalRowViewModels.append(contentsOf: viewModels)
-                self?.monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: result.diaries.last?.createdAt)
-                self?.isMonthlyDiaryLastPage = result.isLastPage
+                let lastCreatedAt: TimeInterval? = result.diaries.last?.createdAt
+                self?.update(viewModels, lastCreatedAt: lastCreatedAt, isLastPage: result.isLastPage)
             } catch {
                 self?.isMonthlyErrorOccured = true
             }
@@ -141,8 +141,17 @@ private extension HomeViewModel {
         isMonthlyErrorOccured = false
         isFetchingMonthlyDiary = false
         isMonthlyDiaryLastPage = false
+        isMonthlyDiaryEmpty = false
 
         fetchNextMonthlyDiaries()
+    }
+    
+    @MainActor
+    func update(_ viewModels: [HomeContentRowViewModel], lastCreatedAt: TimeInterval?, isLastPage: Bool) {
+        internalRowViewModels.append(contentsOf: viewModels)
+        monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: lastCreatedAt)
+        isMonthlyDiaryLastPage = isLastPage
+        isMonthlyDiaryEmpty = internalRowViewModels.isEmpty
     }
     
     nonisolated func makeRowViewModelList(from diaries: [VerseDiary]) -> [HomeContentRowViewModel] {
