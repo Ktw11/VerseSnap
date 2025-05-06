@@ -53,17 +53,19 @@ public actor DiaryRepositoryImpl: DiaryRepository {
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after cursor: DiaryCursor
-    ) async throws -> [VerseDiary] {
+    ) async throws -> DiaryFetchResult {
         try Task.checkCancellation()
         
-        let localResult = try await localDataSource.retreiveDiariesByMonth(
+        let localResult: DiaryFetchResultDTO? = try? await localDataSource.retreiveDiariesByMonth(
             startTimestamp: startTimestamp,
             endTimestamp: endTimestamp,
             after: cursor.lastCreatedAt,
             size: cursor.size
         )
-    
-        if localResult.isEmpty {
+
+        if let localResult, (!localResult.diaries.isEmpty || localResult.isLastPage) {
+            return localResult.toDomain
+        } else {
             let request: Request.ListFilter = .init(
                 startTimestamp: startTimestamp,
                 endTimestamp: endTimestamp,
@@ -72,14 +74,12 @@ public actor DiaryRepositoryImpl: DiaryRepository {
             )
             let api: API = VerseAPI.listFilter(request)
             let data = try await networkProvider.request(api: api)
-            let remoteResult = try JSONDecoder().decode([VerseDiary].self, from: data)
+            let remoteResult = try JSONDecoder().decode(DiaryFetchResult.self, from: data)
             
             try Task.checkCancellation()
             
-            try await localDataSource.save(remoteResult.map(\.toDTO))
+            try await localDataSource.save(remoteResult.diaries.map(\.toDTO))
             return remoteResult
-        } else {
-            return localResult.map { $0.toDomain }
         }
     }
 }

@@ -14,12 +14,24 @@ public final class DiaryUseCasePreview: DiaryUseCase, @unchecked Sendable {
     // MARK: Properties
 
     public var saveLoadingSeconds: Int?
+    public var expectedDiariesByMonth: DiaryFetchResult?
+    public var expectedDiariesByMonthError: Error?
     
     // MARK: Methods
     
     public func save(verse: String, image: UIImage, hashtags: [String]) async throws {
         if let saveLoadingSeconds {
             try await Task.sleep(nanoseconds: UInt64(saveLoadingSeconds * 1000_000_000))
+        }
+    }
+    
+    public func fetchDiariesByMonth(year: Int, month: Int, after cursor: DiaryCursor) async throws -> DiaryFetchResult {
+        if let expectedDiariesByMonth {
+            return expectedDiariesByMonth
+        } else if let expectedDiariesByMonthError {
+            throw expectedDiariesByMonthError
+        } else {
+            throw DomainError.cancelled
         }
     }
 }

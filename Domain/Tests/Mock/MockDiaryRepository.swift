@@ -19,7 +19,7 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var requestedFetchDiariesByMonthStartTimestamp: TimeInterval?
     var requestedFetchDiariesByMonthEndTimestamp: TimeInterval?
     var requestedFetchDiariesByMonthCursor: DiaryCursor?
-    var expectedFetchDiariesByMonth: [VerseDiary]?
+    var expectedFetchDiariesByMonth: DiaryFetchResult?
     var expectedFetchDiariesByMonthError: Error?
     
     func save(verse: String, imageURL: String, hashtags: [String]) async throws {
@@ -37,7 +37,7 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after cursor: DiaryCursor
-    ) async throws -> [VerseDiary] {
+    ) async throws -> DiaryFetchResult {
         isFetchDiariesByMonthCalled = true
         requestedFetchDiariesByMonthStartTimestamp = startTimestamp
         requestedFetchDiariesByMonthEndTimestamp = endTimestamp

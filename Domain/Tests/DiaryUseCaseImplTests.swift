@@ -143,11 +143,14 @@ final class DiaryUseCaseImplTests: XCTestCase {
     
     func test_fetchDiariesByMonth_when_year_month_is_valid_repository_returns_data_then_return_data() async {
         // given
-        let expectedDiaries = [
-            VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verse: "v1", isFavorite: false),
-            VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verse: "v2", isFavorite: true)
-        ]
-        repository.expectedFetchDiariesByMonth = expectedDiaries
+        let expectedResult = DiaryFetchResult(
+            diaries: [
+                VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verse: "v1", isFavorite: false),
+                VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verse: "v2", isFavorite: true)
+            ],
+            isLastPage: true
+        )
+        repository.expectedFetchDiariesByMonth = expectedResult
         
         // when
         let result = try? await sut.fetchDiariesByMonth(
@@ -157,7 +160,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
         )
         
         // then
-        XCTAssertEqual(result, expectedDiaries)
+        XCTAssertEqual(result, expectedResult)
         XCTAssertTrue(repository.isFetchDiariesByMonthCalled)
     }
 }

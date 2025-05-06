@@ -17,7 +17,7 @@ public protocol DiaryLocalDataSource: Sendable {
         endTimestamp: TimeInterval,
         after: TimeInterval?,
         size: Int
-    ) async throws -> [DiaryDTO]
+    ) async throws -> DiaryFetchResultDTO
 }
 
 @ModelActor
@@ -51,7 +51,7 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         endTimestamp: TimeInterval,
         after: TimeInterval?,
         size: Int
-    ) async throws -> [DiaryDTO] {
+    ) async throws -> DiaryFetchResultDTO {
         let predicate: Predicate<PermanentDiary>
         if let after = after {
             predicate = #Predicate {
@@ -74,7 +74,15 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         try Task.checkCancellation()
         
         let results = try modelContext.fetch(fetchDescriptor)
-        return Array(results.map { $0.toDTO }.prefix(size))
+        // 요구 쿼리보다 1개 더 늘림
+        // 마지막 페이지인지 정확히 판단하기 위함
+        let limit: Int = size + 1
+        let diaries: [DiaryDTO] = Array(results.map { $0.toDTO }.prefix(limit))
+
+        return DiaryFetchResultDTO(
+            diaries: diaries.count == limit ? diaries.dropLast() : diaries,
+            isLastPage: diaries.count < limit
+        )
     }
 }
 

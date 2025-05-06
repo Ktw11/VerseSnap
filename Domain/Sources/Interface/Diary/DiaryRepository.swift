@@ -13,5 +13,5 @@ public protocol DiaryRepository: Sendable {
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after cursor: DiaryCursor
-    ) async throws -> [VerseDiary]
+    ) async throws -> DiaryFetchResult
 }
