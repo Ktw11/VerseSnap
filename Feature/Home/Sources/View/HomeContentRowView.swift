@@ -88,11 +88,11 @@ private struct PhotoContainerView: View {
             VStack {
                 if let title = viewModel.topTitle {
                     Text(title)
-                        .font(.urbanist(size: 27, weight: .semibold))
+                        .font(.urbanist(size: 25, weight: .semibold))
                 }
                 
                 Text(viewModel.bottomTitle)
-                    .font(.urbanist(size: 17, weight: .medium))
+                    .font(.urbanist(size: 15, weight: .medium))
             }
         }
     }
