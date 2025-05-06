@@ -7,6 +7,8 @@
 
 import SwiftUI
 import CommonUI
+import Utils
+import Domain
 
 @Observable
 @MainActor
@@ -14,60 +16,42 @@ public final class HomeViewModel {
     
     // MARK: Lifecycle
     
-    init(calendar: Calendar) {
-        let diaries: [Diary] = [
-            .init(
-                photo: HomeAsset.testImage.swiftUIImage,
-                createdAt: Date(),
-                isFavorite: false,
-                firstCharacters: "삼/행/시"
-            ),
-            .init(
-                photo: HomeAsset.testImage.swiftUIImage,
-                createdAt: Date(),
-                isFavorite: true,
-                firstCharacters: "삼/행/시"
-            ),
-            .init(
-                photo: HomeAsset.testImage.swiftUIImage,
-                createdAt: Date(),
-                isFavorite: false,
-                firstCharacters: "사/행/시/시"
-            ),
-            .init(
-                photo: HomeAsset.testImage.swiftUIImage,
-                createdAt: Date(),
-                isFavorite: false,
-                firstCharacters: "삼/행/1"
-            ),
-            .init(
-                photo: HomeAsset.testImage.swiftUIImage,
-                createdAt: Date(),
-                isFavorite: false,
-                firstCharacters: "삼/행/2"
-            )
-        ]
-        
+    init(calendar: Calendar, useCase: DiaryUseCase) {
         self.calendar = calendar
-        self.diaries = diaries
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
         self.currentYear = currentYear
         self.currentMonth = currentMonth
         self.selectedYear = currentYear
         self.selectedMonth = currentMonth
+        #warning("minimumYear, minimumMonth")
         self.pickerLimit = YearMonthPickerLimit(
             minimumYear: 2020,
             minimumMonth: 9,
             currentYear: currentYear,
             currentMonth: currentMonth
         )
+        self.useCase = useCase
+    }
+    
+    // MARK: Definitions
+    
+    private enum Constants {
+        static let cursorSize: Int = 20
+        static let weekdaySymbols: [LocalizedStringResource] = [
+            "mon", "tue", "wed", "thu", "fri", "sat", "sun"
+        ]
     }
     
     // MARK: Properties
     
-    var selectedYear: Int
-    var selectedMonth: Int
+    var selectedYear: Int {
+        didSet { resetAndFetch(year: selectedYear, month: selectedMonth) }
+    }
+    var selectedMonth: Int {
+        didSet { resetAndFetch(year: selectedYear, month: selectedMonth) }
+    }
+    
     var displayStyle: DisplayStyle = .stack
     let pickerLimit: YearMonthPickerLimit
     
@@ -77,12 +61,23 @@ public final class HomeViewModel {
     var displayIcon: Image {
         displayStyle == .stack ? HomeAsset.icGridDisplay.swiftUIImage : HomeAsset.icStackDisplay.swiftUIImage
     }
-    var rowViewModels: [HomeContentRowViewModel] {
-        makeRowViewModels()
-    }
     var gridViewModels: [HomeContentGridViewModel] {
         makeGridViewModels()
     }
+    var showRowViewLoading: Bool {
+        isFetchingMonthlyDiary && rowViewModels.isEmpty
+    }
+    
+    // Diaries by month
+    var rowViewModels: [HomeContentRowViewModel] {
+        internalRowViewModels.withPlaceholder(isCurrentYearMonth: isCurrentYearMonthSelected)
+    }
+    private(set) var isFetchingMonthlyDiary: Bool = false
+    private(set) var isErrorOccured: Bool = false
+    private(set) var isMonthlyDiaryLastPage: Bool = false
+    private var internalRowViewModels: [HomeContentRowViewModel] = []
+    private var monthlyCursor: DiaryCursor = .init(size: Constants.cursorSize, lastCreatedAt: nil)
+    private var monthlyDiariesTask: Task<Void, Error>?
     
     private var isCurrentYearMonthSelected: Bool {
         selectedYear == currentYear && selectedMonth == currentMonth
@@ -91,37 +86,97 @@ public final class HomeViewModel {
     private let currentYear: Int
     private let currentMonth: Int
     private let calendar: Calendar
-    private var diaries: [Diary]
-    
+    private let useCase: DiaryUseCase
+    #warning("임시 구조체, 제거 필요")
+    private var diaries: [Diary] = []
+
     // MARK: Methods
     
     func didTapDisplayIcon() {
         displayStyle.toggle()
     }
+    
+    func fetchNextMonthlyDiaries() {
+        guard !isFetchingMonthlyDiary, !isMonthlyDiaryLastPage else { return }
+
+        let yearMonth: YearMonth = .init(year: selectedYear, month: selectedMonth)
+        isFetchingMonthlyDiary = true
+        isErrorOccured = false
+        
+        monthlyDiariesTask = Task { [weak self, useCase, monthlyCursor] in
+            defer {
+                if !Task.isCancelled {
+                    self?.isFetchingMonthlyDiary = false
+                }
+            }
+            
+            do {
+                try Task.checkCancellation()
+                
+                let result = try await useCase.fetchDiariesByMonth(year: yearMonth.year, month: yearMonth.month, after: monthlyCursor)
+                let viewModels = await Task.detached(priority: .userInitiated) { [weak self] in
+                    self?.makeRowViewModelList(from: result.diaries) ?? []
+                }.value
+                
+                try Task.checkCancellation()
+
+                self?.internalRowViewModels.append(contentsOf: viewModels)
+                self?.monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: result.diaries.last?.createdAt)
+                self?.isMonthlyDiaryLastPage = result.isLastPage
+            } catch {
+                #warning("error 핸들링 필요")
+            }
+        }
+    }
 }
 
 private extension HomeViewModel {
-    func makeRowViewModels() -> [HomeContentRowViewModel] {
-        var wroteDiaryToday: Bool = false
+    func resetAndFetch(year: Int, month: Int) {
+        monthlyDiariesTask?.cancel()
+        monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
+        internalRowViewModels = []
+        isErrorOccured = false
+        isFetchingMonthlyDiary = false
+        isMonthlyDiaryLastPage = false
+
+        fetchNextMonthlyDiaries()
+    }
+    
+    nonisolated func makeRowViewModelList(from diaries: [VerseDiary]) -> [HomeContentRowViewModel] {
+        return diaries.map(makeRowViewModel)
+    }
+    
+    nonisolated func makeRowViewModel(for diary: VerseDiary) -> HomeContentRowViewModel {
+        let createdDate: Date = Date(timeIntervalSince1970: diary.createdAt)
+        let day: Int = calendar.component(.day, from: createdDate)
+        let weekdayIndex: Int = calendar.component(.weekday, from: createdDate)
         
-        var viewModels: [HomeContentRowViewModel] = diaries
-            .filter { selectedYear == calendar.component(.year, from: $0.createdAt) && selectedMonth == calendar.component(.month, from: $0.createdAt) }
-            .reduce(into: []) { result, diary in
-                if calendar.isDateInToday(diary.createdAt) {
-                    wroteDiaryToday = true
-                }
-                result.append(diary.toRowViewModel)
-            }
-        
-        if !wroteDiaryToday && isCurrentYearMonthSelected {
-            viewModels.insert(.placeholder, at: 0)
-        }
-        
-        return viewModels
+        return HomeContentRowViewModel(
+            id: diary.id,
+            photoContainerViewModel: .init(
+                imageURL: diary.imageURL,
+                topTitle: String(day),
+                bottomTitle: Constants.weekdaySymbols[safe: weekdayIndex] ?? ""
+            ),
+            title: createdDate.monthDayString(),
+            description: diary.verse.firstLetters(separator: "/"),
+            timeString: createdDate.timeString(),
+            actionIcon: diary.isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
+        )
     }
     
     func makeGridViewModels() -> [HomeContentGridViewModel] {
         diaries.map(\.toGridViewModel)
+    }
+}
+
+private extension [HomeContentRowViewModel] {
+    func withPlaceholder(isCurrentYearMonth: Bool) -> [HomeContentRowViewModel] {
+        guard isCurrentYearMonth else { return self }
+        
+        var newViewModels = self
+        newViewModels.insert(.placeholder, at: 0)
+        return newViewModels
     }
 }
 
@@ -135,21 +190,6 @@ struct Diary: Equatable {
 }
 
 extension Diary {
-    var toRowViewModel: HomeContentRowViewModel {
-        .init(
-            id: id.uuidString,
-            photoContainerViewModel: .init(
-                image: photo,
-                topTitle: "16",
-                bottomTitle: "Mon"
-            ),
-            title: "6월 17일",
-            description: firstCharacters,
-            timeString: "오후 12:30",
-            actionIcon: isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
-        )
-    }
-    
     var toGridViewModel: HomeContentGridViewModel {
         .init(
             id: id.uuidString,
@@ -163,7 +203,7 @@ extension HomeContentRowViewModel {
     static var placeholder: HomeContentRowViewModel {
         .init(
             id: UUID().uuidString,
-            photoContainerViewModel: .init(image: nil, topTitle: nil, bottomTitle: "Today"),
+            photoContainerViewModel: .init(imageURL: "", topTitle: nil, bottomTitle: "Today"),
             title: String(localized: "오늘의 삼행시"),
             description: String(localized: "기록하기"),
             timeString: nil,

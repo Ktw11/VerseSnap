@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PhotoContainerViewModel: Equatable {
-    let image: Image?
+struct PhotoContainerViewModel: Equatable, Sendable {
+    let imageURL: String
     let topTitle: String?
-    let bottomTitle: String
+    let bottomTitle: LocalizedStringResource
 }

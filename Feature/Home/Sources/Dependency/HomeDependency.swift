@@ -12,5 +12,13 @@ public struct HomeDependency {
     
     // MARK: Lifecycle
     
-    public init() { }
+    public init(
+        useCase: DiaryUseCase
+    ) {
+        self.useCase = useCase
+    }
+    
+    // MARK: Properties
+
+    let useCase: DiaryUseCase
 }

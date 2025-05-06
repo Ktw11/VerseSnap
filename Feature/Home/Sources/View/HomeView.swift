@@ -76,23 +76,44 @@ public struct HomeView: View {
                 limit: viewModel.pickerLimit
             )
         }
+        .onAppear {
+            viewModel.fetchNextMonthlyDiaries()
+        }
     }
     
     // MARK: Methods
     
     @ViewBuilder
     private func stackContentView() -> some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(viewModel.rowViewModels, id: \.id) { rowVM in
-                    HomeContentRowView(viewModel: rowVM)
-                        .frame(height: 84)
-                        .padding(.vertical, 15)
+        if viewModel.showRowViewLoading {
+            ZStack {
+                LoadingView()
+                    .frame(alignment: .center)
+            }
+        } else {
+            ScrollView {
+                LazyVStack {
+                    ForEach(viewModel.rowViewModels, id: \.id) { rowVM in
+                        HomeContentRowView(viewModel: rowVM)
+                            .frame(height: 84)
+                            .padding(.vertical, 15)
+                            .onAppear {
+                                if viewModel.rowViewModels.last == rowVM {
+                                    viewModel.fetchNextMonthlyDiaries()
+                                }
+                            }
+                        
+                        if viewModel.rowViewModels.last != rowVM {
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
+                        }
+                    }
                     
-                    if viewModel.rowViewModels.last != rowVM {
-                        Divider()
-                            .frame(height: 1)
-                            .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
+                    if !viewModel.isMonthlyDiaryLastPage {
+                        LoadingView(size: 15)
+                            .padding(.vertical, 5)
+                            .frame(alignment: .center)
                     }
                 }
             }
@@ -158,13 +179,16 @@ public struct HomeView: View {
     }
 }
 
+#if DEBUG
+import PreviewSupport
 #Preview {
     ZStack {
         CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
-        HomeView(viewModel: .init(calendar: Calendar.current))
+        HomeView(viewModel: .init(calendar: Calendar.current, useCase: DiaryUseCasePreview.preview))
             .padding(.top, 22)
             .padding(.horizontal, 24)
     }
 }
+#endif

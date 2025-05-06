@@ -27,7 +27,7 @@ public final class HomeComponent: HomeBuilder {
     @MainActor
     @ViewBuilder
     public func build() -> HomeView {
-        let viewModel = HomeViewModel(calendar: calendar)
+        let viewModel = HomeViewModel(calendar: calendar, useCase: dependency.useCase)
         HomeView(viewModel: viewModel)
     }
 }

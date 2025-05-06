@@ -67,13 +67,11 @@ private struct PhotoContainerView: View {
     
     var body: some View {
         ZStack {
-            if let image = viewModel.image {
+            if let imageURL = URL(string: viewModel.imageURL) {
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
-                        image
-                            .resizable()
-                            .scaledToFill()
+                        CachedAsyncImage<EmptyView>(url: imageURL)
                         
                         Color.black.opacity(0.3)
                     }
@@ -109,7 +107,7 @@ private struct PhotoContainerView: View {
             HomeContentRowView(
                 viewModel: .init(
                     id: "1",
-                    photoContainerViewModel: .init(image: nil, topTitle: nil, bottomTitle: "Today"),
+                    photoContainerViewModel: .init(imageURL: "", topTitle: nil, bottomTitle: "Today"),
                     title: "오늘의 삼행시",
                     description: "기록하기",
                     timeString: nil,
@@ -121,7 +119,7 @@ private struct PhotoContainerView: View {
             HomeContentRowView(
                 viewModel: .init(
                     id: "2",
-                    photoContainerViewModel: .init(image: nil, topTitle: "16", bottomTitle: "Mon"),
+                    photoContainerViewModel: .init(imageURL: "https://randomuser.me/api/portraits/men/50.jpg", topTitle: "16", bottomTitle: "Mon"),
                     title: "6월 17일",
                     description: "삼/행/시",
                     timeString: "오후 12:30",

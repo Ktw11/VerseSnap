@@ -7,9 +7,6 @@
 
 import Foundation
 import Domain
+import Utils
 
-extension Locale: @retroactive LocaleGettable {
-    public var isLanguageKorean: Bool {
-        Locale.current.language.languageCode?.identifier == "ko"
-    }
-}
+extension Locale: @retroactive LocaleGettable {}

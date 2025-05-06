@@ -8,6 +8,16 @@
 import Foundation
 
 public struct DiaryCursor: Sendable {
+    
+    // MARK: Lifecycle
+    
+    public init(size: Int, lastCreatedAt: TimeInterval?) {
+        self.size = size
+        self.lastCreatedAt = lastCreatedAt
+    }
+    
+    // MARK: Properties
+    
     public let size: Int
     public let lastCreatedAt: TimeInterval?
 }
