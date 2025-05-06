@@ -1,5 +1,5 @@
 //
-//  HomeContentRowViewModel.swift
+//  HomeStackContentViewModel.swift
 //  Home
 //
 //  Created by 공태웅 on 3/9/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeContentRowViewModel: Equatable, Identifiable {
+struct HomeStackContentViewModel: Equatable, Identifiable {
     let id: String
     let photoContainerViewModel: PhotoContainerViewModel
     let title: String

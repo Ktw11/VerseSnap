@@ -77,7 +77,7 @@ public struct HomeView: View {
             )
         }
         .onAppear {
-            viewModel.fetchNextMonthlyDiaries()
+            viewModel.fetchNextStackDiaries()
         }
     }
     
@@ -90,7 +90,7 @@ public struct HomeView: View {
                 LoadingView()
                     .frame(alignment: .center)
             }
-        } else if viewModel.isMonthlyDiaryEmpty {
+        } else if viewModel.isStackDiaryEmpty {
             ZStack {
                 Text("아직 생성한 삼행시가 없습니다.")
                     .font(.suite(size: 14, weight: .regular))
@@ -99,31 +99,31 @@ public struct HomeView: View {
         } else {
             ScrollView {
                 LazyVStack {
-                    ForEach(viewModel.rowViewModels, id: \.id) { rowVM in
-                        HomeContentRowView(viewModel: rowVM)
+                    ForEach(viewModel.stackViewModels, id: \.id) { stackVM in
+                        HomeStackContentView(viewModel: stackVM)
                             .frame(height: 84)
                             .padding(.vertical, 15)
                             .onAppear {
-                                if viewModel.rowViewModels.last == rowVM {
-                                    viewModel.fetchNextMonthlyDiaries()
+                                if viewModel.stackViewModels.last == stackVM {
+                                    viewModel.fetchNextStackDiaries()
                                 }
                             }
                         
-                        if viewModel.rowViewModels.last != rowVM {
+                        if viewModel.stackViewModels.last != stackVM {
                             Divider()
                                 .frame(height: 1)
                                 .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
                         }
                     }
                     
-                    if viewModel.isMonthlyErrorOccured {
+                    if viewModel.isStackErrorOccured {
                         RefreshButton() {
-                            viewModel.fetchNextMonthlyDiaries()
+                            viewModel.fetchNextStackDiaries()
                         }
                             .padding(.top, 10)
                     }
                     
-                    if viewModel.showLoadingRowView {
+                    if viewModel.showLoadingStackView {
                         LoadingView(size: 15)
                             .padding(.vertical, 5)
                             .frame(alignment: .center)

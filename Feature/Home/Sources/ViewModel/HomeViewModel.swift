@@ -55,9 +55,9 @@ public final class HomeViewModel {
     var displayStyle: DisplayStyle = .stack
     let pickerLimit: YearMonthPickerLimit
     
-    private var internalRowViewModels: [HomeContentRowViewModel] = []
-    private var monthlyDiariesTask: Task<Void, Error>?
-    private var monthlyPagingState: PagingState<DiaryCursor> = .initial
+    private var internalStackViewModels: [HomeStackContentViewModel] = []
+    private var stackDiariesTask: Task<Void, Error>?
+    private var stackPagingState: PagingState<DiaryCursor> = .initial
     
     private var isCurrentYearMonthSelected: Bool {
         selectedYear == currentYear && selectedMonth == currentMonth
@@ -76,21 +76,21 @@ public final class HomeViewModel {
         displayStyle.toggle()
     }
     
-    func fetchNextMonthlyDiaries() {
-        guard !monthlyPagingState.isFetching, !monthlyPagingState.isLastPage else { return }
+    func fetchNextStackDiaries() {
+        guard !stackPagingState.isFetching, !stackPagingState.isLastPage else { return }
 
         let yearMonth: YearMonth = .init(year: selectedYear, month: selectedMonth)
-        let cursor = monthlyPagingState.cursor ?? DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
+        let cursor = stackPagingState.cursor ?? DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
         
-        monthlyPagingState.update {
+        stackPagingState.update {
             $0.isFetching = true
             $0.isErrorOccured = false
         }
         
-        monthlyDiariesTask = Task { [weak self, useCase] in
+        stackDiariesTask = Task { [weak self, useCase] in
             defer {
                 if !Task.isCancelled {
-                    self?.monthlyPagingState.isFetching = false
+                    self?.stackPagingState.isFetching = false
                 }
             }
             
@@ -99,7 +99,7 @@ public final class HomeViewModel {
                 
                 let result = try await useCase.fetchDiariesByMonth(year: yearMonth.year, month: yearMonth.month, after: cursor)
                 let viewModels = await Task.detached(priority: .userInitiated) { [weak self] in
-                    self?.makeRowViewModelList(from: result.diaries) ?? []
+                    self?.makeStackViewModelList(from: result.diaries) ?? []
                 }.value
                 
                 try Task.checkCancellation()
@@ -109,7 +109,7 @@ public final class HomeViewModel {
             } catch _ as CancellationError {
                 // do nothing
             } catch {
-                self?.monthlyPagingState.isErrorOccured = true
+                self?.stackPagingState.isErrorOccured = true
             }
         }
     }
@@ -128,52 +128,52 @@ extension HomeViewModel {
     
     // Diaries by month
     var isStackDisplayLoading: Bool {
-        monthlyPagingState.isFetching && rowViewModels.isEmpty
+        stackPagingState.isFetching && internalStackViewModels.isEmpty
     }
-    var rowViewModels: [HomeContentRowViewModel] {
-        internalRowViewModels.withPlaceholder(isCurrentYearMonth: isCurrentYearMonthSelected)
+    var stackViewModels: [HomeStackContentViewModel] {
+        internalStackViewModels.withPlaceholder(isCurrentYearMonth: isCurrentYearMonthSelected)
     }
-    var showLoadingRowView: Bool {
-        !monthlyPagingState.isLastPage && !monthlyPagingState.isErrorOccured
+    var showLoadingStackView: Bool {
+        !stackPagingState.isLastPage && !stackPagingState.isErrorOccured
     }
-    var isMonthlyDiaryEmpty: Bool {
-        monthlyPagingState.isEmpty
+    var isStackDiaryEmpty: Bool {
+        stackPagingState.isEmpty
     }
-    var isMonthlyErrorOccured: Bool {
-        monthlyPagingState.isErrorOccured
+    var isStackErrorOccured: Bool {
+        stackPagingState.isErrorOccured
     }
 }
 
 private extension HomeViewModel {
     func resetAndFetch(year: Int, month: Int) {
-        monthlyDiariesTask?.cancel()
-        monthlyPagingState = .initial
-        internalRowViewModels = []
+        stackDiariesTask?.cancel()
+        stackPagingState = .initial
+        internalStackViewModels = []
 
-        fetchNextMonthlyDiaries()
+        fetchNextStackDiaries()
     }
     
     @MainActor
-    func update(_ viewModels: [HomeContentRowViewModel], lastCreatedAt: TimeInterval?, isLastPage: Bool) {
-        internalRowViewModels.append(contentsOf: viewModels)
+    func update(_ viewModels: [HomeStackContentViewModel], lastCreatedAt: TimeInterval?, isLastPage: Bool) {
+        internalStackViewModels.append(contentsOf: viewModels)
 
-        monthlyPagingState.update {
+        stackPagingState.update {
             $0.isLastPage = isLastPage
-            $0.isEmpty = internalRowViewModels.isEmpty
+            $0.isEmpty = internalStackViewModels.isEmpty
             $0.cursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: lastCreatedAt)
         }
     }
     
-    nonisolated func makeRowViewModelList(from diaries: [VerseDiary]) -> [HomeContentRowViewModel] {
-        return diaries.map(makeRowViewModel)
+    nonisolated func makeStackViewModelList(from diaries: [VerseDiary]) -> [HomeStackContentViewModel] {
+        return diaries.map(makeStackViewModel)
     }
     
-    nonisolated func makeRowViewModel(for diary: VerseDiary) -> HomeContentRowViewModel {
+    nonisolated func makeStackViewModel(for diary: VerseDiary) -> HomeStackContentViewModel {
         let createdDate: Date = Date(timeIntervalSince1970: diary.createdAt)
         let day: Int = calendar.component(.day, from: createdDate)
         let weekdayIndex: Int = calendar.component(.weekday, from: createdDate)
         
-        return HomeContentRowViewModel(
+        return HomeStackContentViewModel(
             id: diary.id,
             photoContainerViewModel: .init(
                 imageURL: diary.imageURL,
@@ -192,8 +192,8 @@ private extension HomeViewModel {
     }
 }
 
-private extension [HomeContentRowViewModel] {
-    func withPlaceholder(isCurrentYearMonth: Bool) -> [HomeContentRowViewModel] {
+private extension [HomeStackContentViewModel] {
+    func withPlaceholder(isCurrentYearMonth: Bool) -> [HomeStackContentViewModel] {
         guard isCurrentYearMonth else { return self }
         
         var newViewModels = self
@@ -221,8 +221,8 @@ extension Diary {
     }
 }
 
-extension HomeContentRowViewModel {
-    static var placeholder: HomeContentRowViewModel {
+extension HomeStackContentViewModel {
+    static var placeholder: HomeStackContentViewModel {
         .init(
             id: UUID().uuidString,
             photoContainerViewModel: .init(imageURL: "", topTitle: nil, bottomTitle: "Today"),

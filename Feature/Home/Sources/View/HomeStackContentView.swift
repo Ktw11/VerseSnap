@@ -1,5 +1,5 @@
 //
-//  HomeContentRowView.swift
+//  HomeStackContentView.swift
 //  Home
 //
 //  Created by 공태웅 on 3/9/25.
@@ -8,11 +8,11 @@
 import SwiftUI
 import CommonUI
 
-struct HomeContentRowView: View {
+struct HomeStackContentView: View {
     
     // MARK: Properties
     
-    let viewModel: HomeContentRowViewModel
+    let viewModel: HomeStackContentViewModel
     
     var body: some View {
         HStack {
@@ -104,7 +104,7 @@ private struct PhotoContainerView: View {
             .ignoresSafeArea()
         
         VStack(spacing: 20) {
-            HomeContentRowView(
+            HomeStackContentView(
                 viewModel: .init(
                     id: "1",
                     photoContainerViewModel: .init(imageURL: "", topTitle: nil, bottomTitle: "Today"),
@@ -116,7 +116,7 @@ private struct PhotoContainerView: View {
             )
             .frame(height: 84)
             
-            HomeContentRowView(
+            HomeStackContentView(
                 viewModel: .init(
                     id: "2",
                     photoContainerViewModel: .init(imageURL: "https://randomuser.me/api/portraits/men/50.jpg", topTitle: "16", bottomTitle: "Mon"),
