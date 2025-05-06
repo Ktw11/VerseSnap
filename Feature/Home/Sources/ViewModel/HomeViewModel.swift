@@ -55,33 +55,9 @@ public final class HomeViewModel {
     var displayStyle: DisplayStyle = .stack
     let pickerLimit: YearMonthPickerLimit
     
-    var yearMonthString: String {
-        "\(selectedYear).\(selectedMonth)"
-    }
-    var displayIcon: Image {
-        displayStyle == .stack ? HomeAsset.icGridDisplay.swiftUIImage : HomeAsset.icStackDisplay.swiftUIImage
-    }
-    var gridViewModels: [HomeContentGridViewModel] {
-        makeGridViewModels()
-    }
-    var showRowViewLoading: Bool {
-        isFetchingMonthlyDiary && rowViewModels.isEmpty
-    }
-    
-    // Diaries by month
-    var rowViewModels: [HomeContentRowViewModel] {
-        internalRowViewModels.withPlaceholder(isCurrentYearMonth: isCurrentYearMonthSelected)
-    }
-    var showLoadingRowView: Bool {
-        !isMonthlyDiaryLastPage && !isMonthlyErrorOccured
-    }
-    private(set) var isFetchingMonthlyDiary: Bool = false
-    private(set) var isMonthlyErrorOccured: Bool = false
-    private(set) var isMonthlyDiaryEmpty: Bool = false
-    private var isMonthlyDiaryLastPage: Bool = false
     private var internalRowViewModels: [HomeContentRowViewModel] = []
-    private var monthlyCursor: DiaryCursor = .init(size: Constants.cursorSize, lastCreatedAt: nil)
     private var monthlyDiariesTask: Task<Void, Error>?
+    private var monthlyPagingState: PagingState<DiaryCursor> = .initial
     
     private var isCurrentYearMonthSelected: Bool {
         selectedYear == currentYear && selectedMonth == currentMonth
@@ -101,23 +77,27 @@ public final class HomeViewModel {
     }
     
     func fetchNextMonthlyDiaries() {
-        guard !isFetchingMonthlyDiary, !isMonthlyDiaryLastPage else { return }
+        guard !monthlyPagingState.isFetching, !monthlyPagingState.isLastPage else { return }
 
         let yearMonth: YearMonth = .init(year: selectedYear, month: selectedMonth)
-        isFetchingMonthlyDiary = true
-        isMonthlyErrorOccured = false
+        let cursor = monthlyPagingState.cursor ?? DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
         
-        monthlyDiariesTask = Task { [weak self, useCase, monthlyCursor] in
+        monthlyPagingState.update {
+            $0.isFetching = true
+            $0.isErrorOccured = false
+        }
+        
+        monthlyDiariesTask = Task { [weak self, useCase] in
             defer {
                 if !Task.isCancelled {
-                    self?.isFetchingMonthlyDiary = false
+                    self?.monthlyPagingState.isFetching = false
                 }
             }
             
             do {
                 try Task.checkCancellation()
                 
-                let result = try await useCase.fetchDiariesByMonth(year: yearMonth.year, month: yearMonth.month, after: monthlyCursor)
+                let result = try await useCase.fetchDiariesByMonth(year: yearMonth.year, month: yearMonth.month, after: cursor)
                 let viewModels = await Task.detached(priority: .userInitiated) { [weak self] in
                     self?.makeRowViewModelList(from: result.diaries) ?? []
                 }.value
@@ -129,21 +109,46 @@ public final class HomeViewModel {
             } catch _ as CancellationError {
                 // do nothing
             } catch {
-                self?.isMonthlyErrorOccured = true
+                self?.monthlyPagingState.isErrorOccured = true
             }
         }
+    }
+}
+
+extension HomeViewModel {
+    var yearMonthString: String {
+        "\(selectedYear).\(selectedMonth)"
+    }
+    var displayIcon: Image {
+        displayStyle == .stack ? HomeAsset.icGridDisplay.swiftUIImage : HomeAsset.icStackDisplay.swiftUIImage
+    }
+    var gridViewModels: [HomeContentGridViewModel] {
+        makeGridViewModels()
+    }
+    
+    // Diaries by month
+    var isStackDisplayLoading: Bool {
+        monthlyPagingState.isFetching && rowViewModels.isEmpty
+    }
+    var rowViewModels: [HomeContentRowViewModel] {
+        internalRowViewModels.withPlaceholder(isCurrentYearMonth: isCurrentYearMonthSelected)
+    }
+    var showLoadingRowView: Bool {
+        !monthlyPagingState.isLastPage && !monthlyPagingState.isErrorOccured
+    }
+    var isMonthlyDiaryEmpty: Bool {
+        monthlyPagingState.isEmpty
+    }
+    var isMonthlyErrorOccured: Bool {
+        monthlyPagingState.isErrorOccured
     }
 }
 
 private extension HomeViewModel {
     func resetAndFetch(year: Int, month: Int) {
         monthlyDiariesTask?.cancel()
-        monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
+        monthlyPagingState = .initial
         internalRowViewModels = []
-        isMonthlyErrorOccured = false
-        isFetchingMonthlyDiary = false
-        isMonthlyDiaryLastPage = false
-        isMonthlyDiaryEmpty = false
 
         fetchNextMonthlyDiaries()
     }
@@ -151,9 +156,12 @@ private extension HomeViewModel {
     @MainActor
     func update(_ viewModels: [HomeContentRowViewModel], lastCreatedAt: TimeInterval?, isLastPage: Bool) {
         internalRowViewModels.append(contentsOf: viewModels)
-        monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: lastCreatedAt)
-        isMonthlyDiaryLastPage = isLastPage
-        isMonthlyDiaryEmpty = internalRowViewModels.isEmpty
+
+        monthlyPagingState.update {
+            $0.isLastPage = isLastPage
+            $0.isEmpty = internalRowViewModels.isEmpty
+            $0.cursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: lastCreatedAt)
+        }
     }
     
     nonisolated func makeRowViewModelList(from diaries: [VerseDiary]) -> [HomeContentRowViewModel] {
@@ -234,5 +242,11 @@ extension DisplayStyle {
         case .stack:
             self = .grid
         }
+    }
+}
+
+private extension PagingState {
+    mutating func update(_ closure: (inout PagingState) -> Void) {
+        closure(&self)
     }
 }

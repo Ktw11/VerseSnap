@@ -85,7 +85,7 @@ public struct HomeView: View {
     
     @ViewBuilder
     private func stackContentView() -> some View {
-        if viewModel.showRowViewLoading {
+        if viewModel.isStackDisplayLoading {
             ZStack {
                 LoadingView()
                     .frame(alignment: .center)
