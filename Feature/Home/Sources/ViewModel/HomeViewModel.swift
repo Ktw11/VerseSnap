@@ -72,9 +72,12 @@ public final class HomeViewModel {
     var rowViewModels: [HomeContentRowViewModel] {
         internalRowViewModels.withPlaceholder(isCurrentYearMonth: isCurrentYearMonthSelected)
     }
+    var showLoadingRowView: Bool {
+        !isMonthlyDiaryLastPage && !isMonthlyErrorOccured
+    }
     private(set) var isFetchingMonthlyDiary: Bool = false
-    private(set) var isErrorOccured: Bool = false
-    private(set) var isMonthlyDiaryLastPage: Bool = false
+    private(set) var isMonthlyErrorOccured: Bool = false
+    private var isMonthlyDiaryLastPage: Bool = false
     private var internalRowViewModels: [HomeContentRowViewModel] = []
     private var monthlyCursor: DiaryCursor = .init(size: Constants.cursorSize, lastCreatedAt: nil)
     private var monthlyDiariesTask: Task<Void, Error>?
@@ -101,7 +104,7 @@ public final class HomeViewModel {
 
         let yearMonth: YearMonth = .init(year: selectedYear, month: selectedMonth)
         isFetchingMonthlyDiary = true
-        isErrorOccured = false
+        isMonthlyErrorOccured = false
         
         monthlyDiariesTask = Task { [weak self, useCase, monthlyCursor] in
             defer {
@@ -124,7 +127,7 @@ public final class HomeViewModel {
                 self?.monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: result.diaries.last?.createdAt)
                 self?.isMonthlyDiaryLastPage = result.isLastPage
             } catch {
-                #warning("error 핸들링 필요")
+                self?.isMonthlyErrorOccured = true
             }
         }
     }
@@ -135,7 +138,7 @@ private extension HomeViewModel {
         monthlyDiariesTask?.cancel()
         monthlyCursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
         internalRowViewModels = []
-        isErrorOccured = false
+        isMonthlyErrorOccured = false
         isFetchingMonthlyDiary = false
         isMonthlyDiaryLastPage = false
 

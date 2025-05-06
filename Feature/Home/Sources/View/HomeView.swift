@@ -110,7 +110,14 @@ public struct HomeView: View {
                         }
                     }
                     
-                    if !viewModel.isMonthlyDiaryLastPage {
+                    if viewModel.isMonthlyErrorOccured {
+                        RefreshButton() {
+                            viewModel.fetchNextMonthlyDiaries()
+                        }
+                            .padding(.top, 10)
+                    }
+                    
+                    if viewModel.showLoadingRowView {
                         LoadingView(size: 15)
                             .padding(.vertical, 5)
                             .frame(alignment: .center)
@@ -176,6 +183,29 @@ public struct HomeView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
             }
+    }
+}
+
+private struct RefreshButton: View {
+    
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: {
+            action()
+        }, label: {
+            CommonUIAsset.Color.buttonBG.swiftUIColor
+                .overlay(alignment: .center) {
+                    HomeAsset.icRefresh.swiftUIImage
+                        .resizable()
+                        .renderingMode(.template)
+                        .tint(Color.white)
+                        .frame(size: 14)
+                }
+                .clipShape(Circle())
+                .frame(size: 24)
+                .frame(alignment: .center)
+        })
     }
 }
 
