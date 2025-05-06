@@ -38,6 +38,16 @@
         }
       }
     },
+    "아직 생성한 삼행시가 없습니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You haven’t created any verses  yet."
+          }
+        }
+      }
+    },
     "오늘의 삼행시" : {
       "localizations" : {
         "en" : {
