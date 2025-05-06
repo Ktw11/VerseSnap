@@ -63,7 +63,7 @@ public actor DiaryRepositoryImpl: DiaryRepository {
             size: cursor.size
         )
 
-        if let localResult, (!localResult.diaries.isEmpty || localResult.isLastPage) {
+        if let localResult, !localResult.diaries.isEmpty {
             return localResult.toDomain
         } else {
             let request: Request.ListFilter = .init(
