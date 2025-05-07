@@ -11,4 +11,5 @@ import UIKit
 public protocol DiaryUseCase {
     func save(verse: String, image: UIImage, hashtags: [String]) async throws
     func fetchDiaries(year: Int, month: Int, after cursor: DiaryCursor) async throws -> DiaryFetchResult
+    func fetchDiariesAll(after cursor: DiaryCursor) async throws -> DiaryFetchResult
 }

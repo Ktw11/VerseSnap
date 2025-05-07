@@ -67,6 +67,11 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
             after: cursor
         )
     }
+    
+    public func fetchDiariesAll(after cursor: DiaryCursor) async throws -> DiaryFetchResult {
+        try Task.checkCancellation()
+        return try await repository.fetchDiariesAll(after: cursor)
+    }
 }
 
 private extension ImageConvertable {

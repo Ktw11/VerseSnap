@@ -163,4 +163,41 @@ final class DiaryUseCaseImplTests: XCTestCase {
         XCTAssertEqual(result, expectedResult)
         XCTAssertTrue(repository.isFetchDiariesCalled)
     }
+    
+    func test_fetchDiariesAll_when_repository_fails_then_throw_error() async {
+        // given
+        repository.expectedFetchDiariesAllError = TestError.common
+        
+        // when
+        do {
+            let result = try await sut.fetchDiariesAll(after: DiaryCursor(size: 10, lastCreatedAt: 200))
+            XCTFail()
+        } catch {
+            // then
+            XCTAssertTrue(repository.isFetchDiariesAllCalled)
+        }
+    }
+    
+    func test_fetchDiariesAll_when_repository_success_then_return_data() async {
+        // given
+        let givenResult = DiaryFetchResult(
+            diaries: [
+                VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verse: "v1", isFavorite: false),
+                VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verse: "v2", isFavorite: true)
+            ],
+            isLastPage: true
+        )
+        repository.expectedFetchDiariesAll = givenResult
+        
+        do {
+            // when
+            let result = try await sut.fetchDiariesAll(after: DiaryCursor(size: 10, lastCreatedAt: 200))
+            
+            // then
+            XCTAssertEqual(givenResult, result)
+            XCTAssertTrue(repository.isFetchDiariesAllCalled)
+        } catch {
+            XCTFail()
+        }
+    }
 }

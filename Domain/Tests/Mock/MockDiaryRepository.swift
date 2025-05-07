@@ -22,6 +22,11 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var expectedFetchDiaries: DiaryFetchResult?
     var expectedFetchDiariesError: Error?
     
+    var isFetchDiariesAllCalled: Bool = false
+    var requestedFetchDiariesAllCursor: DiaryCursor?
+    var expectedFetchDiariesAll: DiaryFetchResult?
+    var expectedFetchDiariesAllError: Error?
+    
     func save(verse: String, imageURL: String, hashtags: [String]) async throws {
         isSaveCalled = true
         requestedSaveVerse = verse
@@ -47,6 +52,19 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
             return expectedFetchDiaries
         } else if let expectedFetchDiariesError {
             throw expectedFetchDiariesError
+        } else {
+            throw TestError.notImplemented
+        }
+    }
+    
+    func fetchDiariesAll(after cursor: Domain.DiaryCursor) async throws -> Domain.DiaryFetchResult {
+        isFetchDiariesAllCalled = true
+        requestedFetchDiariesAllCursor = cursor
+        
+        if let expectedFetchDiariesAll {
+            return expectedFetchDiariesAll
+        } else if let expectedFetchDiariesAllError {
+            throw expectedFetchDiariesAllError
         } else {
             throw TestError.notImplemented
         }
