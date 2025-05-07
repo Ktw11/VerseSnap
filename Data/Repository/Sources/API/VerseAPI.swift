@@ -12,6 +12,7 @@ enum VerseAPI {
     case generate(Request.GenerateVerse)
     case save(Request.SaveVerseDiary)
     case listFilter(Request.ListFilter)
+    case listAll(Request.ListAll)
     
     enum Request {}
 }
@@ -34,6 +35,11 @@ extension VerseAPI.Request {
         let lastCreatedAt: TimeInterval?
         let size: Int
     }
+    
+    struct ListAll: Encodable {
+        let lastCreatedAt: TimeInterval?
+        let size: Int
+    }
 }
 
 extension VerseAPI: API {
@@ -45,6 +51,8 @@ extension VerseAPI: API {
             "verse/save"
         case .listFilter:
             "verse/list/filter"
+        case .listAll:
+            "verse/list/latest"
         }
     }
     
@@ -52,7 +60,7 @@ extension VerseAPI: API {
         switch self {
         case .generate, .save:
             .post
-        case .listFilter:
+        case .listFilter, .listAll:
             .get
         }
     }
@@ -63,6 +71,8 @@ extension VerseAPI: API {
             return nil
         case let .listFilter(params):
             return params.asDictionary.compactMapValues { "\($0)" }
+        case let .listAll(params):
+            return params.asDictionary.compactMapValues { "\($0)" }
         }
     }
     
@@ -72,7 +82,7 @@ extension VerseAPI: API {
             return ["isKorean": params.isKorean]
         case let .save(params):
             return params.asDictionary
-        case .listFilter:
+        case .listFilter, .listAll:
             return nil
         }
     }
@@ -88,7 +98,7 @@ extension VerseAPI: API {
                     mimeType: "image/jpeg"
                 )
             ])
-        case .save, .listFilter:
+        case .save, .listFilter, .listAll:
             return .json
         }
     }

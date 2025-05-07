@@ -18,6 +18,7 @@ public protocol DiaryLocalDataSource: Sendable {
         after: TimeInterval?,
         size: Int
     ) async throws -> DiaryFetchResultDTO
+    func retreiveAllDiaries(after: TimeInterval?, size: Int) async throws -> DiaryFetchResultDTO
 }
 
 @ModelActor
@@ -53,7 +54,7 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         size: Int
     ) async throws -> DiaryFetchResultDTO {
         let predicate: Predicate<PermanentDiary>
-        if let after = after {
+        if let after {
             predicate = #Predicate {
                 $0.createdAt >= startTimestamp &&
                 $0.createdAt < endTimestamp &&
@@ -73,6 +74,38 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         
         try Task.checkCancellation()
         
+        return try await fetchResult(predicate, size: size)
+    }
+    
+    public func retreiveAllDiaries(after: TimeInterval?, size: Int) async throws -> DiaryFetchResultDTO {
+        let predicate: Predicate<PermanentDiary>?
+        if let after {
+            predicate = #Predicate {
+                $0.createdAt < after
+            }
+        } else {
+            predicate = nil
+        }
+        
+        try Task.checkCancellation()
+        
+        return try await fetchResult(predicate, size: size)
+    }
+}
+
+private extension DiaryLocalDataSourceImpl {
+    func reset() throws {
+        try modelContext.delete(model: PermanentDiary.self)
+    }
+    
+    func fetchResult(_ predicate: Predicate<PermanentDiary>?, size: Int) async throws -> DiaryFetchResultDTO{
+        let fetchDescriptor = FetchDescriptor<PermanentDiary>(
+            predicate: predicate,
+            sortBy: [.init(\.createdAt, order: .reverse),]
+        )
+        
+        try Task.checkCancellation()
+        
         let results = try modelContext.fetch(fetchDescriptor)
         // 요구 쿼리보다 1개 더 늘림
         // 마지막 페이지인지 정확히 판단하기 위함
@@ -83,12 +116,6 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
             diaries: diaries.count == limit ? diaries.dropLast() : diaries,
             isLastPage: diaries.count < limit
         )
-    }
-}
-
-private extension DiaryLocalDataSourceImpl {
-    func reset() throws {
-        try modelContext.delete(model: PermanentDiary.self)
     }
 }
 

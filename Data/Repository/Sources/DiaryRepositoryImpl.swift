@@ -72,15 +72,47 @@ public actor DiaryRepositoryImpl: DiaryRepository {
                 lastCreatedAt: cursor.lastCreatedAt,
                 size: cursor.size
             )
-            let api: API = VerseAPI.listFilter(request)
-            let data = try await networkProvider.request(api: api)
-            let remoteResult = try JSONDecoder().decode(DiaryFetchResult.self, from: data)
             
             try Task.checkCancellation()
             
-            try await localDataSource.save(remoteResult.diaries.map(\.toDTO))
-            return remoteResult
+            return try await fetchRemote(api: VerseAPI.listFilter(request))
         }
+    }
+    
+    public func fetchDiariesAll(after cursor: DiaryCursor) async throws -> DiaryFetchResult {
+        try Task.checkCancellation()
+        
+        let localResult: DiaryFetchResultDTO? = try? await localDataSource.retreiveAllDiaries(
+            after: cursor.lastCreatedAt,
+            size: cursor.size
+        )
+        
+        if let localResult, !localResult.diaries.isEmpty {
+            return localResult.toDomain
+        } else {
+            let request: Request.ListAll = .init(
+                lastCreatedAt: cursor.lastCreatedAt,
+                size: cursor.size
+            )
+            
+            try Task.checkCancellation()
+            
+            return try await fetchRemote(api: VerseAPI.listAll(request))
+        }
+    }
+}
+
+private extension DiaryRepositoryImpl {
+    func fetchRemote(api: API) async throws -> DiaryFetchResult {
+        try Task.checkCancellation()
+        
+        let data = try await networkProvider.request(api: api)
+        
+        try Task.checkCancellation()
+        
+        let remoteResult = try JSONDecoder().decode(DiaryFetchResult.self, from: data)
+        try await localDataSource.save(remoteResult.diaries.map(\.toDTO))
+        return remoteResult
     }
 }
 
