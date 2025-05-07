@@ -36,11 +36,16 @@ public struct PagingStackView<
             case .vStack:
                 LazyVStack {
                     pagingContent()
+                    errorContent()
+                    loadingContent()
                 }
             case .vGrid(let columns):
                 LazyVGrid(columns: columns) {
                     pagingContent()
                 }
+                
+                errorContent()
+                loadingContent()
             }
         }
     }
@@ -98,15 +103,19 @@ private extension PagingStackView {
                 divider()
             }
         }
-        
-        Group {
-            if let errorView, isError ?? false {
-                errorView()
-            }
-            
-            if let loadingView, isLoading ?? false {
-                loadingView()
-            }
+    }
+    
+    @ViewBuilder
+    func errorContent() -> some View {
+        if let errorView, isError ?? false {
+            errorView()
+        }
+    }
+    
+    @ViewBuilder
+    func loadingContent() -> some View {
+        if let loadingView, isLoading ?? false {
+            loadingView()
         }
     }
 }
