@@ -56,7 +56,7 @@ public final class HomeViewModel {
     let pickerLimit: YearMonthPickerLimit
     
     private var internalStackViewModels: [HomeStackContentViewModel] = []
-    private var stackDiariesTask: Task<Void, Error>?
+    private var stackDiariesTask: Task<Void, Never>?
     private var stackPagingState: PagingState<DiaryCursor> = .initial
     
     private var isCurrentYearMonthSelected: Bool {
@@ -76,42 +76,16 @@ public final class HomeViewModel {
         displayStyle.toggle()
     }
     
-    func fetchNextStackDiaries() {
-        guard !stackPagingState.isFetching, !stackPagingState.isLastPage else { return }
-
-        let yearMonth: YearMonth = .init(year: selectedYear, month: selectedMonth)
-        let cursor = stackPagingState.cursor ?? DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
+    func fetchNextStackDiaries(byUser: Bool = false) {
+        guard stackPagingState.canStartFetch(byUser: byUser) else { return }
         
         stackPagingState.update {
             $0.isFetching = true
             $0.isErrorOccured = false
         }
         
-        stackDiariesTask = Task { [weak self, useCase] in
-            defer {
-                if !Task.isCancelled {
-                    self?.stackPagingState.isFetching = false
-                }
-            }
-            
-            do {
-                try Task.checkCancellation()
-                
-                let result = try await useCase.fetchDiariesByMonth(year: yearMonth.year, month: yearMonth.month, after: cursor)
-                let viewModels = await Task.detached(priority: .userInitiated) { [weak self] in
-                    self?.makeStackViewModelList(from: result.diaries) ?? []
-                }.value
-                
-                try Task.checkCancellation()
-
-                let lastCreatedAt: TimeInterval? = result.diaries.last?.createdAt
-                self?.update(viewModels, lastCreatedAt: lastCreatedAt, isLastPage: result.isLastPage)
-            } catch _ as CancellationError {
-                // do nothing
-            } catch {
-                self?.stackPagingState.isErrorOccured = true
-            }
-        }
+        let cursor: DiaryCursor = stackPagingState.cursor ?? DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
+        stackDiariesTask = fetchStackDiariesTask(year: selectedYear, month: selectedMonth, cursor: cursor)
     }
 }
 
@@ -190,6 +164,34 @@ private extension HomeViewModel {
     func makeGridViewModels() -> [HomeContentGridViewModel] {
         diaries.map(\.toGridViewModel)
     }
+
+    func fetchStackDiariesTask(year: Int, month: Int, cursor: DiaryCursor) -> Task<Void, Never> {
+        Task { [weak self, useCase] in
+            defer {
+                if !Task.isCancelled {
+                    self?.stackPagingState.isFetching = false
+                }
+            }
+            
+            do {
+                try Task.checkCancellation()
+                
+                let result = try await useCase.fetchDiariesByMonth(year: year, month: month, after: cursor)
+                let viewModels = await Task.detached(priority: .userInitiated) { [weak self] in
+                    self?.makeStackViewModelList(from: result.diaries) ?? []
+                }.value
+                
+                try Task.checkCancellation()
+
+                let lastCreatedAt: TimeInterval? = result.diaries.last?.createdAt
+                self?.update(viewModels, lastCreatedAt: lastCreatedAt, isLastPage: result.isLastPage)
+            } catch _ as CancellationError {
+                // do nothing
+            } catch {
+                self?.stackPagingState.isErrorOccured = true
+            }
+        }
+    }
 }
 
 private extension [HomeStackContentViewModel] {
@@ -246,6 +248,14 @@ extension DisplayStyle {
 }
 
 private extension PagingState {
+    func canStartFetch(byUser: Bool) -> Bool {
+        if byUser {
+            return !isFetching && !isLastPage
+        } else {
+            return !isFetching && !isLastPage && !isErrorOccured
+        }
+    }
+
     mutating func update(_ closure: (inout PagingState) -> Void) {
         closure(&self)
     }

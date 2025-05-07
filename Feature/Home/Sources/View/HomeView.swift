@@ -97,39 +97,37 @@ public struct HomeView: View {
                     .frame(alignment: .center)
             }
         } else {
-            ScrollView {
-                LazyVStack {
-                    ForEach(viewModel.stackViewModels, id: \.id) { stackVM in
-                        HomeStackContentView(viewModel: stackVM)
-                            .frame(height: 84)
-                            .padding(.vertical, 15)
-                            .onAppear {
-                                if viewModel.stackViewModels.last == stackVM {
-                                    viewModel.fetchNextStackDiaries()
-                                }
-                            }
-                        
-                        if viewModel.stackViewModels.last != stackVM {
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
-                        }
-                    }
+            PagingStackView(
+                items: viewModel.stackViewModels,
+                isLoading: viewModel.showLoadingStackView,
+                isError: viewModel.isStackErrorOccured,
+                stackType: .vStack,
+                onAppearLast: {
+                    viewModel.fetchNextStackDiaries()
+                },
+                content: { viewModel in
+                    HomeStackContentView(viewModel: viewModel)
+                        .frame(height: 84)
+                        .padding(.vertical, 15)
+                },
+                divider: {
+                    Divider()
+                        .frame(height: 1)
+                        .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
                     
-                    if viewModel.isStackErrorOccured {
-                        RefreshButton() {
-                            viewModel.fetchNextStackDiaries()
-                        }
-                            .padding(.top, 10)
+                },
+                errorView: {
+                    RefreshButton() {
+                        viewModel.fetchNextStackDiaries(byUser: true)
                     }
-                    
-                    if viewModel.showLoadingStackView {
-                        LoadingView(size: 15)
-                            .padding(.vertical, 5)
-                            .frame(alignment: .center)
-                    }
+                    .padding(.top, 10)
+                },
+                loadingView: {
+                    LoadingView(size: 15)
+                        .padding(.vertical, 5)
+                        .frame(alignment: .center)
                 }
-            }
+            )
         }
     }
     
