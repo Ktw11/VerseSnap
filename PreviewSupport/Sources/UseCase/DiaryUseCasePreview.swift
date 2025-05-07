@@ -14,8 +14,12 @@ public final class DiaryUseCasePreview: DiaryUseCase, @unchecked Sendable {
     // MARK: Properties
 
     public var saveLoadingSeconds: Int?
+    
     public var expectedDiaries: DiaryFetchResult?
     public var expectedDiariesError: Error?
+    
+    public var expectedDiariesAll: DiaryFetchResult?
+    public var expectedDiariesAllError: Error?
     
     // MARK: Methods
     
@@ -30,6 +34,16 @@ public final class DiaryUseCasePreview: DiaryUseCase, @unchecked Sendable {
             return expectedDiaries
         } else if let expectedDiariesError {
             throw expectedDiariesError
+        } else {
+            throw DomainError.cancelled
+        }
+    }
+    
+    public func fetchDiariesAll(after cursor: Domain.DiaryCursor) async throws -> Domain.DiaryFetchResult {
+        if let expectedDiariesAll {
+            return expectedDiariesAll
+        } else if let expectedDiariesAllError {
+            throw expectedDiariesAllError
         } else {
             throw DomainError.cancelled
         }
