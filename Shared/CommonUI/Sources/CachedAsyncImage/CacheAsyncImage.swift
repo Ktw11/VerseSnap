@@ -8,17 +8,15 @@
 import SwiftUI
 import Kingfisher
 
-public struct CachedAsyncImage<Placeholder: View>: View {
+public struct CachedAsyncImage: View {
     
     // MARK: Lifecycle
     
     public init(
         url: URL?,
-        placeholder: (() -> Placeholder)? = nil,
         config: Configuration = .default
     ) {
         self.url = url
-        self.placeholder = placeholder
         self.config = config
     }
     
@@ -46,8 +44,8 @@ public struct CachedAsyncImage<Placeholder: View>: View {
     // MARK: Properties
     
     private let url: URL?
-    private let placeholder: (() -> Placeholder)?
     private let config: Configuration
+    private var placeholder: (() -> AnyView)?
 
     public var body: some View {
         KFImage(url)
@@ -71,5 +69,13 @@ public struct CachedAsyncImage<Placeholder: View>: View {
                     view.scaledToFit()
                 }
             }
+    }
+}
+
+public extension CachedAsyncImage {
+    func placeholder<PlaceHolder: View>(@ViewBuilder _ build: @escaping () -> PlaceHolder) -> Self {
+        var view = self
+        view.placeholder = { AnyView(build()) }
+        return view
     }
 }

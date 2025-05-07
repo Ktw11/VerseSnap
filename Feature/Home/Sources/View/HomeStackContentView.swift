@@ -71,7 +71,7 @@ private struct PhotoContainerView: View {
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
-                        CachedAsyncImage<EmptyView>(url: imageURL)
+                        CachedAsyncImage(url: imageURL)
                         
                         Color.black.opacity(0.3)
                     }
