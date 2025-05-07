@@ -9,10 +9,7 @@ import SwiftUI
 
 public struct PagingStackView<
     Item: Identifiable,
-    Content: View,
-    DividerView: View,
-    ErrorView: View,
-    LoadingView: View
+    Content: View
 >: View {
     
     // MARK: Lifecycle
@@ -55,9 +52,9 @@ public struct PagingStackView<
     private let content: (Item) -> Content
     
     private var onAppearLast: (() -> Void)?
-    private var divider:  (() -> DividerView)?
-    private var errorView: (() -> ErrorView)?
-    private var loadingView: (() -> LoadingView)?
+    private var divider: (() -> AnyView)?
+    private var errorView: (() -> AnyView)?
+    private var loadingView: (() -> AnyView)?
 }
 
 public extension PagingStackView {
@@ -67,21 +64,21 @@ public extension PagingStackView {
         return view
     }
     
-    func divider(@ViewBuilder _ divider: @escaping () -> DividerView) -> Self {
+    func divider<DividerView: View>(@ViewBuilder _ divider: @escaping () -> DividerView) -> Self {
         var view = self
-        view.divider = divider
+        view.divider = { AnyView(divider()) }
         return view
     }
     
-    func errorView(@ViewBuilder _ errorView: @escaping () -> ErrorView) -> Self {
+    func errorView<ErrorView: View>(@ViewBuilder _ errorView: @escaping () -> ErrorView) -> Self {
         var view = self
-        view.errorView = errorView
+        view.errorView = { AnyView(errorView()) }
         return view
     }
     
-    func loadingView(@ViewBuilder _ loadingView: @escaping () -> LoadingView) -> Self {
+    func loadingView<LoadingView: View>(@ViewBuilder _ loadingView: @escaping () -> LoadingView) -> Self {
         var view = self
-        view.loadingView = loadingView
+        view.loadingView = { AnyView(loadingView()) }
         return view
     }
 }
