@@ -10,7 +10,7 @@ import SwiftUI
 public struct PagingStackView<
     Item: Identifiable,
     Content: View,
-    Divider: View,
+    DividerView: View,
     ErrorView: View,
     LoadingView: View
 >: View {
@@ -22,21 +22,13 @@ public struct PagingStackView<
         isLoading: Bool?,
         isError: Bool?,
         stackType: PagingStackType,
-        onAppearLast: @escaping () -> Void,
         content: @escaping (Item) -> Content,
-        divider: (() -> Divider)?,
-        errorView: (() -> ErrorView)?,
-        loadingView: (() -> LoadingView)?
     ) {
         self.items = items
         self.isLoading = isLoading
         self.isError = isError
         self.stackType = stackType
-        self.onAppearLast = onAppearLast
         self.content = content
-        self.divider = divider
-        self.errorView = errorView
-        self.loadingView = loadingView
     }
     
     // MARK: Properties
@@ -60,11 +52,38 @@ public struct PagingStackView<
     private let isLoading: Bool?
     private let isError: Bool?
     private let stackType: PagingStackType
-    private let onAppearLast: () -> Void
     private let content: (Item) -> Content
-    private let divider: (() -> Divider)?
-    private let errorView: (() -> ErrorView)?
-    private let loadingView: (() -> LoadingView)?
+    
+    private var onAppearLast: (() -> Void)?
+    private var divider:  (() -> DividerView)?
+    private var errorView: (() -> ErrorView)?
+    private var loadingView: (() -> LoadingView)?
+}
+
+public extension PagingStackView {
+    func onAppearLast(_ action: @escaping () -> Void) -> Self {
+        var view = self
+        view.onAppearLast = action
+        return view
+    }
+    
+    func divider(@ViewBuilder _ divider: @escaping () -> DividerView) -> Self {
+        var view = self
+        view.divider = divider
+        return view
+    }
+    
+    func errorView(@ViewBuilder _ errorView: @escaping () -> ErrorView) -> Self {
+        var view = self
+        view.errorView = errorView
+        return view
+    }
+    
+    func loadingView(@ViewBuilder _ loadingView: @escaping () -> LoadingView) -> Self {
+        var view = self
+        view.loadingView = loadingView
+        return view
+    }
 }
 
 private extension PagingStackView {
@@ -74,7 +93,7 @@ private extension PagingStackView {
             content(item)
                 .onAppear {
                     if items.last?.id == item.id {
-                        onAppearLast()
+                        onAppearLast?()
                     }
                 }
             

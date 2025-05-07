@@ -102,32 +102,31 @@ public struct HomeView: View {
                 isLoading: viewModel.showLoadingStackView,
                 isError: viewModel.isStackErrorOccured,
                 stackType: .vStack,
-                onAppearLast: {
-                    viewModel.fetchNextStackDiaries()
-                },
                 content: { viewModel in
                     HomeStackContentView(viewModel: viewModel)
                         .frame(height: 84)
                         .padding(.vertical, 15)
-                },
-                divider: {
-                    Divider()
-                        .frame(height: 1)
-                        .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
-                    
-                },
-                errorView: {
-                    RefreshButton() {
-                        viewModel.fetchNextStackDiaries(byUser: true)
-                    }
-                    .padding(.top, 10)
-                },
-                loadingView: {
-                    LoadingView(size: 15)
-                        .padding(.vertical, 5)
-                        .frame(alignment: .center)
                 }
             )
+            .onAppearLast {
+                viewModel.fetchNextStackDiaries()
+            }
+            .divider {
+                Divider()
+                    .frame(height: 1)
+                    .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
+            }
+            .errorView {
+                RefreshButton() {
+                    viewModel.fetchNextStackDiaries(byUser: true)
+                }
+                .padding(.top, 10)
+            }
+            .loadingView {
+                LoadingView(size: 15)
+                    .padding(.vertical, 5)
+                    .frame(alignment: .center)
+            }
         }
     }
     
