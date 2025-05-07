@@ -51,7 +51,7 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
         )
     }
     
-    public func fetchDiariesByMonth(year: Int, month: Int, after cursor: DiaryCursor) async throws -> DiaryFetchResult {
+    public func fetchDiaries(year: Int, month: Int, after cursor: DiaryCursor) async throws -> DiaryFetchResult {
         let dateComponents: DateComponents = .init(year: year, month: month, day: 1)
         guard let startDate = calendar.date(from: dateComponents) else { throw DiaryUseCaseError.failedToConvertDate }
         guard let endDate = calendar.date(byAdding: .month, value: 1, to: startDate) else { throw DiaryUseCaseError.failedToConvertDate }
@@ -61,7 +61,7 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
         
         try Task.checkCancellation()
         
-        return try await repository.fetchDiariesByMonth(
+        return try await repository.fetchDiaries(
             startTimestamp: startTimestamp,
             endTimestamp: endTimestamp,
             after: cursor

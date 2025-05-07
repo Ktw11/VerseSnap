@@ -176,7 +176,7 @@ private extension HomeViewModel {
             do {
                 try Task.checkCancellation()
                 
-                let result = try await useCase.fetchDiariesByMonth(year: year, month: month, after: cursor)
+                let result = try await useCase.fetchDiaries(year: year, month: month, after: cursor)
                 let viewModels = await Task.detached(priority: .userInitiated) { [weak self] in
                     self?.makeStackViewModelList(from: result.diaries) ?? []
                 }.value

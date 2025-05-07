@@ -49,7 +49,7 @@ public actor DiaryRepositoryImpl: DiaryRepository {
         }
     }
     
-    public func fetchDiariesByMonth(
+    public func fetchDiaries(
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after cursor: DiaryCursor

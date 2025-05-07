@@ -15,12 +15,12 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var requestedSaveHashtags: [String]?
     var expectedSaveError: Error?
     
-    var isFetchDiariesByMonthCalled: Bool = false
-    var requestedFetchDiariesByMonthStartTimestamp: TimeInterval?
-    var requestedFetchDiariesByMonthEndTimestamp: TimeInterval?
-    var requestedFetchDiariesByMonthCursor: DiaryCursor?
-    var expectedFetchDiariesByMonth: DiaryFetchResult?
-    var expectedFetchDiariesByMonthError: Error?
+    var isFetchDiariesCalled: Bool = false
+    var requestedFetchDiariesStartTimestamp: TimeInterval?
+    var requestedFetchDiariesEndTimestamp: TimeInterval?
+    var requestedFetchDiariesCursor: DiaryCursor?
+    var expectedFetchDiaries: DiaryFetchResult?
+    var expectedFetchDiariesError: Error?
     
     func save(verse: String, imageURL: String, hashtags: [String]) async throws {
         isSaveCalled = true
@@ -33,20 +33,20 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
         }
     }
     
-    func fetchDiariesByMonth(
+    func fetchDiaries(
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after cursor: DiaryCursor
     ) async throws -> DiaryFetchResult {
-        isFetchDiariesByMonthCalled = true
-        requestedFetchDiariesByMonthStartTimestamp = startTimestamp
-        requestedFetchDiariesByMonthEndTimestamp = endTimestamp
-        requestedFetchDiariesByMonthCursor = cursor
+        isFetchDiariesCalled = true
+        requestedFetchDiariesStartTimestamp = startTimestamp
+        requestedFetchDiariesEndTimestamp = endTimestamp
+        requestedFetchDiariesCursor = cursor
         
-        if let expectedFetchDiariesByMonth {
-            return expectedFetchDiariesByMonth
-        } else if let expectedFetchDiariesByMonthError {
-            throw expectedFetchDiariesByMonthError
+        if let expectedFetchDiaries {
+            return expectedFetchDiaries
+        } else if let expectedFetchDiariesError {
+            throw expectedFetchDiariesError
         } else {
             throw TestError.notImplemented
         }

@@ -121,13 +121,13 @@ final class DiaryUseCaseImplTests: XCTestCase {
         }
     }
     
-    func test_fetchDiariesByMonth_when_year_month_is_valid_repository_fails_then_throw_error() async {
+    func test_fetchDiaries_when_year_month_is_valid_repository_fails_then_throw_error() async {
         // given
-        repository.expectedFetchDiariesByMonthError = TestError.common
+        repository.expectedFetchDiariesError = TestError.common
 
         // when
         do {
-            _ = try await sut.fetchDiariesByMonth(
+            _ = try await sut.fetchDiaries(
                 year: 1010,
                 month: 12,
                 after: DiaryCursor(size: 10, lastCreatedAt: 200)
@@ -135,13 +135,13 @@ final class DiaryUseCaseImplTests: XCTestCase {
             XCTFail()
         } catch TestError.common {
             // then
-            XCTAssertTrue(repository.isFetchDiariesByMonthCalled)
+            XCTAssertTrue(repository.isFetchDiariesCalled)
         } catch {
             XCTFail()
         }
     }
     
-    func test_fetchDiariesByMonth_when_year_month_is_valid_repository_returns_data_then_return_data() async {
+    func test_fetchDiaries_when_year_month_is_valid_repository_returns_data_then_return_data() async {
         // given
         let expectedResult = DiaryFetchResult(
             diaries: [
@@ -150,10 +150,10 @@ final class DiaryUseCaseImplTests: XCTestCase {
             ],
             isLastPage: true
         )
-        repository.expectedFetchDiariesByMonth = expectedResult
+        repository.expectedFetchDiaries = expectedResult
         
         // when
-        let result = try? await sut.fetchDiariesByMonth(
+        let result = try? await sut.fetchDiaries(
             year: 2000,
             month: 2,
             after: DiaryCursor(size: 10, lastCreatedAt: 200)
@@ -161,6 +161,6 @@ final class DiaryUseCaseImplTests: XCTestCase {
         
         // then
         XCTAssertEqual(result, expectedResult)
-        XCTAssertTrue(repository.isFetchDiariesByMonthCalled)
+        XCTAssertTrue(repository.isFetchDiariesCalled)
     }
 }

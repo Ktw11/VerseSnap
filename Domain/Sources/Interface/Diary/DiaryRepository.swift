@@ -9,7 +9,7 @@ import Foundation
 
 public protocol DiaryRepository: Sendable {
     func save(verse: String, imageURL: String, hashtags: [String]) async throws
-    func fetchDiariesByMonth(
+    func fetchDiaries(
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after cursor: DiaryCursor
