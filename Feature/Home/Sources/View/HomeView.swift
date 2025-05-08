@@ -49,10 +49,6 @@ public struct HomeView: View {
                             viewModel.didTapDisplayIcon()
                         }
                 }
-                
-                if viewModel.displayStyle == .grid {
-                    searchBarView()
-                }
             }
             
             Spacer()
@@ -81,38 +77,6 @@ public struct HomeView: View {
             viewModel.fetchNextStackDiaries()
             viewModel.fetchNextGridDiaries()
         }
-    }
-    
-    #warning("구현 필요")
-    @ViewBuilder
-    private func searchBarView() -> some View {
-        
-        CommonUIAsset.Color.placeholderBG.swiftUIColor
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .frame(height: 33)
-            .overlay {
-                HStack {
-                    HomeAsset.icSearch.swiftUIImage
-                        .resizable()
-                        .frame(size: 17)
-                    
-                    TextField("", text: $searchText)
-                        .autocorrectionDisabled(true)
-                        .accentColor(Color.white)
-                    
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundColor(CommonUIAsset.Color.minorText.swiftUIColor)
-                        .frame(size: 12)
-                        .opacity(searchText.isEmpty ? 0.0 : 1.0)
-                        .onTapGesture {
-                            searchText = ""
-                        }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-            }
     }
 }
 
