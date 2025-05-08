@@ -4,30 +4,6 @@
     "" : {
       "shouldTranslate" : false
     },
-    "fri" : {
-      "shouldTranslate" : false
-    },
-    "mon" : {
-      "shouldTranslate" : false
-    },
-    "sat" : {
-      "shouldTranslate" : false
-    },
-    "sun" : {
-      "shouldTranslate" : false
-    },
-    "thu" : {
-      "shouldTranslate" : false
-    },
-    "Today" : {
-      "shouldTranslate" : false
-    },
-    "tue" : {
-      "shouldTranslate" : false
-    },
-    "wed" : {
-      "shouldTranslate" : false
-    },
     "기록하기" : {
       "localizations" : {
         "en" : {
