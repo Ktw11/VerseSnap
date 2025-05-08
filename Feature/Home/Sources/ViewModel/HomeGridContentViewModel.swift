@@ -12,3 +12,5 @@ struct HomeGridContentViewModel: Identifiable {
     let imageURL: String
     let favoriteIcon: Image
 }
+
+extension HomeGridContentViewModel: HomeContentViewModel { }

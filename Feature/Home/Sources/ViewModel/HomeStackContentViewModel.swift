@@ -14,4 +14,12 @@ struct HomeStackContentViewModel: Equatable, Identifiable {
     let description: String
     let timeString: String?
     let actionIcon: Image
+    
+    enum Constants {
+        static let weekdaySymbols: [String] = [
+            "mon", "tue", "wed", "thu", "fri", "sat", "sun"
+        ]
+    }
 }
+
+extension HomeStackContentViewModel: HomeContentViewModel { }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PagingState<Cursor> {
+struct PagingState<Cursor: Sendable>: Sendable {
     var isFetching: Bool
     var isErrorOccured: Bool
     var isEmpty: Bool
