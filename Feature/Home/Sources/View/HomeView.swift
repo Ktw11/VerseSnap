@@ -81,10 +81,57 @@ public struct HomeView: View {
         }
     }
     
-    // MARK: Methods
+    #warning("구현 필요")
+    @ViewBuilder
+    private func searchBarView() -> some View {
+        
+        CommonUIAsset.Color.placeholderBG.swiftUIColor
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .frame(height: 33)
+            .overlay {
+                HStack {
+                    HomeAsset.icSearch.swiftUIImage
+                        .resizable()
+                        .frame(size: 17)
+                    
+                    TextField("", text: $searchText)
+                        .autocorrectionDisabled(true)
+                        .accentColor(Color.white)
+                    
+                    Image(systemName: "xmark.circle.fill")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(CommonUIAsset.Color.minorText.swiftUIColor)
+                        .frame(size: 12)
+                        .opacity(searchText.isEmpty ? 0.0 : 1.0)
+                        .onTapGesture {
+                            searchText = ""
+                        }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+            }
+    }
+}
+
+private extension HomeView {
+    @ViewBuilder
+    func contentLoadingView() -> some View {
+        LoadingView(size: 15)
+            .padding(.vertical, 5)
+            .frame(alignment: .center)
+    }
     
     @ViewBuilder
-    private func stackContentView() -> some View {
+    func contentErrorView() -> some View {
+        RefreshButton() {
+            viewModel.fetchNextStackDiaries(byUser: true)
+        }
+        .padding(.top, 10)
+    }
+    
+    @ViewBuilder
+    func stackContentView() -> some View {
         if viewModel.isStackDisplayLoading {
             ZStack {
                 LoadingView()
@@ -116,76 +163,58 @@ public struct HomeView: View {
                     .frame(height: 1)
                     .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
             }
-            .errorView {
-                RefreshButton() {
-                    viewModel.fetchNextStackDiaries(byUser: true)
-                }
-                .padding(.top, 10)
-            }
-            .loadingView {
-                LoadingView(size: 15)
-                    .padding(.vertical, 5)
+            .errorView { contentErrorView() }
+            .loadingView { contentLoadingView() }
+        }
+    }
+    
+    @ViewBuilder
+    func gridContentView() -> some View {
+        if viewModel.isStackDisplayLoading {
+            ZStack {
+                LoadingView()
                     .frame(alignment: .center)
             }
-        }
-    }
-    
-    @ViewBuilder
-    private func gridContentView() -> some View {
-        ScrollView {
-            let columns: [GridItem] = Array(repeating: GridItem(spacing: 1), count: 3)
-            
-            LazyVGrid(columns: columns, spacing: 1) {
-                ForEach(viewModel.gridViewModels, id: \.id) { gridVM in
-                    Rectangle()
-                        .aspectRatio(3 / 4, contentMode: .fit)
-                        .overlay {
-                            gridVM.image
-                                .resizable()
-                                .scaledToFill()
-                        }
-                        .overlay(alignment: .bottomTrailing) {
-                            gridVM.favoriteIcon
-                                .resizable()
-                                .frame(size: 17)
-                                .padding(.all, 5)
-                        }
-                        .clipped()
-                }
+        } else if viewModel.isStackDiaryEmpty {
+            ZStack {
+                Text("아직 생성한 삼행시가 없습니다.")
+                    .font(.suite(size: 14, weight: .regular))
+                    .frame(alignment: .center)
             }
+        } else {
+            PagingStackView(
+                items: viewModel.gridViewModels,
+                isLoading: viewModel.showLoadingGridView,
+                isError: viewModel.isGridErrorOccured,
+                stackType: .vGrid(columns: Array(repeating: GridItem(spacing: 1), count: 3)),
+                content: {
+                    gridContentItemView($0)
+                }
+            )
+            .onAppearLast {
+                viewModel.fetchNextGridDiaries()
+            }
+            .errorView { contentErrorView() }
+            .loadingView { contentLoadingView() }
         }
     }
     
-    #warning("구현 필요")
     @ViewBuilder
-    private func searchBarView() -> some View {
-        
-        CommonUIAsset.Color.placeholderBG.swiftUIColor
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .frame(height: 33)
+    func gridContentItemView(_ viewModel: HomeGridContentViewModel) -> some View {
+        Rectangle()
+            .aspectRatio(3 / 4, contentMode: .fit)
             .overlay {
-                HStack {
-                    HomeAsset.icSearch.swiftUIImage
-                        .resizable()
-                        .frame(size: 17)
-                    
-                    TextField("", text: $searchText)
-                        .autocorrectionDisabled(true)
-                        .accentColor(Color.white)
-                    
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundColor(CommonUIAsset.Color.minorText.swiftUIColor)
-                        .frame(size: 12)
-                        .opacity(searchText.isEmpty ? 0.0 : 1.0)
-                        .onTapGesture {
-                            searchText = ""
-                        }
+                if let imageURL = URL(string: viewModel.imageURL) {
+                    CachedAsyncImage(url: imageURL)
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
             }
+            .overlay(alignment: .bottomTrailing) {
+                viewModel.favoriteIcon
+                    .resizable()
+                    .frame(size: 17)
+                    .padding(.all, 5)
+            }
+            .clipped()
     }
 }
 

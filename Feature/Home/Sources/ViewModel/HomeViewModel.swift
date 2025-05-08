@@ -41,6 +41,10 @@ public final class HomeViewModel {
         static let weekdaySymbols: [LocalizedStringResource] = [
             "mon", "tue", "wed", "thu", "fri", "sat", "sun"
         ]
+        
+        static func favoriteIcon(_ isFavorite: Bool) -> Image {
+            isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
+        }
     }
     
     // MARK: Properties
@@ -55,20 +59,24 @@ public final class HomeViewModel {
     var displayStyle: DisplayStyle = .stack
     let pickerLimit: YearMonthPickerLimit
     
+    private var isCurrentYearMonthSelected: Bool {
+        selectedYear == currentYear && selectedMonth == currentMonth
+    }
+    
+    // Stack mode
     private var internalStackViewModels: [HomeStackContentViewModel] = []
     private var stackDiariesTask: Task<Void, Never>?
     private var stackPagingState: PagingState<DiaryCursor> = .initial
     
-    private var isCurrentYearMonthSelected: Bool {
-        selectedYear == currentYear && selectedMonth == currentMonth
-    }
+    // Grid mode
+    private(set) var gridViewModels: [HomeGridContentViewModel] = []
+    private var gridDiariesTask: Task<Void, Never>?
+    private var gridPagingState: PagingState<DiaryCursor> = .initial
     
     private let currentYear: Int
     private let currentMonth: Int
     private let calendar: Calendar
     private let useCase: DiaryUseCase
-    #warning("임시 구조체, 제거 필요")
-    private var diaries: [Diary] = []
 
     // MARK: Methods
     
@@ -87,6 +95,18 @@ public final class HomeViewModel {
         let cursor: DiaryCursor = stackPagingState.cursor ?? DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
         stackDiariesTask = fetchStackDiariesTask(year: selectedYear, month: selectedMonth, cursor: cursor)
     }
+    
+    func fetchNextGridDiaries(byUser: Bool = false) {
+        guard gridPagingState.canStartFetch(byUser: byUser) else { return }
+        
+        gridPagingState.update {
+            $0.isFetching = true
+            $0.isErrorOccured = false
+        }
+        
+        let cursor = gridPagingState.cursor ?? DiaryCursor(size: Constants.cursorSize, lastCreatedAt: nil)
+        gridDiariesTask = fetchGridDiariesTask(cursor: cursor)
+    }
 }
 
 extension HomeViewModel {
@@ -96,11 +116,8 @@ extension HomeViewModel {
     var displayIcon: Image {
         displayStyle == .stack ? HomeAsset.icGridDisplay.swiftUIImage : HomeAsset.icStackDisplay.swiftUIImage
     }
-    var gridViewModels: [HomeContentGridViewModel] {
-        makeGridViewModels()
-    }
-    
-    // Diaries by month
+
+    // Diaries - Filtered by Month
     var isStackDisplayLoading: Bool {
         stackPagingState.isFetching && internalStackViewModels.isEmpty
     }
@@ -115,6 +132,20 @@ extension HomeViewModel {
     }
     var isStackErrorOccured: Bool {
         stackPagingState.isErrorOccured
+    }
+    
+    // Diaries - All
+    var isGridDisplayLoading: Bool {
+        gridPagingState.isFetching && gridViewModels.isEmpty
+    }
+    var showLoadingGridView: Bool {
+        !gridPagingState.isLastPage && !gridPagingState.isErrorOccured
+    }
+    var isGridDiaryEmpty: Bool {
+        gridPagingState.isEmpty
+    }
+    var isGridErrorOccured: Bool {
+        gridPagingState.isErrorOccured
     }
 }
 
@@ -157,12 +188,31 @@ private extension HomeViewModel {
             title: createdDate.monthDayString(),
             description: diary.verse.firstLetters(separator: "/"),
             timeString: createdDate.timeString(),
-            actionIcon: diary.isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
+            actionIcon: Constants.favoriteIcon(diary.isFavorite)
         )
     }
     
-    func makeGridViewModels() -> [HomeContentGridViewModel] {
-        diaries.map(\.toGridViewModel)
+    @MainActor
+    func update(_ viewModels: [HomeGridContentViewModel], lastCreatedAt: TimeInterval?, isLastPage: Bool) {
+        gridViewModels.append(contentsOf: viewModels)
+
+        gridPagingState.update {
+            $0.isLastPage = isLastPage
+            $0.isEmpty = gridViewModels.isEmpty
+            $0.cursor = DiaryCursor(size: Constants.cursorSize, lastCreatedAt: lastCreatedAt)
+        }
+    }
+    
+    nonisolated func makeGridViewModelList(from diaries: [VerseDiary]) -> [HomeGridContentViewModel] {
+        return diaries.map(makeGridViewModel)
+    }
+    
+    nonisolated func makeGridViewModel(for diary: VerseDiary) -> HomeGridContentViewModel {
+        HomeGridContentViewModel(
+            id: diary.id,
+            imageURL: diary.imageURL,
+            favoriteIcon: Constants.favoriteIcon(diary.isFavorite)
+        )
     }
 
     func fetchStackDiariesTask(year: Int, month: Int, cursor: DiaryCursor) -> Task<Void, Never> {
@@ -192,6 +242,34 @@ private extension HomeViewModel {
             }
         }
     }
+    
+    func fetchGridDiariesTask(cursor: DiaryCursor) -> Task<Void, Never> {
+        Task { [weak self, useCase] in
+            defer {
+                if !Task.isCancelled {
+                    self?.gridPagingState.isFetching = false
+                }
+            }
+            
+            do {
+                try Task.checkCancellation()
+                
+                let result = try await useCase.fetchDiariesAll(after: cursor)
+                let viewModels = await Task.detached(priority: .userInitiated) { [weak self] in
+                    self?.makeGridViewModelList(from: result.diaries) ?? []
+                }.value
+                
+                try Task.checkCancellation()
+
+                let lastCreatedAt: TimeInterval? = result.diaries.last?.createdAt
+                self?.update(viewModels, lastCreatedAt: lastCreatedAt, isLastPage: result.isLastPage)
+            } catch _ as CancellationError {
+                // do nothing
+            } catch {
+                self?.gridPagingState.isErrorOccured = true
+            }
+        }
+    }
 }
 
 private extension [HomeStackContentViewModel] {
@@ -201,25 +279,6 @@ private extension [HomeStackContentViewModel] {
         var newViewModels = self
         newViewModels.insert(.placeholder, at: 0)
         return newViewModels
-    }
-}
-
-#warning("임시 구조체 - 제거 필요")
-struct Diary: Equatable {
-    let id: UUID = .init()
-    let photo: Image
-    let createdAt: Date
-    let isFavorite: Bool
-    let firstCharacters: String
-}
-
-extension Diary {
-    var toGridViewModel: HomeContentGridViewModel {
-        .init(
-            id: id.uuidString,
-            image: photo,
-            favoriteIcon: isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
-        )
     }
 }
 
