@@ -20,51 +20,60 @@ public struct HomeView: View {
     
     @State private var isShowingPicker = false
     @State private var searchText: String = ""
+    @Namespace private var namespace
     @Bindable private var viewModel: HomeViewModel
     
     public var body: some View {
-        VStack {
-            VStack(spacing: 15) {
-                ZStack {
-                    HStack {
-                        Text(viewModel.yearMonthString)
-                            .font(.suite(size: 20, weight: .bold))
-                        
-                        HomeAsset.icDownArrow.swiftUIImage
-                            .resizable()
-                            .frame(width: 18, height: 18)
-                    }
-                    .padding(.bottom, 15)
-                    .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
-                    .onTapGesture {
-                        isShowingPicker = true
+        NavigationStack {
+            ZStack {
+                CommonUIAsset.Color.mainBG.swiftUIColor
+                    .ignoresSafeArea()
+                
+                VStack {
+                    VStack(spacing: 15) {
+                        ZStack {
+                            HStack {
+                                Text(viewModel.yearMonthString)
+                                    .font(.suite(size: 20, weight: .bold))
+                                
+                                HomeAsset.icDownArrow.swiftUIImage
+                                    .resizable()
+                                    .frame(width: 18, height: 18)
+                            }
+                            .padding(.bottom, 15)
+                            .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
+                            .onTapGesture {
+                                isShowingPicker = true
+                            }
+                            
+                            viewModel.displayIcon
+                                .resizable()
+                                .frame(size: 24)
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .onTapGesture {
+                                    viewModel.didTapDisplayIcon()
+                                }
+                        }
                     }
                     
-                    viewModel.displayIcon
-                        .resizable()
-                        .frame(size: 24)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .onTapGesture {
-                            viewModel.didTapDisplayIcon()
-                        }
+                    Spacer()
+                        .frame(height: 20)
+                    
+                    ZStack {
+                        stackContentView()
+                            .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
+                        
+                        gridContentView()
+                            .opacity(viewModel.displayStyle == .grid ? 1.0 : 0)
+                    }
                 }
+                .foregroundStyle(.white)
+                .padding(.top, 20)
+                .background(CommonUIAsset.Color.mainBG.swiftUIColor)
             }
-            
-            Spacer()
-                .frame(height: 20)
-            
-            ZStack {
-                stackContentView()
-                    .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
-                
-                gridContentView()
-                    .opacity(viewModel.displayStyle == .grid ? 1.0 : 0)
-            }
+            .toolbarVisibility(.hidden, for: .navigationBar)
         }
-        .foregroundStyle(.white)
-        .padding(.top, 20)
-        .background(CommonUIAsset.Color.mainBG.swiftUIColor)
         .modalView($isShowingPicker) {
             YearMonthPickerView(
                 selectedYear: $viewModel.selectedYear,
@@ -84,16 +93,10 @@ private extension HomeView {
     @ViewBuilder
     func stackContentView() -> some View {
         if viewModel.isStackDisplayLoading {
-            ZStack(alignment: .center) {
-                LoadingView()
-                    .frame(alignment: .center)
-            }
+            LoadingView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         } else if viewModel.isStackDiaryEmpty {
-            ZStack(alignment: .center) {
-                Text("아직 생성한 삼행시가 없습니다.")
-                    .font(.suite(size: 14, weight: .regular))
-                    .frame(alignment: .center)
-            }
+            contentEmotyView()
         } else {
             PagingStackView(
                 items: viewModel.stackViewModels,
@@ -124,16 +127,10 @@ private extension HomeView {
     @ViewBuilder
     func gridContentView() -> some View {
         if viewModel.isStackDisplayLoading {
-            ZStack(alignment: .center) {
-                LoadingView()
-                    .frame(alignment: .center)
-            }
+            LoadingView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         } else if viewModel.isStackDiaryEmpty {
-            ZStack(alignment: .center) {
-                Text("아직 생성한 삼행시가 없습니다.")
-                    .font(.suite(size: 14, weight: .regular))
-                    .frame(alignment: .center)
-            }
+            contentEmotyView()
         } else {
             PagingStackView(
                 items: viewModel.gridViewModels,
@@ -183,6 +180,13 @@ private extension HomeView {
     func contentErrorView(action: @escaping (() -> Void)) -> some View {
         RefreshButton(action: action)
             .padding(.top, 10)
+    }
+    
+    @ViewBuilder
+    func contentEmotyView() -> some View {
+        Text("아직 생성한 삼행시가 없습니다.")
+            .font(.suite(size: 14, weight: .regular))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
 }
 
