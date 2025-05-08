@@ -40,9 +40,7 @@ final class HomeDiaryPagingController<ViewModel: HomeContentViewModel> {
         byUser: Bool = false,
         fetchDiaries: @escaping FetchDiaries
     ) {
-        print("@@@ 1")
         guard pagingState.canStartFetch(byUser: byUser) else { return }
-        print("@@@ 2")
         
         pagingState.update {
             $0.isFetching = true
