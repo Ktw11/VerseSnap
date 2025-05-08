@@ -5,9 +5,10 @@
 //  Created by 공태웅 on 5/8/25.
 //
 
-import Foundation
+import SwiftUI
 import Domain
 
+@Observable
 @MainActor
 final class HomeDiaryPagingController<ViewModel: HomeContentViewModel> {
     
@@ -39,7 +40,9 @@ final class HomeDiaryPagingController<ViewModel: HomeContentViewModel> {
         byUser: Bool = false,
         fetchDiaries: @escaping FetchDiaries
     ) {
+        print("@@@ 1")
         guard pagingState.canStartFetch(byUser: byUser) else { return }
+        print("@@@ 2")
         
         pagingState.update {
             $0.isFetching = true
@@ -76,18 +79,8 @@ extension HomeDiaryPagingController {
 }
 
 private extension HomeDiaryPagingController {
-    func update(_ newViewModels: [ViewModel], lastCreatedAt: TimeInterval?, isLastPage: Bool) {
-       viewModels.append(contentsOf: newViewModels)
-       
-       pagingState.update {
-           $0.isLastPage = isLastPage
-           $0.isEmpty = viewModels.isEmpty
-           $0.cursor = DiaryCursor(size: cursorSize, lastCreatedAt: lastCreatedAt)
-       }
-   }
-    
     func makeFetchingTask(_ fetchDiaries: @escaping FetchDiaries, cursor: DiaryCursor) -> Task<Void, Never> {
-        Task { [weak self] in
+        return Task { [weak self] in
             defer {
                 if !Task.isCancelled {
                     self?.pagingState.isFetching = false
@@ -113,6 +106,16 @@ private extension HomeDiaryPagingController {
             }
         }
     }
+    
+    func update(_ newViewModels: [ViewModel], lastCreatedAt: TimeInterval?, isLastPage: Bool) {
+       viewModels.append(contentsOf: newViewModels)
+       
+       pagingState.update {
+           $0.isLastPage = isLastPage
+           $0.isEmpty = viewModels.isEmpty
+           $0.cursor = DiaryCursor(size: cursorSize, lastCreatedAt: lastCreatedAt)
+       }
+   }
     
     nonisolated func makeViewModelList(from diaries: [VerseDiary]) -> [ViewModel] {
         diaries.map { viewModelFactory.build(from: $0) }
