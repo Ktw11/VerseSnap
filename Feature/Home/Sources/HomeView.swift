@@ -126,10 +126,10 @@ private extension HomeView {
     
     @ViewBuilder
     func gridContentView() -> some View {
-        if viewModel.isStackDisplayLoading {
+        if viewModel.isGridDisplayLoading {
             LoadingView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        } else if viewModel.isStackDiaryEmpty {
+        } else if viewModel.isGridDiaryEmpty {
             contentEmotyView()
         } else {
             PagingStackView(
