@@ -79,6 +79,7 @@ public struct HomeView: View {
         }
         .onAppear {
             viewModel.fetchNextStackDiaries()
+            viewModel.fetchNextGridDiaries()
         }
     }
     
@@ -117,21 +118,6 @@ public struct HomeView: View {
 
 private extension HomeView {
     @ViewBuilder
-    func contentLoadingView() -> some View {
-        LoadingView(size: 15)
-            .padding(.vertical, 5)
-            .frame(alignment: .center)
-    }
-    
-    @ViewBuilder
-    func contentErrorView() -> some View {
-        RefreshButton() {
-            viewModel.fetchNextStackDiaries(byUser: true)
-        }
-        .padding(.top, 10)
-    }
-    
-    @ViewBuilder
     func stackContentView() -> some View {
         if viewModel.isStackDisplayLoading {
             ZStack(alignment: .center) {
@@ -164,7 +150,9 @@ private extension HomeView {
                     .frame(height: 1)
                     .overlay(CommonUIAsset.Color.placeholderBG.swiftUIColor)
             }
-            .errorView { contentErrorView() }
+            .errorView {
+                contentErrorView(action: { viewModel.fetchNextStackDiaries(byUser: true) } )
+            }
             .loadingView { contentLoadingView() }
         }
     }
@@ -195,7 +183,9 @@ private extension HomeView {
             .onAppearLast {
                 viewModel.fetchNextGridDiaries()
             }
-            .errorView { contentErrorView() }
+            .errorView {
+                contentErrorView(action: { viewModel.fetchNextGridDiaries(byUser: true) } )
+            }
             .loadingView { contentLoadingView() }
         }
     }
@@ -216,6 +206,19 @@ private extension HomeView {
                     .padding(.all, 5)
             }
             .clipped()
+    }
+    
+    @ViewBuilder
+    func contentLoadingView() -> some View {
+        LoadingView(size: 15)
+            .padding(.vertical, 5)
+            .frame(alignment: .center)
+    }
+    
+    @ViewBuilder
+    func contentErrorView(action: @escaping (() -> Void)) -> some View {
+        RefreshButton(action: action)
+            .padding(.top, 10)
     }
 }
 
