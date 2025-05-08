@@ -34,12 +34,16 @@ struct RootTabView<
     var body: some View {
         VStack(spacing: 0) {
             TabView(selection: $selected) {
-                homeBuilder.build()
-                    .padding(.horizontal, 24)
-                    .tag(TabSelection.home)
-                    .toolbarVisibility(.hidden, for: .tabBar)
-                    .background(CommonUIAsset.Color.mainBG.swiftUIColor)
-                    .ignoresSafeArea(.keyboard, edges: .bottom)
+                ZStack {
+                    CommonUIAsset.Color.mainBG.swiftUIColor
+                        .ignoresSafeArea()
+                    
+                    homeBuilder.build()
+                        .padding(.horizontal, 24)
+                }
+                .tag(TabSelection.home)
+                .toolbarVisibility(.hidden, for: .tabBar)
+                .ignoresSafeArea(.keyboard, edges: .bottom)
                 
                 #warning("Profile View 구현 필요")
                 VStack {
@@ -50,15 +54,12 @@ struct RootTabView<
                 }
                 .tag(TabSelection.profile)
                 .toolbarVisibility(.hidden, for: .tabBar)
-                .background(CommonUIAsset.Color.mainBG.swiftUIColor)
             }
             
             CustomTabView(selected: $selected, isNewVersePresented: $isNewVersePresented)
-                .padding(.bottom, 15)
                 .background(CommonUIAsset.Color.mainBG.swiftUIColor)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
         }
-        .edgesIgnoringSafeArea(.bottom)
         .fullScreenCover(isPresented: $isNewVersePresented) {
             newVerseBuilder.build(isPresented: $isNewVersePresented)
                 .presentationBackground(CommonUIAsset.Color.mainBG.swiftUIColor)
