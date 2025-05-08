@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CommonUI
 
 struct VerseInfo {
     let generatedTime: Date

@@ -164,7 +164,7 @@ private extension NewVerseView {
                 if let uiImage = viewModel.croppedImage {
                     Image(uiImage: uiImage)
                         .resizable()
-                        .aspectRatio(0.65, contentMode: .fit)
+                        .aspectRatio(contentMode: .fill)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     Text("사진 선택하기")

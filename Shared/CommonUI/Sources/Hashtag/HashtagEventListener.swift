@@ -1,13 +1,13 @@
 //
 //  HashtagEventListener.swift
-//  NewVerse
+//  CommonUI
 //
-//  Created by 공태웅 on 4/4/25.
+//  Created by 공태웅 on 5/8/25.
 //
 
 import Foundation
 
-protocol HashtagEventListener {
+public protocol HashtagEventListener: AnyObject {
     @MainActor
     func didSubmitHashtag(_ hashtag: Hashtag)
     @MainActor

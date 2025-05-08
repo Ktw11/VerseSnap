@@ -1,14 +1,31 @@
 //
 //  HashtagView.swift
-//  NewVerse
+//  CommonUI
 //
-//  Created by 공태웅 on 3/18/25.
+//  Created by 공태웅 on 5/8/25.
 //
 
 import SwiftUI
-import CommonUI
 
-struct HashtagView: View {
+public struct HashtagView: View {
+    
+    // MARK: Lifecycle
+    
+    public init(
+        hashtag: Binding<Hashtag>,
+        maxWidth: Binding<CGFloat>,
+        isFocused: FocusState<UUID?>.Binding,
+        icon: Image?,
+        eventListener: HashtagEventListener?,
+        backgroundColor: Color = CommonUIAsset.Color.placeholderBG.swiftUIColor
+    ) {
+        self._hashtag = hashtag
+        self._maxWidth = maxWidth
+        self._isFocused = isFocused
+        self.icon = icon
+        self.eventListener = eventListener
+        self.backgroundColor = backgroundColor
+    }
     
     // MARK: Definitions
     
@@ -38,12 +55,14 @@ struct HashtagView: View {
     @Binding var hashtag: Hashtag
     @Binding var maxWidth: CGFloat
     @FocusState.Binding var isFocused: UUID?
-    let icon: Image?
-    let eventListener: HashtagEventListener
     @State private var hashtagPrefixWidth = CGFloat.zero
     @State private var textFieldWidth = CGFloat.zero
     
-    var body: some View {
+    private let icon: Image?
+    private let backgroundColor: Color
+    private weak var eventListener: HashtagEventListener?
+    
+    public var body: some View {
         HStack(spacing: Constants.spacing) {
             hashtagPrefixView()
             
@@ -56,7 +75,7 @@ struct HashtagView: View {
         .padding(.trailing, Constants.trailingPadding(isIconHidden: icon == nil))
         .padding(.vertical, 4)
         .background {
-            CommonUIAsset.Color.placeholderBG.swiftUIColor
+            backgroundColor
                 .clipShape(Capsule())
         }
         .onTapGesture {
@@ -110,7 +129,7 @@ private extension HashtagView {
                         }
                 }
                 .onSubmit {
-                    eventListener.didSubmitHashtag(hashtag)
+                    eventListener?.didSubmitHashtag(hashtag)
                 }
         }
     }
@@ -122,7 +141,7 @@ private extension HashtagView {
                 .resizable()
                 .frame(width: Constants.iconSize.width, height: Constants.iconSize.height)
                 .onTapGesture {
-                    eventListener.removeHashtag(id: hashtag.id)
+                    eventListener?.removeHashtag(id: hashtag.id)
                 }
         }
     }

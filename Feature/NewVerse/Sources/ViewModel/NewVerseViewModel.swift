@@ -137,7 +137,7 @@ public final class NewVerseViewModel {
 }
 
 extension NewVerseViewModel: HashtagEventListener {
-    func didSubmitHashtag(_ hashtag: Hashtag) {
+    public func didSubmitHashtag(_ hashtag: Hashtag) {
         if hashtag.value.isEmpty {
             guard hashtags.filter({ $0.value.isEmpty }).count > 1 else { return }
             removeHashtag(id: hashtag.id)
@@ -148,7 +148,7 @@ extension NewVerseViewModel: HashtagEventListener {
         }
     }
     
-    func removeHashtag(id: UUID) {
+    public func removeHashtag(id: UUID) {
         if hashtags.count > 1 {
             var filtered = hashtags.filter { $0.id != id }
             if filtered.count < Constants.maxHastagCount && !hashtagsHasPlaceholder {
