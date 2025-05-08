@@ -58,8 +58,8 @@ struct RootTabView<
             
             CustomTabView(selected: $selected, isNewVersePresented: $isNewVersePresented)
                 .background(CommonUIAsset.Color.mainBG.swiftUIColor)
-                .ignoresSafeArea(.keyboard, edges: .bottom)
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .fullScreenCover(isPresented: $isNewVersePresented) {
             newVerseBuilder.build(isPresented: $isNewVersePresented)
                 .presentationBackground(CommonUIAsset.Color.mainBG.swiftUIColor)
