@@ -108,12 +108,13 @@ private extension NewVerseView {
         if let blurImage = viewModel.backgroundBlurImage {
             Image(uiImage: blurImage)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+                .scaledToFill()
                 .blur(radius: 5)
                 .overlay {
                     Color.black.opacity(0.2)
+                        .ignoresSafeArea()
                 }
-                .ignoresSafeArea()
         }
     }
     
