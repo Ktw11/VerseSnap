@@ -15,8 +15,8 @@ public struct HashtagView: View {
         hashtag: Binding<Hashtag>,
         maxWidth: Binding<CGFloat>,
         isFocused: FocusState<UUID?>.Binding,
-        icon: Image?,
-        eventListener: HashtagEventListener?,
+        icon: Image? = nil,
+        eventListener: HashtagEventListener? = nil,
         backgroundColor: Color = CommonUIAsset.Color.placeholderBG.swiftUIColor
     ) {
         self._hashtag = hashtag
