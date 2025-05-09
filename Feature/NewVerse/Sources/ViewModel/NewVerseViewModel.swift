@@ -70,7 +70,11 @@ public final class NewVerseViewModel {
         }
     }
     var verse: AttributedString? {
-        boldFirstCharacterOfEachLine(from: generatedVerse)
+        generatedVerse?
+            .highlightFirstCharacterOfEachLine(
+                highlightedFont: .suite(size: 14, weight: .bold),
+                regularFont: .suite(size: 14, weight: .regular)
+            )
     }
     
     let dateString: String = Date().yearMonthDayString()
@@ -167,28 +171,5 @@ extension NewVerseViewModel: HashtagEventListener {
 private extension NewVerseViewModel {
     var hashtagsHasPlaceholder: Bool {
         hashtags.contains(where: { $0.value.isEmpty })
-    }
-    
-    func boldFirstCharacterOfEachLine(from text: String?) -> AttributedString? {
-        guard let text else { return nil }
-        let lines = text.components(separatedBy: "\n")
-        var result = AttributedString()
-        
-        for (index, line) in lines.enumerated() {
-            var attributedLine = AttributedString(line)
-            
-            let startIndex: AttributedString.Index = attributedLine.startIndex
-            let endIndex: AttributedString.Index = attributedLine.index(afterCharacter: startIndex)
-            attributedLine[startIndex..<endIndex].font = .suite(size: 14, weight: .bold)
-            attributedLine[endIndex...].font = .suite(size: 14, weight: .regular)
-            
-            result.append(attributedLine)
-
-            if index < lines.count - 1 {
-                result.append(AttributedString("\n"))
-            }
-        }
-        
-        return result
     }
 }

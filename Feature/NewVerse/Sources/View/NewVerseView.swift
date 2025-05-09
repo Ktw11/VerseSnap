@@ -153,6 +153,7 @@ private extension NewVerseView {
         Text(viewModel.dateString)
             .font(.suite(size: 20, weight: .bold))
             .foregroundStyle(.white)
+            .shadow(color: Color.black.opacity(0.2), radius: 2, x: 2, y: 2)
             .padding(.bottom, 30)
     }
     
@@ -175,7 +176,7 @@ private extension NewVerseView {
             }
             .overlay(alignment: .bottom) {
                 LinearGradient(
-                    gradient: Gradient(colors: [Color.black.opacity(0.5), Color.clear]),
+                    gradient: Gradient(colors: [Color.black.opacity(0.6), Color.clear]),
                     startPoint: .bottom,
                     endPoint: .top
                 )

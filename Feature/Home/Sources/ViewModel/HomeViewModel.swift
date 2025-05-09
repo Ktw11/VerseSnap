@@ -112,15 +112,7 @@ public final class HomeViewModel {
         guard let diary = cachedDiaries.first(where: { $0.id == id }) else { return }
         let createdDate: Date = Date(timeIntervalSince1970: diary.createdAt)
         
-        presentingDetailViewModel = DetailDiaryViewModel(
-            id: diary.id,
-            dateString: createdDate.yearMonthDayString(),
-            timeString: createdDate.timeString(),
-            imageRatio: 0.65,
-            imageURL: diary.imageURL,
-            verse: diary.verse,
-            hashtags: diary.hashtags.map { Hashtag(value: $0) }
-        )
+        presentingDetailViewModel = DetailDiaryViewModel(from: diary)
     }
 }
 

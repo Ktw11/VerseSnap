@@ -9,5 +9,5 @@ import SwiftUI
 
 public enum PagingStackType {
     case vStack
-    case vGrid(columns: [GridItem])
+    case vGrid(columns: [GridItem], spacing: CGFloat)
 }

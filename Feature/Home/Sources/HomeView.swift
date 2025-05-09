@@ -148,11 +148,13 @@ private extension HomeView {
         } else if viewModel.isGridDiaryEmpty {
             contentEmotyView()
         } else {
+            let columns: [GridItem] = Array(repeating: GridItem(spacing: 1), count: 3)
+
             PagingStackView(
                 items: viewModel.gridViewModels,
                 isLoading: viewModel.showLoadingGridView,
                 isError: viewModel.isGridErrorOccured,
-                stackType: .vGrid(columns: Array(repeating: GridItem(spacing: 1), count: 3)),
+                stackType: .vGrid(columns: columns, spacing: 1),
                 content: { gridContentItemView($0) }
             )
             .onAppearLast {

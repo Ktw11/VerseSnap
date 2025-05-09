@@ -44,6 +44,8 @@ struct DetailDiaryView: View {
                     }
                 
                 Spacer()
+                
+                Spacer()
             }
             .frame(maxWidth: .infinity)
             .background {
@@ -81,10 +83,12 @@ private extension DetailDiaryView {
             Text(viewModel.dateString)
                 .font(.suite(size: 20, weight: .bold))
                 .foregroundStyle(.white)
+                .shadow(color: Color.black.opacity(0.2), radius: 2, x: 2, y: 2)
             
             Text(viewModel.timeString)
                 .font(.suite(size: 14, weight: .regular))
                 .foregroundStyle(.white)
+                .shadow(color: Color.black.opacity(0.2), radius: 2, x: 2, y: 2)
         }
         .padding(.bottom, 30)
     }
@@ -104,18 +108,20 @@ private extension DetailDiaryView {
             }
             .overlay(alignment: .bottom) {
                 LinearGradient(
-                    gradient: Gradient(colors: [Color.black.opacity(0.5), Color.clear]),
+                    gradient: Gradient(colors: [Color.black.opacity(0.6), Color.clear]),
                     startPoint: .bottom,
                     endPoint: .top
                 )
                 .frame(height: 120)
             }
             .overlay(alignment: .bottomLeading) {
-                Text(viewModel.verse)
-                    .foregroundStyle(Color.white)
-                    .minimumScaleFactor(0.6)
-                    .padding(.leading, 17)
-                    .padding(.bottom, 17)
+                if let verse = viewModel.verse {
+                    Text(verse)
+                        .foregroundStyle(Color.white)
+                        .minimumScaleFactor(0.6)
+                        .padding(.leading, 17)
+                        .padding(.bottom, 17)
+                }
             }
             .clipShape(RoundedRectangle(cornerRadius: 30))
             .padding(.bottom, 5)
@@ -134,6 +140,7 @@ private extension DetailDiaryView {
                     )
                 }
             }
+            .allowsHitTesting(false)
             .padding(.all, 10)
             .padding(.bottom, 10)
         }

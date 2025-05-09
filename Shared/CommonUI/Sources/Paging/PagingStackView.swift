@@ -31,7 +31,7 @@ public struct PagingStackView<
     // MARK: Properties
 
     public var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             switch stackType {
             case .vStack:
                 LazyVStack {
@@ -39,8 +39,8 @@ public struct PagingStackView<
                     errorContent()
                     loadingContent()
                 }
-            case .vGrid(let columns):
-                LazyVGrid(columns: columns) {
+            case .vGrid(let columns, let spacing):
+                LazyVGrid(columns: columns, spacing: spacing) {
                     pagingContent()
                 }
                 
