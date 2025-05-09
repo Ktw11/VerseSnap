@@ -1,12 +1,6 @@
 {
   "sourceLanguage" : "ko",
   "strings" : {
-    "" : {
-      "shouldTranslate" : false
-    },
-    "#" : {
-      "shouldTranslate" : false
-    },
     "다시 만들기" : {
       "localizations" : {
         "en" : {
@@ -113,16 +107,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deep in thought... 🤔"
-          }
-        }
-      }
-    },
-    "해시태그를 입력해주세요" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please enter a hashtag."
           }
         }
       }

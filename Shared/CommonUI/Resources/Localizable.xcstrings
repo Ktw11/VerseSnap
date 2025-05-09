@@ -1,0 +1,22 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "" : {
+      "shouldTranslate" : false
+    },
+    "#" : {
+      "shouldTranslate" : false
+    },
+    "해시태그를 입력해주세요" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a hashtag."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
