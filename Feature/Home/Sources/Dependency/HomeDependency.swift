@@ -6,19 +6,23 @@
 //
 
 import Foundation
+import NewVerseInterface
 import Domain
 
-public struct HomeDependency {
+public struct HomeDependency<NewVerseComponent: NewVerseBuilder> {
     
     // MARK: Lifecycle
     
     public init(
-        useCase: DiaryUseCase
+        useCase: DiaryUseCase,
+        newVerseBuilder: NewVerseComponent
     ) {
         self.useCase = useCase
+        self.newVerseBuilder = newVerseBuilder
     }
     
     // MARK: Properties
 
     let useCase: DiaryUseCase
+    let newVerseBuilder: NewVerseComponent
 }

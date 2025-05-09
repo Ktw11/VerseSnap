@@ -7,13 +7,15 @@
 
 import SwiftUI
 import CommonUI
+import NewVerseInterface
 
-public struct HomeView: View {
+public struct HomeView<NewVerseComponent: NewVerseBuilder>: View {
     
     // MARK: Lifecycle
     
-    public init(viewModel: HomeViewModel) {
+    public init(viewModel: HomeViewModel, newVerseBuilder: NewVerseComponent) {
         self.viewModel = viewModel
+        self.newVerseBuilder = newVerseBuilder
     }
     
     // MARK: Properties
@@ -23,6 +25,7 @@ public struct HomeView: View {
     @Bindable private var viewModel: HomeViewModel
     @Namespace private var stackDiaryNamespace
     @Namespace private var gridDiaryNamespace
+    private let newVerseBuilder: NewVerseComponent
     
     public var body: some View {
         NavigationStack {
@@ -71,6 +74,10 @@ public struct HomeView: View {
                     view.navigationTransition(.zoom(sourceID: detailViewModel.id, in: stackDiaryNamespace))
                 }
             }
+        }
+        .fullScreenCover(isPresented: $viewModel.isNewVersePresented) {
+            newVerseBuilder.build(isPresented: $viewModel.isNewVersePresented)
+                .presentationBackground(CommonUIAsset.Color.mainBG.swiftUIColor)
         }
         .onAppear {
             viewModel.fetchNextStackDiaries()

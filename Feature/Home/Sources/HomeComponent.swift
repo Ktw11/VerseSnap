@@ -7,12 +7,13 @@
 
 import SwiftUI
 import HomeInterface
+import NewVerseInterface
 
-public final class HomeComponent: HomeBuilder {
+public final class HomeComponent<NewVerseComponent: NewVerseBuilder>: HomeBuilder {
     
     // MARK: Lifecycle
     
-    public init(calendar: Calendar, dependency: HomeDependency) {
+    public init(calendar: Calendar, dependency: HomeDependency<NewVerseComponent>) {
         self.calendar = calendar
         self.dependency = dependency
     }
@@ -20,14 +21,14 @@ public final class HomeComponent: HomeBuilder {
     // MARK: Properties
     
     private let calendar: Calendar
-    private let dependency: HomeDependency
+    private let dependency: HomeDependency<NewVerseComponent>
     
     // MARK: Methods
     
     @MainActor
     @ViewBuilder
-    public func build() -> HomeView {
+    public func build() -> some View {
         let viewModel = HomeViewModel(calendar: calendar, useCase: dependency.useCase)
-        HomeView(viewModel: viewModel)
+        HomeView(viewModel: viewModel, newVerseBuilder: dependency.newVerseBuilder)
     }
 }

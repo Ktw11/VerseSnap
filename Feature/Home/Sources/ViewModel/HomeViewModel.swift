@@ -69,6 +69,7 @@ public final class HomeViewModel {
     
     var displayStyle: DisplayStyle = .stack
     var presentingDetailViewModel: DetailDiaryViewModel?
+    var isNewVersePresented: Bool = false
     let pickerLimit: YearMonthPickerLimit
     
     private var isCurrentYearMonthSelected: Bool {
@@ -109,8 +110,11 @@ public final class HomeViewModel {
     }
     
     func didTapDiary(_ id: String) {
+        guard id != HomeStackContentViewModel.Constants.placeholderId else {
+            isNewVersePresented = true
+            return
+        }
         guard let diary = cachedDiaries.first(where: { $0.id == id }) else { return }
-        let createdDate: Date = Date(timeIntervalSince1970: diary.createdAt)
         
         presentingDetailViewModel = DetailDiaryViewModel(from: diary)
     }
@@ -184,7 +188,7 @@ private extension [HomeStackContentViewModel] {
 private extension HomeStackContentViewModel {
     static var placeholder: HomeStackContentViewModel {
         .init(
-            id: UUID().uuidString,
+            id: Constants.placeholderId,
             photoContainerViewModel: .init(imageURL: "", topTitle: nil, bottomTitle: "Today"),
             title: String(localized: "오늘의 삼행시"),
             description: String(localized: "기록하기"),

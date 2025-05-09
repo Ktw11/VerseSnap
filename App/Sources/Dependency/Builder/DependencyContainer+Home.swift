@@ -12,6 +12,12 @@ import HomeInterface
 extension DependencyContainer {
     @MainActor
     var homeBuilder: some HomeBuilder {
-        HomeComponent(calendar: Calendar(identifier: .gregorian), dependency: HomeDependency(useCase: useCaseBuilder.diaryUseCase))
+        HomeComponent(
+            calendar: Calendar(identifier: .gregorian),
+            dependency: HomeDependency(
+                useCase: useCaseBuilder.diaryUseCase,
+                newVerseBuilder: newVerseBuilder
+            )
+        )
     }
 }
