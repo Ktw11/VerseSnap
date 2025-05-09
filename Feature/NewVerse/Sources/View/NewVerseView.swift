@@ -38,6 +38,9 @@ public struct NewVerseView<SelectPhotoComponent: SelectPhotoBuilder>: View {
     
     public var body: some View {
         ZStack {
+            CommonUIAsset.Color.mainBG.swiftUIColor
+                .ignoresSafeArea()
+            
             ScrollView(.vertical) {
                 VStack {
                     headerView()
