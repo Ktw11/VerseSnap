@@ -168,6 +168,7 @@ private extension DetailDiaryView {
     
     DetailDiaryView(
         viewModel: .init(
+            id: UUID().uuidString,
             dateString: "2025.6.17",
             timeString: "오후 12:30",
             imageRatio: 0.65,
