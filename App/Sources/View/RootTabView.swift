@@ -39,7 +39,6 @@ struct RootTabView<
                         .ignoresSafeArea()
                     
                     homeBuilder.build()
-                        .padding(.horizontal, 24)
                 }
                 .tag(TabSelection.home)
                 .toolbarVisibility(.hidden, for: .tabBar)
