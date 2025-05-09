@@ -259,7 +259,10 @@ import PreviewSupport
         CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
-        HomeView(viewModel: .init(calendar: Calendar.current, useCase: DiaryUseCasePreview.preview))
+        HomeView(
+            viewModel: .init(calendar: Calendar.current, useCase: DiaryUseCasePreview.preview),
+            newVerseBuilder: NewVersePreviewComponent()
+        )
             .padding(.top, 22)
             .padding(.horizontal, 24)
     }
