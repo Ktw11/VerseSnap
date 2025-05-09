@@ -20,59 +20,35 @@ public struct HomeView: View {
     
     @State private var isShowingPicker = false
     @State private var searchText: String = ""
-    @Namespace private var namespace
     @Bindable private var viewModel: HomeViewModel
+    @Namespace private var stackDiaryNamespace
+    @Namespace private var gridDiaryNamespace
     
     public var body: some View {
         NavigationStack {
-            ZStack {
-                CommonUIAsset.Color.mainBG.swiftUIColor
-                    .ignoresSafeArea()
+            VStack {
+                headerView()
                 
-                VStack {
-                    VStack(spacing: 15) {
-                        ZStack {
-                            HStack {
-                                Text(viewModel.yearMonthString)
-                                    .font(.suite(size: 20, weight: .bold))
-                                
-                                HomeAsset.icDownArrow.swiftUIImage
-                                    .resizable()
-                                    .frame(width: 18, height: 18)
-                            }
-                            .padding(.bottom, 15)
-                            .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
-                            .onTapGesture {
-                                isShowingPicker = true
-                            }
-                            
-                            viewModel.displayIcon
-                                .resizable()
-                                .frame(size: 24)
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .onTapGesture {
-                                    viewModel.didTapDisplayIcon()
-                                }
-                        }
-                    }
+                Spacer()
+                    .frame(height: 20)
+                
+                ZStack {
+                    stackContentView()
+                        .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
                     
-                    Spacer()
-                        .frame(height: 20)
-                    
-                    ZStack {
-                        stackContentView()
-                            .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
-                        
-                        gridContentView()
-                            .opacity(viewModel.displayStyle == .grid ? 1.0 : 0)
-                    }
+                    gridContentView()
+                        .opacity(viewModel.displayStyle == .grid ? 1.0 : 0)
                 }
-                .foregroundStyle(.white)
-                .padding(.top, 20)
-                .background(CommonUIAsset.Color.mainBG.swiftUIColor)
             }
+            .foregroundStyle(.white)
+            .padding(.top, 20)
+            .padding(.horizontal, 24)
             .toolbarVisibility(.hidden, for: .navigationBar)
+            .background {
+                CommonUIAsset.Color.mainBG.swiftUIColor
+                    .padding(-50)
+                    .ignoresSafeArea()
+            }
         }
         .modalView($isShowingPicker) {
             YearMonthPickerView(
@@ -82,6 +58,20 @@ public struct HomeView: View {
                 limit: viewModel.pickerLimit
             )
         }
+        .fullScreenCover(item: $viewModel.presentingDetailViewModel) { detailViewModel in
+            DetailDiaryView(viewModel: detailViewModel) {
+                viewModel.presentingDetailViewModel = nil
+            }
+            .toolbarVisibility(.hidden, for: .navigationBar)
+            .switch(on: viewModel.displayStyle) { view, style in
+                switch style {
+                case .grid:
+                    view.navigationTransition(.zoom(sourceID: detailViewModel.id, in: gridDiaryNamespace))
+                case .stack:
+                    view.navigationTransition(.zoom(sourceID: detailViewModel.id, in: stackDiaryNamespace))
+                }
+            }
+        }
         .onAppear {
             viewModel.fetchNextStackDiaries()
             viewModel.fetchNextGridDiaries()
@@ -90,6 +80,36 @@ public struct HomeView: View {
 }
 
 private extension HomeView {
+    @ViewBuilder
+    func headerView() -> some View {
+        VStack(spacing: 15) {
+            ZStack {
+                HStack {
+                    Text(viewModel.yearMonthString)
+                        .font(.suite(size: 20, weight: .bold))
+                    
+                    HomeAsset.icDownArrow.swiftUIImage
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                }
+                .padding(.bottom, 15)
+                .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
+                .onTapGesture {
+                    isShowingPicker = true
+                }
+                
+                viewModel.displayIcon
+                    .resizable()
+                    .frame(size: 24)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .onTapGesture {
+                        viewModel.didTapDisplayIcon()
+                    }
+            }
+        }
+    }
+    
     @ViewBuilder
     func stackContentView() -> some View {
         if viewModel.isStackDisplayLoading {
@@ -103,11 +123,7 @@ private extension HomeView {
                 isLoading: viewModel.showLoadingStackView,
                 isError: viewModel.isStackErrorOccured,
                 stackType: .vStack,
-                content: { viewModel in
-                    HomeStackContentView(viewModel: viewModel)
-                        .frame(height: 84)
-                        .padding(.vertical, 15)
-                }
+                content: { stackContentItemView($0) }
             )
             .onAppearLast {
                 viewModel.fetchNextStackDiaries()
@@ -137,9 +153,7 @@ private extension HomeView {
                 isLoading: viewModel.showLoadingGridView,
                 isError: viewModel.isGridErrorOccured,
                 stackType: .vGrid(columns: Array(repeating: GridItem(spacing: 1), count: 3)),
-                content: {
-                    gridContentItemView($0)
-                }
+                content: { gridContentItemView($0) }
             )
             .onAppearLast {
                 viewModel.fetchNextGridDiaries()
@@ -152,21 +166,37 @@ private extension HomeView {
     }
     
     @ViewBuilder
-    func gridContentItemView(_ viewModel: HomeGridContentViewModel) -> some View {
+    func stackContentItemView(_ stackViewModel: HomeStackContentViewModel) -> some View {
+        HomeStackContentView(viewModel: stackViewModel)
+            .contentShape(Rectangle())
+            .matchedTransitionSource(id: stackViewModel.id, in: stackDiaryNamespace)
+            .onTapGesture {
+                viewModel.didTapDiary(stackViewModel.id)
+            }
+            .frame(height: 84)
+            .padding(.vertical, 15)
+    }
+    
+    @ViewBuilder
+    func gridContentItemView(_ gridViewModel: HomeGridContentViewModel) -> some View {
         Rectangle()
             .aspectRatio(3 / 4, contentMode: .fit)
             .overlay {
-                if let imageURL = URL(string: viewModel.imageURL) {
+                if let imageURL = URL(string: gridViewModel.imageURL) {
                     CachedAsyncImage(url: imageURL)
                 }
             }
             .overlay(alignment: .bottomTrailing) {
-                viewModel.favoriteIcon
+                gridViewModel.favoriteIcon
                     .resizable()
                     .frame(size: 17)
                     .padding(.all, 5)
             }
             .clipped()
+            .matchedTransitionSource(id: gridViewModel.id, in: gridDiaryNamespace)
+            .onTapGesture {
+                viewModel.didTapDiary(gridViewModel.id)
+            }
     }
     
     @ViewBuilder

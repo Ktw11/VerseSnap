@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct VerseDiary: Decodable, Equatable, Sendable {
+public struct VerseDiary: Decodable, Equatable, Sendable, Hashable {
     // MARK: Lifecycle
     
     public init(

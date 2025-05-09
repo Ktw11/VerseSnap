@@ -13,7 +13,7 @@ struct DetailDiaryView: View {
     // MARK: Properties
     
     let viewModel: DetailDiaryViewModel
-    @Binding var isPresented: Bool
+    let dismiss: (() -> Void)
     
     @State private var image: Image?
     @State private var hashtagsViewMaxWidth: CGFloat = 0
@@ -62,7 +62,7 @@ private extension DetailDiaryView {
     func headerView() -> some View {
         HStack {
             Button(action: {
-                isPresented.toggle()
+                dismiss()
             }, label: {
                 CommonUIAsset.Image.icExitBig.swiftUIImage
                     .resizable()
@@ -168,7 +168,7 @@ private extension DetailDiaryView {
             verse: "삼:삼\n행:행행\n시:시시시시",
             hashtags: [.init(value: "해시해"), .init(value: "hashash")]
         ),
-        isPresented: $isPresented
+        dismiss: { Void() }
     )
 }
 #endif

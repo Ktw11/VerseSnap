@@ -68,12 +68,14 @@ public final class HomeViewModel {
     }
     
     var displayStyle: DisplayStyle = .stack
+    var presentingDetailViewModel: DetailDiaryViewModel?
     let pickerLimit: YearMonthPickerLimit
     
     private var isCurrentYearMonthSelected: Bool {
         selectedYear == currentYear && selectedMonth == currentMonth
     }
 
+    private var cachedDiaries: Set<VerseDiary> = []
     private let stackPagingController: HomeDiaryPagingController<HomeStackContentViewModel>
     private let gridPagingController: HomeDiaryPagingController<HomeGridContentViewModel>
     private let currentYear: Int
@@ -91,15 +93,34 @@ public final class HomeViewModel {
         let year: Int = selectedYear
         let month: Int = selectedMonth
         
-        stackPagingController.fetchNext(byUser: byUser) { [useCase] cursor in
-            try await useCase.fetchDiaries(year: year, month: month, after: cursor)
+        stackPagingController.fetchNext(byUser: byUser) { [weak self, useCase] cursor in
+            let result = try await useCase.fetchDiaries(year: year, month: month, after: cursor)
+            await self?.updateCachedDiaries(Set(result.diaries))
+            return result
         }
     }
     
     func fetchNextGridDiaries(byUser: Bool = false) {
-        gridPagingController.fetchNext { [useCase] cursor in
-            try await useCase.fetchDiariesAll(after: cursor)
+        gridPagingController.fetchNext { [weak self, useCase] cursor in
+            let result = try await useCase.fetchDiariesAll(after: cursor)
+            await self?.updateCachedDiaries(Set(result.diaries))
+            return result
         }
+    }
+    
+    func didTapDiary(_ id: String) {
+        guard let diary = cachedDiaries.first(where: { $0.id == id }) else { return }
+        let createdDate: Date = Date(timeIntervalSince1970: diary.createdAt)
+        
+        presentingDetailViewModel = DetailDiaryViewModel(
+            id: diary.id,
+            dateString: createdDate.yearMonthDayString(),
+            timeString: createdDate.timeString(),
+            imageRatio: 0.65,
+            imageURL: diary.imageURL,
+            verse: diary.verse,
+            hashtags: diary.hashtags.map { Hashtag(value: $0) }
+        )
     }
 }
 
@@ -151,6 +172,10 @@ private extension HomeViewModel {
     func resetAndRefreshStackPage() {
         stackPagingController.reset()
         fetchNextStackDiaries()
+    }
+    
+    func updateCachedDiaries(_ newDiaries: Set<VerseDiary>) {
+        cachedDiaries.formUnion(Set(newDiaries))
     }
 }
 

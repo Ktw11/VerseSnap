@@ -8,7 +8,8 @@
 import Foundation
 import CommonUI
 
-struct DetailDiaryViewModel {
+struct DetailDiaryViewModel: Identifiable {
+    let id: String
     let dateString: String
     let timeString: String
     let imageRatio: CGFloat

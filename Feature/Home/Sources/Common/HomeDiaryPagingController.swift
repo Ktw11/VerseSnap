@@ -78,7 +78,7 @@ extension HomeDiaryPagingController {
 
 private extension HomeDiaryPagingController {
     func makeFetchingTask(_ fetchDiaries: @escaping FetchDiaries, cursor: DiaryCursor) -> Task<Void, Never> {
-        return Task { [weak self] in
+        Task { [weak self] in
             defer {
                 if !Task.isCancelled {
                     self?.pagingState.isFetching = false

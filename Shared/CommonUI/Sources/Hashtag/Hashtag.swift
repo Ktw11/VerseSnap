@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Hashtag: Identifiable, Equatable {
+public struct Hashtag: Identifiable, Equatable, Sendable {
     
     // MARK: Lifecycle
     
