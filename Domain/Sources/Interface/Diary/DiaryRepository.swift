@@ -14,6 +14,6 @@ public protocol DiaryRepository: Sendable {
         endTimestamp: TimeInterval,
         after cursor: DiaryCursor
     ) async throws -> DiaryFetchResult
-    
     func fetchDiariesAll(after cursor: DiaryCursor) async throws -> DiaryFetchResult
+    func updateFavorite(to isFavorite: Bool, id: String) async throws
 }

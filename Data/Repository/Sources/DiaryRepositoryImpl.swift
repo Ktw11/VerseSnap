@@ -100,6 +100,11 @@ public actor DiaryRepositoryImpl: DiaryRepository {
             return try await fetchRemote(api: VerseAPI.listAll(request))
         }
     }
+    
+    public func updateFavorite(to isFavorite: Bool, id: String) async throws {
+        #warning("구현 필요")
+        return
+    }
 }
 
 private extension DiaryRepositoryImpl {

@@ -27,6 +27,11 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var expectedFetchDiariesAll: DiaryFetchResult?
     var expectedFetchDiariesAllError: Error?
     
+    var isUpdateFavoriteCalled: Bool = false
+    var requestedUpdateFavoriteTo: Bool?
+    var requestedUpdateFavoriteId: String?
+    var expectedUpdateFavoriteError: Error?
+    
     func save(verse: String, imageURL: String, hashtags: [String]) async throws {
         isSaveCalled = true
         requestedSaveVerse = verse
@@ -67,6 +72,16 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
             throw expectedFetchDiariesAllError
         } else {
             throw TestError.notImplemented
+        }
+    }
+    
+    func updateFavorite(to isFavorite: Bool, id: String) async throws {
+        isUpdateFavoriteCalled = true
+        requestedUpdateFavoriteTo = isFavorite
+        requestedUpdateFavoriteId = id
+        
+        if let expectedUpdateFavoriteError {
+            throw expectedUpdateFavoriteError
         }
     }
 }

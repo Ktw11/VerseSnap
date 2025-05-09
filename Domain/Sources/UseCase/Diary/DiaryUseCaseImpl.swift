@@ -72,6 +72,11 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
         try Task.checkCancellation()
         return try await repository.fetchDiariesAll(after: cursor)
     }
+    
+    public func updateFavorite(to isFavorite: Bool, id: String) async throws {
+        try Task.checkCancellation()
+        return try await repository.updateFavorite(to: isFavorite, id: id)
+    }
 }
 
 private extension ImageConvertable {

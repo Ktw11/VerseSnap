@@ -21,6 +21,8 @@ public final class DiaryUseCasePreview: DiaryUseCase, @unchecked Sendable {
     public var expectedDiariesAll: DiaryFetchResult?
     public var expectedDiariesAllError: Error?
     
+    public var expectedUpdateFavoriteError: Error?
+    
     // MARK: Methods
     
     public func save(verse: String, image: UIImage, hashtags: [String]) async throws {
@@ -46,6 +48,12 @@ public final class DiaryUseCasePreview: DiaryUseCase, @unchecked Sendable {
             throw expectedDiariesAllError
         } else {
             throw DomainError.cancelled
+        }
+    }
+    
+    public func updateFavorite(to isFavorite: Bool, id: String) async throws {
+        if let expectedUpdateFavoriteError {
+            throw expectedUpdateFavoriteError
         }
     }
 }

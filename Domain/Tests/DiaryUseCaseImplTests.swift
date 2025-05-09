@@ -170,7 +170,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            let result = try await sut.fetchDiariesAll(after: DiaryCursor(size: 10, lastCreatedAt: 200))
+            _ = try await sut.fetchDiariesAll(after: DiaryCursor(size: 10, lastCreatedAt: 200))
             XCTFail()
         } catch {
             // then
@@ -196,6 +196,45 @@ final class DiaryUseCaseImplTests: XCTestCase {
             // then
             XCTAssertEqual(givenResult, result)
             XCTAssertTrue(repository.isFetchDiariesAllCalled)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_updateFavorite_when_repository_fails_then_throw_error() async {
+        // given
+        let givenValue: Bool = [true, false].randomElement()!
+        let givenId: String = "id"
+        
+        repository.expectedUpdateFavoriteError = TestError.common
+        
+        // when
+        do {
+            _ = try await sut.updateFavorite(to: givenValue, id: givenId)
+            XCTFail()
+        } catch {
+            // then
+            XCTAssertTrue(repository.isUpdateFavoriteCalled)
+            XCTAssertEqual(repository.requestedUpdateFavoriteTo, givenValue)
+            XCTAssertEqual(repository.requestedUpdateFavoriteId, givenId)
+        }
+    }
+    
+    func test_updateFavorite_when_repository_success_then_success() async {
+        // given
+        let givenValue: Bool = [true, false].randomElement()!
+        let givenId: String = "id2"
+        
+        repository.expectedUpdateFavoriteError = nil
+        
+        // when
+        do {
+            _ = try await sut.updateFavorite(to: givenValue, id: givenId)
+            
+            // then
+            XCTAssertTrue(repository.isUpdateFavoriteCalled)
+            XCTAssertEqual(repository.requestedUpdateFavoriteTo, givenValue)
+            XCTAssertEqual(repository.requestedUpdateFavoriteId, givenId)
         } catch {
             XCTFail()
         }
