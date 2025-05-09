@@ -73,7 +73,7 @@ public final class NewVerseViewModel {
         boldFirstCharacterOfEachLine(from: generatedVerse)
     }
     
-    let dateString: String = dateFormatter.string(from: Date())
+    let dateString: String = Date().yearMonthDayString()
     let imageRatio: CGFloat = 0.65
     
     private var generatedVerse: String? = nil
@@ -81,13 +81,6 @@ public final class NewVerseViewModel {
     private let verseUseCase: VerseUseCase
     private let diaryUseCase: DiaryUseCase
     private let appStateUpdator: GlobalAppStateUpdatable
-    
-    private static var dateFormatter: DateFormatter = .init()
-        .dateFormat("yyyy.M.d")
-        .locale(Locale.current)
-    private static var timeFormatter: DateFormatter = .init()
-        .dateFormat("a h:mm")
-        .locale(Locale.current)
     
     // MARK: Methods
     

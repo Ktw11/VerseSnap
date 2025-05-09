@@ -22,6 +22,13 @@ public extension Date {
         }
     }
     
+    func yearMonthDayString(locale: Locale = .current) -> String {
+        let formatter = DateFormatter()
+            .dateFormat("yyyy.M.d")
+            .locale(Locale.current)
+        return formatter.string(from: self)
+    }
+    
     func timeString(locale: Locale = .current) -> String {
         if locale.isLanguageKorean {
             return self.formatted(
