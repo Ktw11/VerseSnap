@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "ko",
   "strings" : {
-    "" : {
-      "shouldTranslate" : false
-    },
     "기록하기" : {
       "localizations" : {
         "en" : {
