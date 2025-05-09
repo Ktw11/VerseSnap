@@ -121,12 +121,13 @@ private extension DiaryLocalDataSourceImpl {
 
 private extension PermanentDiary {
     var toDTO: DiaryDTO {
-        .init(id: id,
-              imageURL: imageURL,
-              hashtags: hashtags.components(separatedBy: ","),
-              createdAt: createdAt,
-              verse: verse,
-              isFavorite: isFavorite
+        .init(
+            id: id,
+            imageURL: imageURL,
+            hashtags: hashtags.components(separatedBy: ",").filter { !$0.isEmpty },
+            createdAt: createdAt,
+            verse: verse,
+            isFavorite: isFavorite
         )
     }
 }
