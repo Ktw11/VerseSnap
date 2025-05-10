@@ -100,18 +100,24 @@ private extension HomeView {
     func headerView() -> some View {
         VStack(spacing: 15) {
             ZStack {
-                HStack {
-                    Text(viewModel.yearMonthString)
-                        .font(.suite(size: 20, weight: .bold))
-                    
-                    HomeAsset.icDownArrow.swiftUIImage
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                }
-                .padding(.bottom, 15)
-                .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
-                .onTapGesture {
-                    isShowingPicker = true
+                Group {
+                    switch viewModel.displayStyle {
+                    case .grid:
+                        Text(verbatim: "Gallery")
+                            .font(.suite(size: 18, weight: .regular))
+                    case .stack:
+                        HStack {
+                            Text(viewModel.yearMonthString)
+                                .font(.suite(size: 20, weight: .bold))
+                            
+                            HomeAsset.icDownArrow.swiftUIImage
+                                .resizable()
+                                .frame(width: 18, height: 18)
+                        }
+                        .onTapGesture {
+                            isShowingPicker = true
+                        }
+                    }
                 }
                 
                 viewModel.displayIcon
@@ -123,6 +129,7 @@ private extension HomeView {
                         viewModel.didTapDisplayIcon()
                     }
             }
+            .padding(.bottom, 15)
         }
     }
     
