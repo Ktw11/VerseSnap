@@ -54,10 +54,16 @@ public final class HomeViewModel: Sendable {
     // MARK: Properties
     
     var selectedYear: Int {
-        didSet { resetAndRefreshStackPage() }
+        didSet {
+            guard selectedYear != oldValue else { return }
+            resetAndRefreshStackPage()
+        }
     }
     var selectedMonth: Int {
-        didSet { resetAndRefreshStackPage() }
+        didSet {
+            guard selectedMonth != oldValue else { return }
+            resetAndRefreshStackPage()
+        }
     }
     
     var displayStyle: DisplayStyle = .stack
