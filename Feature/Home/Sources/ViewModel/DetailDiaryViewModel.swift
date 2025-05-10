@@ -10,17 +10,12 @@ import Domain
 import CommonUI
 import Utils
 
-struct DetailDiaryViewModel: Identifiable {
-    let id: String
-    let dateString: String
-    let timeString: String
-    let imageRatio: CGFloat
-    let imageURL: String
-    let verse: AttributedString?
-    let hashtags: [Hashtag]
-}
-
-extension DetailDiaryViewModel {
+@Observable
+@MainActor
+final class DetailDiaryViewModel: Identifiable {
+    
+    // MARK: Lifecycle
+    
     init(from diary: VerseDiary, imageRatio: CGFloat = 0.65) {
         let createdDate: Date = Date(timeIntervalSince1970: diary.createdAt)
         
@@ -35,5 +30,17 @@ extension DetailDiaryViewModel {
                 regularFont: .suite(size: 14, weight: .regular)
             )
         self.hashtags = diary.hashtags.map { Hashtag(value: $0) }
+        self.isFavorte = diary.isFavorite
     }
+    
+    // MARK: Properties
+    
+    let id: String
+    let dateString: String
+    let timeString: String
+    let imageRatio: CGFloat
+    let imageURL: String
+    let verse: AttributedString?
+    let hashtags: [Hashtag]
+    var isFavorte: Bool
 }

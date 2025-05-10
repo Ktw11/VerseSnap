@@ -44,10 +44,15 @@ public actor NetworkProvider: NetworkProvidable {
 private extension NetworkProvider {
     func requestData(api: API, retry: Bool = true) async throws -> Data {
         let accessToken = await tokenStore?.accessToken
+        
+        try Task.checkCancellation()
+        
         let request: URLRequest = try api.makeURLRequest(baseURLString: configuration.baseUrlString, accessToken: accessToken)
         
         let (data, response): (Data, URLResponse)
         do {
+            try Task.checkCancellation()
+            
             (data, response) = try await session.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse else {

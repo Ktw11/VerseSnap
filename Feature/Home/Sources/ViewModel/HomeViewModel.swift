@@ -12,7 +12,7 @@ import Domain
 
 @Observable
 @MainActor
-public final class HomeViewModel {
+public final class HomeViewModel: Sendable {
     
     // MARK: Lifecycle
     
@@ -35,17 +35,12 @@ public final class HomeViewModel {
         
         self.stackPagingController = HomeDiaryPagingController(
             viewModelFactory: HomeStackViewModelFactory(
-                calendar: calendar,
-                favoriteIcon: Constants.heartFillIcon,
-                normalIcon: Constants.heartEmptyIcon
+                calendar: calendar
             ),
             cursorSize: Constants.cursorSize
         )
         self.gridPagingController = HomeDiaryPagingController(
-            viewModelFactory: HomeGridViewModelFactory(
-                favoriteIcon: Constants.heartFillIcon,
-                normalIcon: Constants.heartEmptyIcon
-            ),
+            viewModelFactory: HomeGridViewModelFactory(),
             cursorSize: Constants.cursorSize
         )
     }
@@ -54,8 +49,6 @@ public final class HomeViewModel {
     
     private enum Constants {
         static let cursorSize: Int = 20
-        static let heartFillIcon: Image = HomeAsset.icHeartFill.swiftUIImage
-        static let heartEmptyIcon: Image = HomeAsset.icHeartEmpty.swiftUIImage
     }
     
     // MARK: Properties
@@ -79,6 +72,7 @@ public final class HomeViewModel {
     private var cachedDiaries: Set<VerseDiary> = []
     private let stackPagingController: HomeDiaryPagingController<HomeStackContentViewModel>
     private let gridPagingController: HomeDiaryPagingController<HomeGridContentViewModel>
+    var favoriteTasks: Dictionary<String, Task<Void, Never>> = .init()
     private let currentYear: Int
     private let currentMonth: Int
     private let calendar: Calendar
@@ -117,6 +111,30 @@ public final class HomeViewModel {
         guard let diary = cachedDiaries.first(where: { $0.id == id }) else { return }
         
         presentingDetailViewModel = DetailDiaryViewModel(from: diary)
+    }
+    
+    func didTapFavorite(to isFavorite: Bool, id: String) {
+        if let updatingTask = favoriteTasks[id] {
+            updatingTask.cancel()
+        }
+        
+        updateDiary(id: id, isFavorite: isFavorite)
+        
+        let favoriteTask = Task.detached { [weak self, useCase] in
+            defer {
+                Task { @MainActor [weak self] in self?.favoriteTasks.removeValue(forKey: id) }
+            }
+            
+            do {
+                try Task.checkCancellation()
+                try await useCase.updateFavorite(to: isFavorite, id: id)
+            } catch {
+                guard Task.isCancelled else { return }
+                await self?.updateDiary(id: id, isFavorite: !isFavorite)
+            }
+        }
+        
+        favoriteTasks[id] = favoriteTask
     }
 }
 
@@ -173,9 +191,21 @@ private extension HomeViewModel {
     func updateCachedDiaries(_ newDiaries: Set<VerseDiary>) {
         cachedDiaries.formUnion(Set(newDiaries))
     }
+    
+    func updateDiary(id: String, isFavorite: Bool) {
+        gridPagingController.updateDiary(id: id, isFavorite: isFavorite)
+        stackPagingController.updateDiary(id: id, isFavorite: isFavorite)
+        
+        if let diary = cachedDiaries.first(where: { $0.id == id }) {
+            var updatedDiary = diary
+            updatedDiary.isFavorite = isFavorite
+            cachedDiaries.update(with: updatedDiary)
+        }
+    }
 }
 
 private extension [HomeStackContentViewModel] {
+    @MainActor
     func withPlaceholder(isCurrentYearMonth: Bool) -> [HomeStackContentViewModel] {
         guard isCurrentYearMonth else { return self }
         
@@ -193,7 +223,7 @@ private extension HomeStackContentViewModel {
             title: String(localized: "오늘의 삼행시"),
             description: String(localized: "기록하기"),
             timeString: nil,
-            actionIcon: CommonUIAsset.Image.icPlus.swiftUIImage
+            isFavorite: nil
         )
     }
 }

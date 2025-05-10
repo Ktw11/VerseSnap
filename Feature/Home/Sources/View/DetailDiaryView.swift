@@ -12,8 +12,9 @@ struct DetailDiaryView: View {
     
     // MARK: Properties
     
-    let viewModel: DetailDiaryViewModel
+    @Binding var viewModel: DetailDiaryViewModel
     let dismiss: (() -> Void)
+    let didTapFavorite: ((Bool) -> Void)
     
     @State private var image: Image?
     @State private var hashtagsViewMaxWidth: CGFloat = 0
@@ -25,7 +26,7 @@ struct DetailDiaryView: View {
                 .ignoresSafeArea()
             
             VStack {
-                headerView()
+                headerView(isFavorte: viewModel.isFavorte)
                 
                 Spacer()
 
@@ -61,7 +62,7 @@ struct DetailDiaryView: View {
 
 private extension DetailDiaryView {
     @ViewBuilder
-    func headerView() -> some View {
+    func headerView(isFavorte: Bool) -> some View {
         HStack {
             Button(action: {
                 dismiss()
@@ -73,6 +74,19 @@ private extension DetailDiaryView {
             })
             
             Spacer()
+            
+            Button(action: {
+                viewModel.isFavorte.toggle()
+                
+                didTapFavorite(!isFavorte)
+            }, label: {
+                let icon = isFavorte ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
+                
+                icon
+                    .resizable()
+                    .frame(size: 24)
+                    .padding(.trailing, 27)
+            })
         }
         .padding(.top, 20)
     }
@@ -165,18 +179,22 @@ private extension DetailDiaryView {
 #if DEBUG
 #Preview {
     @Previewable @State var isPresented: Bool = false
+    @Previewable @State var viewModel: DetailDiaryViewModel = .init(
+        from: .init(
+            id: UUID().uuidString,
+            imageURL: "https://randomuser.me/api/portraits/men/50.jpg",
+            hashtags: ["해시해", "hashash"],
+            createdAt: Date().timeIntervalSince1970,
+            verse: "삼:삼\n행:행행\n시:시시시시",
+            isFavorite: true
+        ),
+        imageRatio: 0.65
+    )
     
     DetailDiaryView(
-        viewModel: .init(
-            id: UUID().uuidString,
-            dateString: "2025.6.17",
-            timeString: "오후 12:30",
-            imageRatio: 0.65,
-            imageURL: "https://randomuser.me/api/portraits/men/50.jpg",
-            verse: "삼:삼\n행:행행\n시:시시시시",
-            hashtags: [.init(value: "해시해"), .init(value: "hashash")]
-        ),
-        dismiss: { Void() }
+        viewModel: $viewModel,
+        dismiss: { Void() },
+        didTapFavorite: { _ in Void() }
     )
 }
 #endif

@@ -105,9 +105,11 @@ public actor DiaryRepositoryImpl: DiaryRepository {
         let request: VerseAPI.Request.UpdateFavorite = .init(id: id, isFavorite: isFavorite)
         let api: API = VerseAPI.updateFavorite(request)
         
+        try Task.checkCancellation()
         _ = try await networkProvider.request(api: api)
         
         Task.detached { [localDataSource] in
+            try Task.checkCancellation()
             try? await localDataSource.updateFavorite(to: isFavorite, id: id)
         }
     }

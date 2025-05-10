@@ -7,7 +7,20 @@
 
 import SwiftUI
 
-struct HomeStackContentViewModel: Equatable, Identifiable {
+@Observable
+@MainActor
+final class HomeStackContentViewModel: Identifiable {
+    
+    // MARK: Lifecycle
+    
+    init(id: String, photoContainerViewModel: PhotoContainerViewModel, title: String, description: String, timeString: String?, isFavorite: Bool? = nil) {
+        self.id = id
+        self.photoContainerViewModel = photoContainerViewModel
+        self.title = title
+        self.description = description
+        self.timeString = timeString
+        self.isFavorite = isFavorite
+    }
 
     // MARK: Definitions
     
@@ -25,7 +38,11 @@ struct HomeStackContentViewModel: Equatable, Identifiable {
     let title: String
     let description: String
     let timeString: String?
-    let actionIcon: Image
+    var isFavorite: Bool?
 }
 
-extension HomeStackContentViewModel: HomeContentViewModel { }
+extension HomeStackContentViewModel: HomeContentViewModel {
+    func setFavorite(to isFavorite: Bool) {
+        self.isFavorite = isFavorite
+    }
+}

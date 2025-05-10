@@ -101,6 +101,7 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         
         guard let diary = try modelContext.fetch(fetchDescriptor).first else { return }
         diary.isFavorite = isFavorite
+        try modelContext.save()
     }
 }
 

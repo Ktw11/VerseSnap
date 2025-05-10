@@ -61,9 +61,19 @@ public struct HomeView<NewVerseComponent: NewVerseBuilder>: View {
                 limit: viewModel.pickerLimit
             )
         }
-        .fullScreenCover(item: $viewModel.presentingDetailViewModel) { detailViewModel in
-            DetailDiaryView(viewModel: detailViewModel) {
+        .fullScreenCover(item: Binding(
+            get: { viewModel.presentingDetailViewModel },
+            set: { viewModel.presentingDetailViewModel = $0 }
+        )) { detailViewModel in
+            DetailDiaryView(
+                viewModel: Binding(
+                    get: { detailViewModel },
+                    set: { viewModel.presentingDetailViewModel = $0 }
+                )
+            ) {
                 viewModel.presentingDetailViewModel = nil
+            } didTapFavorite: { newValue in
+                viewModel.didTapFavorite(to: newValue, id: detailViewModel.id)
             }
             .toolbarVisibility(.hidden, for: .navigationBar)
             .switch(on: viewModel.displayStyle) { view, style in
@@ -188,6 +198,8 @@ private extension HomeView {
     
     @ViewBuilder
     func gridContentItemView(_ gridViewModel: HomeGridContentViewModel) -> some View {
+        let icon = gridViewModel.isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
+        
         Rectangle()
             .aspectRatio(3 / 4, contentMode: .fit)
             .overlay {
@@ -196,7 +208,7 @@ private extension HomeView {
                 }
             }
             .overlay(alignment: .bottomTrailing) {
-                gridViewModel.favoriteIcon
+                icon
                     .resizable()
                     .frame(size: 17)
                     .padding(.all, 5)

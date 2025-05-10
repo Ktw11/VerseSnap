@@ -8,4 +8,8 @@
 import Foundation
 import Domain
 
-protocol HomeContentViewModel: Identifiable, Sendable { }
+protocol HomeContentViewModel: Identifiable, Sendable {
+    var id: String { get }
+    
+    @MainActor func setFavorite(to isFavorite: Bool)
+}

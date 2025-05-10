@@ -33,5 +33,5 @@ public struct VerseDiary: Decodable, Equatable, Sendable, Hashable {
     public let hashtags: [String]
     public let createdAt: TimeInterval
     public let verse: String
-    public let isFavorite: Bool
+    public var isFavorite: Bool
 }

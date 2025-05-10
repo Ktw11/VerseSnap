@@ -13,8 +13,6 @@ struct HomeStackViewModelFactory: HomeContentViewModelFactory {
     // MARK: Properties
     
     let calendar: Calendar
-    let favoriteIcon: Image
-    let normalIcon: Image
     
     // MARK: Definitions
     
@@ -41,7 +39,7 @@ struct HomeStackViewModelFactory: HomeContentViewModelFactory {
             title: createdDate.monthDayString(),
             description: diary.verse.firstLetters(separator: "/"),
             timeString: createdDate.timeString(),
-            actionIcon: diary.isFavorite ? favoriteIcon : normalIcon
+            isFavorite: diary.isFavorite
         )
     }
 }

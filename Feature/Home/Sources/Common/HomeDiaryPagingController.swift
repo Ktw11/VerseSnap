@@ -51,6 +51,11 @@ final class HomeDiaryPagingController<ViewModel: HomeContentViewModel> {
         fetchingTask = makeFetchingTask(fetchDiaries, cursor: cursor)
     }
     
+    func updateDiary(id: String, isFavorite: Bool) {
+        guard var viewModel = viewModels.first(where: { $0.id == id }) else { return }
+        viewModel.setFavorite(to: isFavorite)
+    }
+    
     func reset() {
         fetchingTask?.cancel()
         pagingState = .initial
@@ -89,9 +94,7 @@ private extension HomeDiaryPagingController {
                 try Task.checkCancellation()
                 
                 let result = try await fetchDiaries(cursor)
-                let viewModels: [ViewModel] = await Task.detached(priority: .userInitiated) { [weak self] in
-                    self?.makeViewModelList(from: result.diaries) ?? []
-                }.value
+                let viewModels: [ViewModel] = result.diaries.compactMap { self?.viewModelFactory.build(from: $0) }
                 
                 try Task.checkCancellation()
                 
@@ -114,10 +117,6 @@ private extension HomeDiaryPagingController {
            $0.cursor = DiaryCursor(size: cursorSize, lastCreatedAt: lastCreatedAt)
        }
    }
-    
-    nonisolated func makeViewModelList(from diaries: [VerseDiary]) -> [ViewModel] {
-        diaries.map { viewModelFactory.build(from: $0) }
-    }
 }
 
 private extension PagingState {

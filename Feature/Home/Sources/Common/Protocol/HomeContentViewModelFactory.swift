@@ -11,5 +11,6 @@ import Domain
 protocol HomeContentViewModelFactory<ViewModel>: Sendable {
     associatedtype ViewModel: HomeContentViewModel
 
+    @MainActor
     func build(from diary: VerseDiary) -> ViewModel
 }

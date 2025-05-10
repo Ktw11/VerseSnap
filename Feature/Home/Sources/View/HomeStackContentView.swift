@@ -10,6 +10,15 @@ import CommonUI
 
 struct HomeStackContentView: View {
     
+    // MARK: Constants
+    
+    private enum Constants {
+        static func actionIcon(isFavorite: Bool?) -> Image {
+            guard let isFavorite else { return CommonUIAsset.Image.icPlus.swiftUIImage }
+            return isFavorite ? HomeAsset.icHeartFill.swiftUIImage : HomeAsset.icHeartEmpty.swiftUIImage
+        }
+    }
+    
     // MARK: Properties
     
     let viewModel: HomeStackContentViewModel
@@ -45,7 +54,7 @@ struct HomeStackContentView: View {
             
             Spacer()
             
-            viewModel.actionIcon
+            Constants.actionIcon(isFavorite: viewModel.isFavorite)
                 .frame(maxHeight: .infinity, alignment: .top)
         }
     }
@@ -111,7 +120,7 @@ private struct PhotoContainerView: View {
                     title: "오늘의 삼행시",
                     description: "기록하기",
                     timeString: nil,
-                    actionIcon: CommonUIAsset.Image.icPlus.swiftUIImage
+                    isFavorite: nil
                 )
             )
             .frame(height: 84)
@@ -123,7 +132,7 @@ private struct PhotoContainerView: View {
                     title: "6월 17일",
                     description: "삼/행/시",
                     timeString: "오후 12:30",
-                    actionIcon: HomeAsset.icHeartFill.swiftUIImage
+                    isFavorite: true
                 )
             )
             .frame(height: 84)
