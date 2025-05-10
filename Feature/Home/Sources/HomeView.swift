@@ -21,7 +21,6 @@ public struct HomeView<NewVerseComponent: NewVerseBuilder>: View {
     // MARK: Properties
     
     @State private var isShowingPicker = false
-    @State private var searchText: String = ""
     @Bindable private var viewModel: HomeViewModel
     @Namespace private var stackDiaryNamespace
     @Namespace private var gridDiaryNamespace
