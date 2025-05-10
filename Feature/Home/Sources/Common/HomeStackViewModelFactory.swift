@@ -18,7 +18,7 @@ struct HomeStackViewModelFactory: HomeContentViewModelFactory {
     
     private enum Constants {
         static let weekdaySymbols: [String] = [
-            "mon", "tue", "wed", "thu", "fri", "sat", "sun"
+            "", "sun", "mon", "tue", "wed", "thu", "fri", "sat"
         ]
     }
     
