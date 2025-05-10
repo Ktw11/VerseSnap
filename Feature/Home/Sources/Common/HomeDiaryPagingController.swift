@@ -52,8 +52,13 @@ final class HomeDiaryPagingController<ViewModel: HomeContentViewModel> {
     }
     
     func updateDiary(id: String, isFavorite: Bool) {
-        guard var viewModel = viewModels.first(where: { $0.id == id }) else { return }
+        guard let viewModel = viewModels.first(where: { $0.id == id }) else { return }
         viewModel.setFavorite(to: isFavorite)
+    }
+    
+    func insertDiary(_ diary: VerseDiary, at index: Int) {
+        let viewModel = viewModelFactory.build(from: diary)
+        viewModels.insert(viewModel, at: index)
     }
     
     func reset() {

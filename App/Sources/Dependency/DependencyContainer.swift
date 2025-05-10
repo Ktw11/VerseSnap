@@ -41,6 +41,7 @@ final class DependencyContainer {
             repositoryBuilder: repositoryBuilder,
             thirdAuthProvider: thirdAuthProvider,
             tokenStore: tokenStore,
+            diaryEventSender: diaryEventPublisher,
             minimumImageLength: Constants.minimumImageLength
         )
     }()
@@ -48,6 +49,7 @@ final class DependencyContainer {
     @MainActor
     let appStateStore: GlobalAppStateStore = .init()
     let tokenStore: TokenStore = .init()
+    let diaryEventPublisher: DiaryEventSender & DiaryEventReceiver = DiaryEventPublisher()
     
     private let networkProvider: NetworkProvidable = NetworkProvider(
         configuration: NetworkConfiguration(baseUrlString: AppKeys.baseUrl)

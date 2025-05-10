@@ -28,7 +28,11 @@ public final class HomeComponent<NewVerseComponent: NewVerseBuilder>: HomeBuilde
     @MainActor
     @ViewBuilder
     public func build() -> some View {
-        let viewModel = HomeViewModel(calendar: calendar, useCase: dependency.useCase)
+        let viewModel = HomeViewModel(
+            calendar: calendar,
+            useCase: dependency.useCase,
+            diaryEventReceiver: dependency.diaryEventReceiver
+        )
         HomeView(viewModel: viewModel, newVerseBuilder: dependency.newVerseBuilder)
     }
 }

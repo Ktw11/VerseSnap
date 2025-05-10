@@ -18,7 +18,7 @@ extension DependencyContainer {
                 verseUseCase: useCaseBuilder.verseUseCase,
                 diaryUseCase: useCaseBuilder.diaryUseCase,
                 selectPhotoBuilder: selectPhotoBuilder,
-                appStateUpdator: appStateStore
+                appStateUpdator: appStateStore,
             )
         )
     }

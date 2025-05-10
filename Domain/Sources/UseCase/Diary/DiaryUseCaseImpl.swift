@@ -16,12 +16,14 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
         imageConverter: ImageConvertable,
         imageUploader: ImageUploadable,
         repository: DiaryRepository,
+        diaryEventSender: DiaryEventSender,
         minImageLength: CGFloat,
         calendar: Calendar
     ) {
         self.imageConverter = imageConverter
         self.imageUploader = imageUploader
         self.repository = repository
+        self.diaryEventSender = diaryEventSender
         self.minImageLength = minImageLength
         self.calendar = calendar
     }
@@ -31,6 +33,7 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
     private let imageConverter: ImageConvertable
     private let imageUploader: ImageUploadable
     private let repository: DiaryRepository
+    private let diaryEventSender: DiaryEventSender
     private let minImageLength: CGFloat
     private let calendar: Calendar
     
@@ -44,11 +47,13 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
             throw DomainError.failedToUploadImage
         }
 
-        _ = try await repository.save(
+        let result = try await repository.save(
             verse: verse,
             imageURL: imageURL.absoluteString,
             hashtags: hashtags
         )
+        
+        diaryEventSender.send(.created(result))
     }
     
     public func fetchDiaries(year: Int, month: Int, after cursor: DiaryCursor) async throws -> DiaryFetchResult {

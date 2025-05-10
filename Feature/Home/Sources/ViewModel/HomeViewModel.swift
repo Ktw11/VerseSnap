@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import CommonUI
 import Utils
 import Domain
@@ -16,7 +17,7 @@ public final class HomeViewModel: Sendable {
     
     // MARK: Lifecycle
     
-    init(calendar: Calendar, useCase: DiaryUseCase) {
+    init(calendar: Calendar, useCase: DiaryUseCase, diaryEventReceiver: DiaryEventReceiver) {
         self.calendar = calendar
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
@@ -32,6 +33,7 @@ public final class HomeViewModel: Sendable {
             currentMonth: currentMonth
         )
         self.useCase = useCase
+        self.diaryEventReceiver = diaryEventReceiver
         
         self.stackPagingController = HomeDiaryPagingController(
             viewModelFactory: HomeStackViewModelFactory(
@@ -43,6 +45,8 @@ public final class HomeViewModel: Sendable {
             viewModelFactory: HomeGridViewModelFactory(),
             cursorSize: Constants.cursorSize
         )
+        
+        setUpEvents()
     }
     
     // MARK: Definitions
@@ -83,6 +87,8 @@ public final class HomeViewModel: Sendable {
     private let currentMonth: Int
     private let calendar: Calendar
     private let useCase: DiaryUseCase
+    private let diaryEventReceiver: DiaryEventReceiver
+    private var bag = Set<AnyCancellable>()
 
     // MARK: Methods
     
@@ -189,6 +195,26 @@ extension HomeViewModel {
 }
 
 private extension HomeViewModel {
+    func setUpEvents() {
+        diaryEventReceiver.eventPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                self?.handleDiaryEvent(event)
+            }
+            .store(in: &bag)
+    }
+    
+    func handleDiaryEvent(_ event: DiaryEvent) {
+        switch event {
+        case let .created(diary):
+            cachedDiaries.insert(diary)
+            gridPagingController.insertDiary(diary, at: 0)
+            if isCurrentYearMonthSelected {
+                stackPagingController.insertDiary(diary, at: 0)
+            }
+        }
+    }
+    
     func resetAndRefreshStackPage() {
         stackPagingController.reset()
         fetchNextStackDiaries()

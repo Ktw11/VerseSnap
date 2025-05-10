@@ -15,6 +15,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
     var imageConverter: MockImageConverter!
     var imageUploader: MockImageUploader!
     var repository: MockDiaryRepository!
+    var diaryEventSender: MockDiaryEventSender!
     let minImageLength: CGFloat = 512
      
     override func setUp() {
@@ -23,17 +24,20 @@ final class DiaryUseCaseImplTests: XCTestCase {
         imageConverter = MockImageConverter()
         imageUploader = MockImageUploader()
         repository = MockDiaryRepository()
+        diaryEventSender = MockDiaryEventSender()
         
         sut = DiaryUseCaseImpl(
             imageConverter: imageConverter,
             imageUploader: imageUploader,
             repository: repository,
+            diaryEventSender: diaryEventSender,
             minImageLength: minImageLength,
             calendar: Calendar(identifier: .gregorian)
         )
     }
     
     override func tearDown() {
+        diaryEventSender = nil
         repository = nil
         imageConverter = nil
         imageUploader = nil
@@ -56,6 +60,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
             XCTAssertEqual(imageConverter.requestedMinLength, minImageLength)
             XCTAssertEqual(imageConverter.requestedOutputScale, 1.0)
             XCTAssertEqual(imageConverter.requestedMaxKB, 900 * 1024)
+            XCTAssertFalse(diaryEventSender.isSendCalled)
         } catch {
             XCTFail()
         }
@@ -73,6 +78,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
         } catch DomainError.failedToUploadImage {
             // then
             XCTAssertTrue(imageUploader.isUploadImageCalled)
+            XCTAssertFalse(diaryEventSender.isSendCalled)
         } catch {
             XCTFail()
         }
@@ -98,6 +104,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
             XCTAssertEqual(givenVerse, repository.requestedSaveVerse)
             XCTAssertEqual(givenImageURL.absoluteString, repository.requestedSaveImageURL)
             XCTAssertEqual(givenHashtags, repository.requestedSaveHashtags)
+            XCTAssertFalse(diaryEventSender.isSendCalled)
         } catch {
             XCTFail()
         }
@@ -105,6 +112,14 @@ final class DiaryUseCaseImplTests: XCTestCase {
     
     func test_save_success() async {
         // given
+        repository.expectedSave = VerseDiary(
+            id: "id",
+            imageURL: "url",
+            hashtags: [],
+            createdAt: 123,
+            verse: "verse",
+            isFavorite: true
+        )
         imageConverter.expectedConvertToJpegData = Data()
         imageUploader.expectedUploadImage = URL(string: "www.google.com")
         
@@ -116,6 +131,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
             XCTAssertTrue(imageConverter.isConvertToJpegDataCalled)
             XCTAssertTrue(imageUploader.isUploadImageCalled)
             XCTAssertTrue(repository.isSaveCalled)
+            XCTAssertTrue(diaryEventSender.isSendCalled)
         } catch {
             XCTFail()
         }

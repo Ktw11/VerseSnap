@@ -30,7 +30,7 @@ public actor DiaryRepositoryImpl: DiaryRepository {
     
     // MARK: Methods
     
-    public func save(verse: String, imageURL: String, hashtags: [String]) async throws {
+    public func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
         let request: Request.SaveVerseDiary = .init(verse: verse, imageURL: imageURL, hashtags: hashtags)
         let api: API = VerseAPI.save(request)
         
@@ -47,6 +47,8 @@ public actor DiaryRepositoryImpl: DiaryRepository {
         Task { [result] in
             try? await localDataSource.save(result.toDTO)
         }
+        
+        return result
     }
     
     public func fetchDiaries(

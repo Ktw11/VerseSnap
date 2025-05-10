@@ -24,11 +24,13 @@ final class UseCaseComponent: UseCaseBuilder {
         repositoryBuilder: RepositoryBuilder,
         thirdAuthProvider: ThirdPartyAuthProvidable,
         tokenStore: TokenUpdatable,
+        diaryEventSender: DiaryEventSender,
         minimumImageLength: CGFloat
     ) {
         self.repositoryBuilder = repositoryBuilder
         self.thirdAuthProvider = thirdAuthProvider
         self.tokenStore = tokenStore
+        self.diaryEventSender = diaryEventSender
         self.minimumImageLength = minimumImageLength
     }
     
@@ -37,6 +39,7 @@ final class UseCaseComponent: UseCaseBuilder {
     private let repositoryBuilder: RepositoryBuilder
     private let thirdAuthProvider: ThirdPartyAuthProvidable
     private let tokenStore: TokenUpdatable
+    private let diaryEventSender: DiaryEventSender
     private let minimumImageLength: CGFloat
     
     var authUseCase: AuthUseCase & TokenRefreshable {
@@ -62,6 +65,7 @@ final class UseCaseComponent: UseCaseBuilder {
             imageConverter: ImageConverter(),
             imageUploader: ImageUploader(),
             repository: repositoryBuilder.diaryRepository,
+            diaryEventSender: diaryEventSender,
             minImageLength: minimumImageLength,
             calendar: Calendar(identifier: .gregorian)
         )

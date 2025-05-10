@@ -16,7 +16,8 @@ extension DependencyContainer {
             calendar: Calendar(identifier: .gregorian),
             dependency: HomeDependency(
                 useCase: useCaseBuilder.diaryUseCase,
-                newVerseBuilder: newVerseBuilder
+                newVerseBuilder: newVerseBuilder,
+                diaryEventReceiver: diaryEventPublisher
             )
         )
     }

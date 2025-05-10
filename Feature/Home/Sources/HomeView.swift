@@ -278,7 +278,11 @@ import PreviewSupport
             .ignoresSafeArea()
         
         HomeView(
-            viewModel: .init(calendar: Calendar.current, useCase: DiaryUseCasePreview.preview),
+            viewModel: .init(
+                calendar: Calendar.current,
+                useCase: DiaryUseCasePreview.preview,
+                diaryEventReceiver: DiaryEventReceiverPreview.preview
+            ),
             newVerseBuilder: NewVersePreviewComponent()
         )
             .padding(.top, 22)

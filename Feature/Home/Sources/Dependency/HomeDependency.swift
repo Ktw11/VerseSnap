@@ -15,14 +15,17 @@ public struct HomeDependency<NewVerseComponent: NewVerseBuilder> {
     
     public init(
         useCase: DiaryUseCase,
-        newVerseBuilder: NewVerseComponent
+        newVerseBuilder: NewVerseComponent,
+        diaryEventReceiver: DiaryEventReceiver
     ) {
         self.useCase = useCase
         self.newVerseBuilder = newVerseBuilder
+        self.diaryEventReceiver = diaryEventReceiver
     }
     
     // MARK: Properties
 
     let useCase: DiaryUseCase
     let newVerseBuilder: NewVerseComponent
+    let diaryEventReceiver: DiaryEventReceiver
 }

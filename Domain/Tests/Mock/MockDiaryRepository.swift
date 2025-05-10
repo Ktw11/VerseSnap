@@ -14,6 +14,7 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var requestedSaveImageURL: String?
     var requestedSaveHashtags: [String]?
     var expectedSaveError: Error?
+    var expectedSave: VerseDiary?
     
     var isFetchDiariesCalled: Bool = false
     var requestedFetchDiariesStartTimestamp: TimeInterval?
@@ -32,14 +33,18 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var requestedUpdateFavoriteId: String?
     var expectedUpdateFavoriteError: Error?
     
-    func save(verse: String, imageURL: String, hashtags: [String]) async throws {
+    func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
         isSaveCalled = true
         requestedSaveVerse = verse
         requestedSaveImageURL = imageURL
         requestedSaveHashtags = hashtags
         
-        if let expectedSaveError {
+        if let expectedSave {
+            return expectedSave
+        } else if let expectedSaveError {
             throw expectedSaveError
+        } else {
+            throw TestError.notImplemented
         }
     }
     
