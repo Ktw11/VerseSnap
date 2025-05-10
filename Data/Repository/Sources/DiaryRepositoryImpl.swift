@@ -102,8 +102,14 @@ public actor DiaryRepositoryImpl: DiaryRepository {
     }
     
     public func updateFavorite(to isFavorite: Bool, id: String) async throws {
-        #warning("구현 필요")
-        return
+        let request: VerseAPI.Request.UpdateFavorite = .init(id: id, isFavorite: isFavorite)
+        let api: API = VerseAPI.updateFavorite(request)
+        
+        _ = try await networkProvider.request(api: api)
+        
+        Task.detached { [localDataSource] in
+            try? await localDataSource.updateFavorite(to: isFavorite, id: id)
+        }
     }
 }
 

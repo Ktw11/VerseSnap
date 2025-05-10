@@ -19,6 +19,8 @@ public protocol DiaryLocalDataSource: Sendable {
         size: Int
     ) async throws -> DiaryFetchResultDTO
     func retreiveAllDiaries(after: TimeInterval?, size: Int) async throws -> DiaryFetchResultDTO
+    
+    func updateFavorite(to isFavorite: Bool, id: String) async throws
 }
 
 @ModelActor
@@ -90,6 +92,15 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         try Task.checkCancellation()
         
         return try await fetchResult(predicate, size: size)
+    }
+    
+    public func updateFavorite(to isFavorite: Bool, id: String) async throws {
+        let fetchDescriptor = FetchDescriptor<PermanentDiary>(
+            predicate: #Predicate { $0.id == id }
+        )
+        
+        guard let diary = try modelContext.fetch(fetchDescriptor).first else { return }
+        diary.isFavorite = isFavorite
     }
 }
 

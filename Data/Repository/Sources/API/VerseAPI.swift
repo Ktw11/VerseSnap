@@ -13,6 +13,7 @@ enum VerseAPI {
     case save(Request.SaveVerseDiary)
     case listFilter(Request.ListFilter)
     case listAll(Request.ListAll)
+    case updateFavorite(Request.UpdateFavorite)
     
     enum Request {}
 }
@@ -40,6 +41,16 @@ extension VerseAPI.Request {
         let lastCreatedAt: TimeInterval?
         let size: Int
     }
+    
+    struct UpdateFavorite: Encodable {
+        enum CodingKeys: String, CodingKey {
+            case id = "verseId"
+            case isFavorite
+        }
+        
+        let id: String
+        let isFavorite: Bool
+    }
 }
 
 extension VerseAPI: API {
@@ -53,6 +64,8 @@ extension VerseAPI: API {
             "verse/list/filter"
         case .listAll:
             "verse/list/latest"
+        case .updateFavorite:
+            "verse/favorite"
         }
     }
     
@@ -62,12 +75,14 @@ extension VerseAPI: API {
             .post
         case .listFilter, .listAll:
             .get
+        case .updateFavorite:
+            .patch
         }
     }
     
     var queryParameters: [String: String]? {
         switch self {
-        case .generate, .save:
+        case .generate, .save, .updateFavorite:
             return nil
         case let .listFilter(params):
             return params.asDictionary.compactMapValues { "\($0)" }
@@ -81,6 +96,8 @@ extension VerseAPI: API {
         case let .generate(params):
             return ["isKorean": params.isKorean]
         case let .save(params):
+            return params.asDictionary
+        case let .updateFavorite(params):
             return params.asDictionary
         case .listFilter, .listAll:
             return nil
@@ -98,7 +115,7 @@ extension VerseAPI: API {
                     mimeType: "image/jpeg"
                 )
             ])
-        case .save, .listFilter, .listAll:
+        case .save, .listFilter, .listAll, .updateFavorite:
             return .json
         }
     }
