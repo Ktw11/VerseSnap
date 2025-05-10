@@ -69,11 +69,6 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
             }
         }
         
-        let fetchDescriptor = FetchDescriptor<PermanentDiary>(
-            predicate: predicate,
-            sortBy: [.init(\.createdAt, order: .reverse),]
-        )
-        
         try Task.checkCancellation()
         
         return try await fetchResult(predicate, size: size)
