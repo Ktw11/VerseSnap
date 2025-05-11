@@ -24,6 +24,7 @@ final class RootViewModel {
     var scene: AppScene {
         appStateStore.scene
     }
+    
     private let appStateStore: GlobalAppStateStore
     private let useCase: AuthUseCase
     
@@ -31,8 +32,8 @@ final class RootViewModel {
     
     func trySignIn() {
         Task { [weak self, useCase] in
-            if let _ = await useCase.signInWithSavedToken() {
-                self?.appStateStore.setScene(to: .tabs)
+            if let result = await useCase.signInWithSavedToken() {
+                self?.appStateStore.setScene(to: .tabs(result.user))
             } else {
                 self?.appStateStore.setScene(to: .signIn)
             }

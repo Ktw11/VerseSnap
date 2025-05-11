@@ -8,7 +8,7 @@
 import Foundation
 
 public enum AppScene {
-    case tabs
+    case tabs(User)
     case signIn
     case splash
 }

@@ -10,8 +10,7 @@ import Domain
 import VSNetwork
 import RemoteStorage
 
-protocol UseCaseBuilder {
-    var authUseCase: AuthUseCase & TokenRefreshable{ get }
+protocol UseCaseBuilder: Sendable {
     var verseUseCase: VerseUseCase { get }
     var diaryUseCase: DiaryUseCase { get }
 }
@@ -41,16 +40,7 @@ final class UseCaseComponent: UseCaseBuilder {
     private let tokenStore: TokenUpdatable
     private let diaryEventSender: DiaryEventSender
     private let minimumImageLength: CGFloat
-    
-    var authUseCase: AuthUseCase & TokenRefreshable {
-        AuthUseCaseImpl(
-            authRepository: repositoryBuilder.authRepository,
-            signInInfoRepository: repositoryBuilder.signInInfoRepository,
-            thirdAuthProvider: thirdAuthProvider,
-            tokenUpdator: tokenStore
-        )
-    }
-    
+
     var verseUseCase: VerseUseCase {
         VerseUseCaseImpl(
             locale: Locale.current,

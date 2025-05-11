@@ -8,6 +8,6 @@
 import Foundation
 import Combine
 
-public protocol DiaryEventReceiver {
+public protocol DiaryEventReceiver: Sendable {
     var eventPublisher: AnyPublisher<DiaryEvent, Never> { get }
 }

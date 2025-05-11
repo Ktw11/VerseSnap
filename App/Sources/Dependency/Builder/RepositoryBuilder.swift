@@ -11,9 +11,7 @@ import Domain
 import Repository
 import VSNetwork
 
-protocol RepositoryBuilder {
-    var authRepository: AuthRepository { get }
-    var signInInfoRepository: SignInInfoRepository { get }
+protocol RepositoryBuilder: Sendable {
     var verseRepository: VerseRepository { get }
     var diaryRepository: DiaryRepository { get }
 }
@@ -22,36 +20,18 @@ final class RepositoryComponent: RepositoryBuilder {
 
     // MARK: Lifecycle
     
-    init(networkProvider: NetworkProvidable) {
+    init(
+        networkProvider: NetworkProvidable,
+        localDataSouceContainer: LocalDataSourceContainer
+    ) {
         self.networkProvider = networkProvider
+        self.localDataSouceContainer = localDataSouceContainer
     }
     
     // MARK: Properties
-    
+
     private let networkProvider: NetworkProvidable
-    
-    private lazy var modelContainer: ModelContainer = {
-        let schema = Schema([
-            PermanentDiary.self,
-            PermanentSignInInfo.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        return try! ModelContainer(for: schema, configurations: [modelConfiguration])
-    }()
-    private lazy var signInInfoDataSource: SignInInfoDataSource = {
-        SignInInfoLocalDataSource(container: modelContainer)
-    }()
-    private lazy var diaryLocalDataSource: DiaryLocalDataSource = {
-        DiaryLocalDataSourceImpl(container: modelContainer)
-    }()
-    
-    var authRepository: AuthRepository {
-        AuthRepositoryImpl(networkProvider: networkProvider)
-    }
-    
-    var signInInfoRepository: SignInInfoRepository {
-        SignInInfoRepositoryImpl(dataSource: signInInfoDataSource)
-    }
+    private let localDataSouceContainer: LocalDataSourceContainer
     
     var verseRepository: VerseRepository {
         VerseRepositoryImpl(networkProvider: networkProvider)
@@ -60,7 +40,7 @@ final class RepositoryComponent: RepositoryBuilder {
     var diaryRepository: DiaryRepository {
         DiaryRepositoryImpl(
             networkProvider: networkProvider,
-            localDataSource: diaryLocalDataSource
+            localDataSource: localDataSouceContainer.diaryLocalDataSource
         )
     }
 }

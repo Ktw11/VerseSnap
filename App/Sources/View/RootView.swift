@@ -4,31 +4,21 @@ import SignInInterface
 import HomeInterface
 import NewVerseInterface
 
-struct RootView<
-    SignInComponent: SignInBuilder,
-    HomeComponent: HomeBuilder,
-    NewVerseComponent: NewVerseBuilder
->: View {
+struct RootView: View {
     
     // MARK: Lifecycle
     
     init(
         viewModel: RootViewModel,
-        signInBuilder: SignInComponent,
-        homeBuilder: HomeComponent,
-        newVerseBuilder: NewVerseComponent
+        dependency: DependencyContainer
     ) {
         self.viewModel = viewModel
-        self.signInBuilder = signInBuilder
-        self.homeBuilder = homeBuilder
-        self.newVerseBuilder = newVerseBuilder
+        self.dependency = dependency
     }
     
     // MARK: Properites
     
-    private let signInBuilder: SignInComponent
-    private let homeBuilder: HomeComponent
-    private let newVerseBuilder: NewVerseComponent
+    private let dependency: DependencyContainer
     private let viewModel: RootViewModel
 
     var body: some View {
@@ -42,9 +32,9 @@ struct RootView<
                 Text("@@@ SPLASH")
                     .font(.largeTitle)
             case .signIn:
-                signInBuilder.build()
-            case .tabs:
-                RootTabView(homeBuilder: homeBuilder, newVerseBuilder: newVerseBuilder)
+                dependency.signInBuilder.build()
+            case let .tabs(user):
+                dependency.buildRootTabView(user: user)
             }
         }
         .onAppear {
@@ -63,9 +53,7 @@ import PreviewSupport
             appStateStore: GlobalAppStateStore(),
             useCase: AuthUseCasePreview.preview
         ),
-        signInBuilder: dependency.signInBuilder,
-        homeBuilder: dependency.homeBuilder,
-        newVerseBuilder: dependency.newVerseBuilder
+        dependency: dependency
     )
 }
 #endif

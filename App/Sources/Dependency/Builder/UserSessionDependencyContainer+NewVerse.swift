@@ -1,5 +1,5 @@
 //
-//  DependencyContainer+NewVerse.swift
+//  UserSessionDependencyContainer+NewVerse.swift
 //  App
 //
 //  Created by 공태웅 on 4/20/25.
@@ -10,7 +10,7 @@ import NewVerse
 import NewVerseInterface
 import Domain
 
-extension DependencyContainer {
+extension UserSessionDependencyContainer {
     @MainActor
     var newVerseBuilder: some NewVerseBuilder {
         NewVerseComponent(

@@ -1,5 +1,5 @@
 //
-//  DependencyContainer+SelectPhoto.swift
+//  UserSessionDependencyContainer+SelectPhoto.swift
 //  App
 //
 //  Created by 공태웅 on 4/22/25.
@@ -11,7 +11,7 @@ import SelectPhotoInterface
 import Domain
 import Photos
 
-extension DependencyContainer {
+extension UserSessionDependencyContainer {
     @MainActor
     var selectPhotoBuilder: some SelectPhotoBuilder {
         SelectPhotoComponent(

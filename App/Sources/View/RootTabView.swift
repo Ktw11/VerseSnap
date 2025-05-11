@@ -7,29 +7,17 @@
 
 import SwiftUI
 import CommonUI
+import Domain
 import HomeInterface
 import NewVerseInterface
 
-struct RootTabView<
-    HomeComponent: HomeBuilder,
-    NewVerseComponent: NewVerseBuilder
->: View {
-    // MARK: Lifecycle
-    
-    init(
-        homeBuilder: HomeComponent,
-        newVerseBuilder: NewVerseComponent
-    ) {
-        self.homeBuilder = homeBuilder
-        self.newVerseBuilder = newVerseBuilder
-    }
-    
+struct RootTabView: View {
+
     // MARK: Properties
     
+    @Environment(\.userSessionContainer) private var userSessionContainer
     @State private var selected: TabSelection = .home
     @State private var isNewVersePresented: Bool = false
-    private let homeBuilder: HomeComponent
-    private let newVerseBuilder: NewVerseComponent
     
     var body: some View {
         VStack(spacing: 0) {
@@ -38,7 +26,7 @@ struct RootTabView<
                     CommonUIAsset.Color.mainBG.swiftUIColor
                         .ignoresSafeArea()
                     
-                    homeBuilder.build()
+                    userSessionContainer?.homeBuilder.build()
                 }
                 .tag(TabSelection.home)
                 .toolbarVisibility(.hidden, for: .tabBar)
@@ -60,7 +48,7 @@ struct RootTabView<
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .fullScreenCover(isPresented: $isNewVersePresented) {
-            newVerseBuilder.build(isPresented: $isNewVersePresented)
+            userSessionContainer?.newVerseBuilder.build(isPresented: $isNewVersePresented)
                 .presentationBackground(CommonUIAsset.Color.mainBG.swiftUIColor)
         }
     }

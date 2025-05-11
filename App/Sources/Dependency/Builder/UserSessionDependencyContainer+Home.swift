@@ -1,5 +1,5 @@
 //
-//  DependencyContainer+Home.swift
+//  UserSessionDependencyContainer+Home.swift
 //  App
 //
 //  Created by 공태웅 on 3/11/25.
@@ -9,7 +9,7 @@ import Foundation
 import Home
 import HomeInterface
 
-extension DependencyContainer {
+extension UserSessionDependencyContainer {
     @MainActor
     var homeBuilder: some HomeBuilder {
         HomeComponent(
@@ -17,7 +17,7 @@ extension DependencyContainer {
             dependency: HomeDependency(
                 useCase: useCaseBuilder.diaryUseCase,
                 newVerseBuilder: newVerseBuilder,
-                diaryEventReceiver: diaryEventPublisher
+                diaryEventReceiver: diaryEventReceiver
             )
         )
     }
