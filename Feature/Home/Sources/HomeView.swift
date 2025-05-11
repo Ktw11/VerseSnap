@@ -30,21 +30,23 @@ public struct HomeView<NewVerseComponent: NewVerseBuilder>: View {
         NavigationStack {
             VStack {
                 headerView()
+                    .padding(.horizontal, 24)
                 
                 Spacer()
                     .frame(height: 20)
                 
                 ZStack {
                     stackContentView()
+                        .padding(.horizontal, 24)
                         .opacity(viewModel.displayStyle == .stack ? 1.0 : 0)
                     
                     gridContentView()
+                        .padding(.horizontal, 5)
                         .opacity(viewModel.displayStyle == .grid ? 1.0 : 0)
                 }
             }
             .foregroundStyle(.white)
             .padding(.top, 20)
-            .padding(.horizontal, 24)
             .toolbarVisibility(.hidden, for: .navigationBar)
             .background {
                 CommonUIAsset.Color.mainBG.swiftUIColor
