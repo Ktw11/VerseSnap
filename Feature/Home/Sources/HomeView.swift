@@ -66,25 +66,7 @@ public struct HomeView<NewVerseComponent: NewVerseBuilder>: View {
             get: { viewModel.presentingDetailViewModel },
             set: { viewModel.presentingDetailViewModel = $0 }
         )) { detailViewModel in
-            DetailDiaryView(
-                viewModel: Binding(
-                    get: { detailViewModel },
-                    set: { viewModel.presentingDetailViewModel = $0 }
-                )
-            ) {
-                viewModel.presentingDetailViewModel = nil
-            } didTapFavorite: { newValue in
-                viewModel.didTapFavorite(to: newValue, id: detailViewModel.id)
-            }
-            .toolbarVisibility(.hidden, for: .navigationBar)
-            .switch(on: viewModel.displayStyle) { view, style in
-                switch style {
-                case .grid:
-                    view.navigationTransition(.zoom(sourceID: detailViewModel.id, in: gridDiaryNamespace))
-                case .stack:
-                    view.navigationTransition(.zoom(sourceID: detailViewModel.id, in: stackDiaryNamespace))
-                }
-            }
+            detailDiaryView(detailViewModel)
         }
         .fullScreenCover(isPresented: $viewModel.isNewVersePresented) {
             newVerseBuilder.build(isPresented: $viewModel.isNewVersePresented)
@@ -246,6 +228,29 @@ private extension HomeView {
         Text("아직 생성한 삼행시가 없습니다.")
             .font(.suite(size: 14, weight: .regular))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    }
+    
+    @ViewBuilder
+    func detailDiaryView(_ detailViewModel: DetailDiaryViewModel) -> some View {
+        DetailDiaryView(
+            viewModel: Binding(
+                get: { detailViewModel },
+                set: { viewModel.presentingDetailViewModel = $0 }
+            )
+        ) {
+            viewModel.presentingDetailViewModel = nil
+        } didTapFavorite: { newValue in
+            viewModel.didTapFavorite(to: newValue, id: detailViewModel.id)
+        }
+        .toolbarVisibility(.hidden, for: .navigationBar)
+        .switch(on: viewModel.displayStyle) { view, style in
+            switch style {
+            case .grid:
+                view.navigationTransition(.zoom(sourceID: detailViewModel.id, in: gridDiaryNamespace))
+            case .stack:
+                view.navigationTransition(.zoom(sourceID: detailViewModel.id, in: stackDiaryNamespace))
+            }
+        }
     }
 }
 
