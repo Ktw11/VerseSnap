@@ -141,7 +141,7 @@ private extension HomeView {
             LoadingView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         } else if viewModel.isStackDiaryEmpty {
-            contentEmotyView()
+            contentEmptyView()
         } else {
             PagingStackView(
                 items: viewModel.stackViewModels,
@@ -171,7 +171,7 @@ private extension HomeView {
             LoadingView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         } else if viewModel.isGridDiaryEmpty {
-            contentEmotyView()
+            contentEmptyView()
         } else {
             let columns: [GridItem] = Array(repeating: GridItem(spacing: 1), count: 3)
 
@@ -242,7 +242,7 @@ private extension HomeView {
     }
     
     @ViewBuilder
-    func contentEmotyView() -> some View {
+    func contentEmptyView() -> some View {
         Text("아직 생성한 삼행시가 없습니다.")
             .font(.suite(size: 14, weight: .regular))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
