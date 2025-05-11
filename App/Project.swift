@@ -40,6 +40,7 @@ let project = Project(
                 .feature(type: .home),
                 .feature(type: .newVerse),
                 .feature(type: .selectPhoto),
+                .feature(type: .profile),
                 .core(type: .thirdPartyAuth),
                 .core(type: .remoteStorage),
                 .data(type: .repository),

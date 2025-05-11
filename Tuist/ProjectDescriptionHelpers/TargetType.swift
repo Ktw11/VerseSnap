@@ -1,17 +1,31 @@
 import ProjectDescription
 
 public enum TargetType: String, Sendable {
+    // App
     case app = "App"
+    
+    // Domain
     case domain = "Domain"
+    
+    // Feature
     case signIn = "SignIn"
     case home = "Home"
     case newVerse = "NewVerse"
     case selectPhoto = "SelectPhoto"
+    case profile = "Profile"
+    
+    // Core
     case thirdPartyAuth = "ThirdPartyAuth"
     case remoteStorage = "RemoteStorage"
     case network = "VSNetwork"
+    
+    // Repository
     case repository = "Repository"
+    
+    // Preview
     case previewSupport = "PreviewSupport"
+    
+    // Shared
     case commonUI = "CommonUI"
     case utils = "Utils"
 }
@@ -34,7 +48,8 @@ public extension TargetType {
         case .signIn,
                 .home,
                 .newVerse,
-                .selectPhoto:
+                .selectPhoto,
+                .profile:
             featureBundleId
         case .thirdPartyAuth, .network, .remoteStorage:
             coreBundleId
