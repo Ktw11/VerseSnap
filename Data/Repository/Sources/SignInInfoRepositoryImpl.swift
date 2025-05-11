@@ -27,7 +27,7 @@ public actor SignInInfoRepositoryImpl: SignInInfoRepository {
     }
     
     public func save(info: SignInInfo) async throws {
-        let dto = SignInInfoDTO(refreshToken: info.refreshToken, signInType: info.signInType)
+        let dto = SignInInfoDTO(refreshToken: info.refreshToken, signInType: info.signInType, userId: info.userId)
         try await dataSource.save(info: dto)
     }
     

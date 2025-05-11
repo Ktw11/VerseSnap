@@ -90,7 +90,7 @@ final class DependencyContainer {
     @ViewBuilder
     @MainActor
     func buildRootTabView(user: User) -> some View {
-        let container = UserSessionDependencyContainer(dependency: self)
+        let container = UserSessionDependencyContainer(user: user, dependency: self)
         
         RootTabView()
             .environment(\.userSessionContainer, container)

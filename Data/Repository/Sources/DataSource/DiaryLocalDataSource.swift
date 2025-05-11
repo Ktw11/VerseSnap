@@ -9,17 +9,17 @@ import Foundation
 import SwiftData
 
 public protocol DiaryLocalDataSource: Sendable {
-    func save(_ diary: DiaryDTO) async throws
-    func save(_ diaries: [DiaryDTO]) async throws
+    func save(_ diary: DiaryDTO, userId: String) async throws
+    func save(_ diaries: [DiaryDTO], userId: String) async throws
     
     func retreiveDiariesByMonth(
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after: TimeInterval?,
-        size: Int
+        size: Int,
+        userId: String
     ) async throws -> DiaryFetchResultDTO
-    func retreiveAllDiaries(after: TimeInterval?, size: Int) async throws -> DiaryFetchResultDTO
-    
+    func retreiveAllDiaries(after: TimeInterval?, size: Int, userId: String) async throws -> DiaryFetchResultDTO
     func updateFavorite(to isFavorite: Bool, id: String) async throws
 }
 
@@ -33,18 +33,18 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         self.modelExecutor = DefaultSerialModelExecutor(modelContext: ModelContext(container))
     }
     
-    public func save(_ diary: DiaryDTO) async throws {
+    public func save(_ diary: DiaryDTO, userId: String) async throws {
         try Task.checkCancellation()
         
-        modelContext.insert(diary.toPermanent)
+        modelContext.insert(diary.toPermanent(userId: userId))
         try modelContext.save()
     }
     
-    public func save(_ diaries: [DiaryDTO]) async throws {
+    public func save(_ diaries: [DiaryDTO], userId: String) async throws {
         try Task.checkCancellation()
         
         for diary in diaries {
-            modelContext.insert(diary.toPermanent)
+            modelContext.insert(diary.toPermanent(userId: userId))
         }
         try modelContext.save()
     }
@@ -53,11 +53,13 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,
         after: TimeInterval?,
-        size: Int
+        size: Int,
+        userId: String
     ) async throws -> DiaryFetchResultDTO {
         let predicate: Predicate<PermanentDiary>
         if let after {
             predicate = #Predicate {
+                $0.userId == userId &&
                 $0.createdAt >= startTimestamp &&
                 $0.createdAt < endTimestamp &&
                 $0.createdAt < after
@@ -74,10 +76,11 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         return try await fetchResult(predicate, size: size)
     }
     
-    public func retreiveAllDiaries(after: TimeInterval?, size: Int) async throws -> DiaryFetchResultDTO {
+    public func retreiveAllDiaries(after: TimeInterval?, size: Int, userId: String) async throws -> DiaryFetchResultDTO {
         let predicate: Predicate<PermanentDiary>?
         if let after {
             predicate = #Predicate {
+                $0.userId == userId &&
                 $0.createdAt < after
             }
         } else {
@@ -101,6 +104,7 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
 }
 
 private extension DiaryLocalDataSourceImpl {
+    #warning("로그인 한 유저의 기록만 지우도록 수정")
     func reset() throws {
         try modelContext.delete(model: PermanentDiary.self)
     }
@@ -140,7 +144,15 @@ private extension PermanentDiary {
 }
 
 private extension DiaryDTO {
-    var toPermanent: PermanentDiary {
-        .init(id: id, imageURL: imageURL, hashtags: hashtags, createdAt: createdAt, verse: verse, isFavorite: isFavorite)
+    func toPermanent(userId: String) -> PermanentDiary {
+        .init(
+            id: id,
+            imageURL: imageURL,
+            hashtags: hashtags,
+            createdAt: createdAt,
+            verse: verse,
+            userId: userId,
+            isFavorite: isFavorite
+        )
     }
 }

@@ -8,13 +8,25 @@
 import Foundation
 
 public struct User: Decodable, Sendable {
-    public let id: String
-    public let loginType: String
-    public let refreshToken: String
     
-    public init(id: String, loginType: String, refreshToken: String) {
+    // MARK: Lifecycle
+    
+    public init(
+        id: String,
+        loginType: String,
+        refreshToken: String,
+        createdAt: TimeInterval
+    ) {
         self.id = id
         self.loginType = loginType
         self.refreshToken = refreshToken
+        self.createdAt = createdAt
     }
+    
+    // MARK: Properties
+    
+    public let id: String
+    public let loginType: String
+    public let refreshToken: String
+    public let createdAt: TimeInterval
 }

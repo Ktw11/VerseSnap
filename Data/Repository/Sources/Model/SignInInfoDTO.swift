@@ -11,10 +11,11 @@ import Domain
 public struct SignInInfoDTO: Sendable {
     let refreshToken: String
     let signInType: String
+    let userId: String
 }
 
 extension SignInInfoDTO {
     var toDomain: SignInInfo {
-        .init(refreshToken: refreshToken, signInType: signInType)
+        .init(refreshToken: refreshToken, signInType: signInType, userId: userId)
     }
 }

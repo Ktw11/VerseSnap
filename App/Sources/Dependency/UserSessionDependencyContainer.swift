@@ -13,13 +13,15 @@ final class UserSessionDependencyContainer: Sendable {
     
     // MARK: Lifecycle
     
-    init(dependency: DependencyContainer) {
+    init(user: User, dependency: DependencyContainer) {
         let repositoryBuilder = RepositoryComponent(
+            userId: user.id,
             networkProvider: dependency.networkProvider,
             localDataSouceContainer: dependency.localDataSouceContainer
         )
         let diaryEventPublisher = dependency.diaryEventPublisher
         
+        self.user = user
         self.appStateStore = dependency.appStateStore
         self.useCaseBuilder = UseCaseComponent(
             repositoryBuilder: repositoryBuilder,
@@ -39,8 +41,8 @@ final class UserSessionDependencyContainer: Sendable {
     
     // MARK: Properties
     
-    @MainActor
-    let appStateStore: GlobalAppStateStore
+    let user: User
+    @MainActor let appStateStore: GlobalAppStateStore
     let useCaseBuilder: UseCaseBuilder
     let diaryEventReceiver: DiaryEventReceiver
 }

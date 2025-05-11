@@ -14,15 +14,18 @@ public actor DiaryRepositoryImpl: DiaryRepository {
     // MARK: Lifecycle
     
     public init(
+        userId: String,
         networkProvider: NetworkProvidable,
         localDataSource: DiaryLocalDataSource
     ) {
+        self.userId = userId
         self.networkProvider = networkProvider
         self.localDataSource = localDataSource
     }
     
     // MARK: Properties
     
+    private let userId: String
     private let networkProvider: NetworkProvidable
     private let localDataSource: DiaryLocalDataSource
     
@@ -44,8 +47,9 @@ public actor DiaryRepositoryImpl: DiaryRepository {
             throw DomainError.unknown
         }
         
+        let userId: String = self.userId
         Task { [result] in
-            try? await localDataSource.save(result.toDTO)
+            try? await localDataSource.save(result.toDTO, userId: userId)
         }
         
         return result
@@ -62,7 +66,8 @@ public actor DiaryRepositoryImpl: DiaryRepository {
             startTimestamp: startTimestamp,
             endTimestamp: endTimestamp,
             after: cursor.lastCreatedAt,
-            size: cursor.size
+            size: cursor.size,
+            userId: userId
         )
 
         if let localResult, !localResult.diaries.isEmpty {
@@ -86,7 +91,8 @@ public actor DiaryRepositoryImpl: DiaryRepository {
         
         let localResult: DiaryFetchResultDTO? = try? await localDataSource.retreiveAllDiaries(
             after: cursor.lastCreatedAt,
-            size: cursor.size
+            size: cursor.size,
+            userId: userId
         )
         
         if let localResult, !localResult.diaries.isEmpty {
@@ -126,7 +132,7 @@ private extension DiaryRepositoryImpl {
         try Task.checkCancellation()
         
         let remoteResult = try JSONDecoder().decode(DiaryFetchResult.self, from: data)
-        try await localDataSource.save(remoteResult.diaries.map(\.toDTO))
+        try await localDataSource.save(remoteResult.diaries.map(\.toDTO), userId: userId)
         return remoteResult
     }
 }

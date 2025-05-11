@@ -21,15 +21,18 @@ final class RepositoryComponent: RepositoryBuilder {
     // MARK: Lifecycle
     
     init(
+        userId: String,
         networkProvider: NetworkProvidable,
         localDataSouceContainer: LocalDataSourceContainer
     ) {
+        self.userId = userId
         self.networkProvider = networkProvider
         self.localDataSouceContainer = localDataSouceContainer
     }
     
     // MARK: Properties
 
+    private let userId: String
     private let networkProvider: NetworkProvidable
     private let localDataSouceContainer: LocalDataSourceContainer
     
@@ -39,6 +42,7 @@ final class RepositoryComponent: RepositoryBuilder {
     
     var diaryRepository: DiaryRepository {
         DiaryRepositoryImpl(
+            userId: userId,
             networkProvider: networkProvider,
             localDataSource: localDataSouceContainer.diaryLocalDataSource
         )

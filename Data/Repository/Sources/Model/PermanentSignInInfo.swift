@@ -10,12 +10,21 @@ import SwiftData
 
 @Model
 public final class PermanentSignInInfo {
-    @Attribute(.unique)
-    var refreshToken: String
-    var signInType: String
     
-    init(refreshToken: String, signInType: String) {
+    // MARK: Lifecycle
+    
+    init(refreshToken: String, signInType: String, userId: String) {
         self.refreshToken = refreshToken
         self.signInType = signInType
+        self.userId = userId
     }
+    
+    // MARK: Properties
+    
+    @Attribute(.unique) var refreshToken: String
+    var signInType: String
+    @Attribute(.unique) var userId: String
+    
+    @Relationship(deleteRule: .cascade)
+    var diaries: [PermanentDiary]?
 }

@@ -35,11 +35,11 @@ public actor AuthUseCaseImpl: AuthUseCase {
         guard let account = ThirdPartyAccount(rawValue: info.signInType) else { return nil }
         guard let response = try? await authRepository.signIn(refreshToken: info.refreshToken) else { return nil }
         
+        updateSignInInfo(user: response.user, account: account)
+        
         let accessToken: String = response.accessToken
         let refreshToken: String = response.user.refreshToken
-
         await tokenUpdator.updateTokens(accessToken: accessToken, refreshToken: refreshToken)
-        updateSignInInfo(refreshToken: refreshToken, account: account)
         
         return response
     }
@@ -48,11 +48,12 @@ public actor AuthUseCaseImpl: AuthUseCase {
         let token = try await thirdAuthProvider.getToken(account: account)
         let response = try await authRepository.signIn(token: token, account: account.rawValue)
         
+        updateSignInInfo(user: response.user, account: account)
+        
         let accessToken: String = response.accessToken
         let refreshToken: String = response.user.refreshToken
-        
         await tokenUpdator.updateTokens(accessToken: accessToken, refreshToken: refreshToken)
-        updateSignInInfo(refreshToken: refreshToken, account: account)
+        
         return response
     }
     
@@ -66,16 +67,20 @@ public actor AuthUseCaseImpl: AuthUseCase {
         )
         
         if let account = ThirdPartyAccount(rawValue: info.signInType) {
-            updateSignInInfo(refreshToken: tokens.refreshToken, account: account)
+            updateSignInInfo(id: info.userId, refreshToken: tokens.refreshToken, account: account)
         }
     }
 }
 
 private extension AuthUseCaseImpl {
-    func updateSignInInfo(refreshToken: String, account: ThirdPartyAccount) {
+    func updateSignInInfo(user: User, account: ThirdPartyAccount) {
+        updateSignInInfo(id: user.id, refreshToken: user.refreshToken, account: account)
+    }
+    
+    func updateSignInInfo(id: String, refreshToken: String, account: ThirdPartyAccount) {
         Task.detached(priority: .medium) { [signInInfoRepository] in
             try? await signInInfoRepository.save(
-                info: .init(refreshToken: refreshToken, signInType: account.rawValue)
+                info: .init(refreshToken: refreshToken, signInType: account.rawValue, userId: id)
             )
         }
     }

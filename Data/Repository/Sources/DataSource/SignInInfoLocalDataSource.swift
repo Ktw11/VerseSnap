@@ -44,12 +44,12 @@ public actor SignInInfoLocalDataSource: SignInInfoDataSource {
 
 private extension PermanentSignInInfo {
     var toDTO: SignInInfoDTO {
-        .init(refreshToken: refreshToken, signInType: signInType)
+        .init(refreshToken: refreshToken, signInType: signInType, userId: userId)
     }
 }
 
 private extension SignInInfoDTO {
     var toPermanent: PermanentSignInInfo {
-        .init(refreshToken: refreshToken, signInType: signInType)
+        .init(refreshToken: refreshToken, signInType: signInType, userId: userId)
     }
 }

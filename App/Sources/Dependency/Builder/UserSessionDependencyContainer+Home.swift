@@ -13,6 +13,7 @@ extension UserSessionDependencyContainer {
     @MainActor
     var homeBuilder: some HomeBuilder {
         HomeComponent(
+            user: user,
             calendar: Calendar(identifier: .gregorian),
             dependency: HomeDependency(
                 useCase: useCaseBuilder.diaryUseCase,
