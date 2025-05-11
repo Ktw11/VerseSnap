@@ -12,6 +12,7 @@ let project = Project(
             type: targetType,
             product: .framework,
             sources: ["Sources/**"],
+            resources: ["Resources/**"],
             dependencies: [
                 .featureInterface(type: targetType),
                 .domain,
