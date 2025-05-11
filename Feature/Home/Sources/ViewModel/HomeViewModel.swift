@@ -17,7 +17,12 @@ public final class HomeViewModel: Sendable {
     
     // MARK: Lifecycle
     
-    init(calendar: Calendar, useCase: DiaryUseCase, diaryEventReceiver: DiaryEventReceiver) {
+    init(
+        calendar: Calendar,
+        useCase: DiaryUseCase,
+        diaryEventReceiver: DiaryEventReceiver,
+        signUpDate: Date
+    ) {
         self.calendar = calendar
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
@@ -25,10 +30,9 @@ public final class HomeViewModel: Sendable {
         self.currentMonth = currentMonth
         self.selectedYear = currentYear
         self.selectedMonth = currentMonth
-        #warning("minimumYear, minimumMonth")
         self.pickerLimit = YearMonthPickerLimit(
-            minimumYear: 2020,
-            minimumMonth: 9,
+            minimumYear: calendar.component(.year, from: signUpDate),
+            minimumMonth: calendar.component(.month, from: signUpDate),
             currentYear: currentYear,
             currentMonth: currentMonth
         )

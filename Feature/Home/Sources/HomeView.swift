@@ -278,10 +278,11 @@ import PreviewSupport
             .ignoresSafeArea()
         
         HomeView(
-            viewModel: .init(
+            viewModel: HomeViewModel(
                 calendar: Calendar.current,
                 useCase: DiaryUseCasePreview.preview,
-                diaryEventReceiver: DiaryEventReceiverPreview.preview
+                diaryEventReceiver: DiaryEventReceiverPreview.preview,
+                signUpDate: Date()
             ),
             newVerseBuilder: NewVersePreviewComponent()
         )

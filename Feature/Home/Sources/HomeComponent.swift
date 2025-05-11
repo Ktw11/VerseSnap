@@ -8,18 +8,21 @@
 import SwiftUI
 import HomeInterface
 import NewVerseInterface
+import Domain
 
 public final class HomeComponent<NewVerseComponent: NewVerseBuilder>: HomeBuilder {
     
     // MARK: Lifecycle
     
-    public init(calendar: Calendar, dependency: HomeDependency<NewVerseComponent>) {
+    public init(user: User, calendar: Calendar, dependency: HomeDependency<NewVerseComponent>) {
+        self.user = user
         self.calendar = calendar
         self.dependency = dependency
     }
     
     // MARK: Properties
     
+    private let user: User
     private let calendar: Calendar
     private let dependency: HomeDependency<NewVerseComponent>
     
@@ -31,7 +34,8 @@ public final class HomeComponent<NewVerseComponent: NewVerseBuilder>: HomeBuilde
         let viewModel = HomeViewModel(
             calendar: calendar,
             useCase: dependency.useCase,
-            diaryEventReceiver: dependency.diaryEventReceiver
+            diaryEventReceiver: dependency.diaryEventReceiver,
+            signUpDate: Date(timeIntervalSince1970: user.createdAt)
         )
         HomeView(viewModel: viewModel, newVerseBuilder: dependency.newVerseBuilder)
     }
