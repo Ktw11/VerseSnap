@@ -21,6 +21,7 @@ public protocol DiaryLocalDataSource: Sendable {
     ) async throws -> DiaryFetchResultDTO
     func retreiveAllDiaries(after: TimeInterval?, size: Int, userId: String) async throws -> DiaryFetchResultDTO
     func updateFavorite(to isFavorite: Bool, id: String) async throws
+    func deleteAll() async throws
 }
 
 @ModelActor
@@ -101,13 +102,16 @@ public actor DiaryLocalDataSourceImpl: DiaryLocalDataSource {
         diary.isFavorite = isFavorite
         try modelContext.save()
     }
+    
+    public func deleteAll() async throws {
+        let descriptor = FetchDescriptor<PermanentDiary>()
+        let diaries = try modelContext.fetch(descriptor)
+        diaries.forEach { modelContext.delete($0) }
+        try modelContext.save()
+    }
 }
 
 private extension DiaryLocalDataSourceImpl {
-    #warning("로그인 한 유저의 기록만 지우도록 수정")
-    func reset() throws {
-        try modelContext.delete(model: PermanentDiary.self)
-    }
     
     func fetchResult(_ predicate: Predicate<PermanentDiary>?, size: Int) async throws -> DiaryFetchResultDTO{
         let fetchDescriptor = FetchDescriptor<PermanentDiary>(

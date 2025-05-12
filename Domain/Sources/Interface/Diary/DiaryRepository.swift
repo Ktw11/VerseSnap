@@ -16,4 +16,5 @@ public protocol DiaryRepository: Sendable {
     ) async throws -> DiaryFetchResult
     func fetchDiariesAll(after cursor: DiaryCursor) async throws -> DiaryFetchResult
     func updateFavorite(to isFavorite: Bool, id: String) async throws
+    func deleteAll() async throws
 }

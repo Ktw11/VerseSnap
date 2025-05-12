@@ -121,6 +121,10 @@ public actor DiaryRepositoryImpl: DiaryRepository {
             try? await localDataSource.updateFavorite(to: isFavorite, id: id)
         }
     }
+    
+    public func deleteAll() async throws {
+        try await localDataSource.deleteAll()
+    }
 }
 
 private extension DiaryRepositoryImpl {
