@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "ko",
   "strings" : {
-    "@@@ PROFILE VIEW" : {
-
-    },
     "@@@ SPLASH" : {
       "shouldTranslate" : false
     }

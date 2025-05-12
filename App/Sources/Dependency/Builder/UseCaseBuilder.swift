@@ -13,6 +13,7 @@ import RemoteStorage
 protocol UseCaseBuilder: Sendable {
     var verseUseCase: VerseUseCase { get }
     var diaryUseCase: DiaryUseCase { get }
+    var userUseCase: UserUseCase { get }
 }
 
 final class UseCaseComponent: UseCaseBuilder {
@@ -59,5 +60,9 @@ final class UseCaseComponent: UseCaseBuilder {
             minImageLength: minimumImageLength,
             calendar: Calendar(identifier: .gregorian)
         )
+    }
+    
+    var userUseCase: UserUseCase {
+        UserUseCaseImpl(repository: repositoryBuilder.userRepository)
     }
 }

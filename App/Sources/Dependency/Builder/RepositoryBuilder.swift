@@ -14,6 +14,7 @@ import VSNetwork
 protocol RepositoryBuilder: Sendable {
     var verseRepository: VerseRepository { get }
     var diaryRepository: DiaryRepository { get }
+    var userRepository: UserRepository { get }
 }
 
 final class RepositoryComponent: RepositoryBuilder {
@@ -46,5 +47,9 @@ final class RepositoryComponent: RepositoryBuilder {
             networkProvider: networkProvider,
             localDataSource: localDataSouceContainer.diaryLocalDataSource
         )
+    }
+    
+    var userRepository: UserRepository {
+        UserRepositoryImpl(networkProvider: networkProvider)
     }
 }

@@ -32,12 +32,11 @@ struct RootTabView: View {
                 .toolbarVisibility(.hidden, for: .tabBar)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                 
-                #warning("Profile View 구현 필요")
-                VStack {
-                    Spacer()
-                    Text("@@@ PROFILE VIEW")
-                        .foregroundStyle(.white)
-                    Spacer()
+                ZStack {
+                    CommonUIAsset.Color.mainBG.swiftUIColor
+                        .ignoresSafeArea()
+                    
+                    userSessionContainer?.profileBuilder.build()
                 }
                 .tag(TabSelection.profile)
                 .toolbarVisibility(.hidden, for: .tabBar)
