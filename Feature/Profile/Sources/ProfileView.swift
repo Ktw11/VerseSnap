@@ -134,11 +134,18 @@ private extension ProfileView {
 import PreviewSupport
 
 #Preview {
+    let viewModel = ProfileViewModel(
+        nickname: "nickname",
+        userUseCase: UserUseCasePreview.preview,
+        authUseCase: AuthUseCasePreview.preview,
+        appStateUpdator: GlobalStateUpdatorPreview.preview
+    )
+    
     ZStack {
         CommonUIAsset.Color.mainBG.swiftUIColor
             .ignoresSafeArea()
         
-        ProfileView()
+        ProfileView(viewModel: viewModel)
     }
 }
 
