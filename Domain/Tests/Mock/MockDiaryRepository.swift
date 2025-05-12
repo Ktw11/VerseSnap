@@ -33,6 +33,9 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var requestedUpdateFavoriteId: String?
     var expectedUpdateFavoriteError: Error?
     
+    var isDeleteAllCalled: Bool = false
+    var expectedDeleteAllError: Error?
+    
     func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
         isSaveCalled = true
         requestedSaveVerse = verse
@@ -87,6 +90,14 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
         
         if let expectedUpdateFavoriteError {
             throw expectedUpdateFavoriteError
+        }
+    }
+    
+    func deleteAll() async throws {
+        isDeleteAllCalled = true
+        
+        if let expectedDeleteAllError {
+            throw expectedDeleteAllError
         }
     }
 }

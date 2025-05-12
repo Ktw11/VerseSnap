@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol TokenUpdatable: Sendable {
-    func updateTokens(accessToken: String, refreshToken: String) async
+    func updateTokens(accessToken: String?, refreshToken: String?) async
 }

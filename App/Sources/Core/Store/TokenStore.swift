@@ -16,7 +16,7 @@ actor TokenStore: TokenStorable, TokenUpdatable {
     var accessToken: String?
     var refreshToken: String?
     
-    func updateTokens(accessToken: String, refreshToken: String) async {
+    func updateTokens(accessToken: String?, refreshToken: String?) async {
         self.accessToken = accessToken
         self.refreshToken = refreshToken
     }
