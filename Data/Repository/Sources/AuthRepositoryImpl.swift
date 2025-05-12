@@ -53,6 +53,18 @@ public actor AuthRepositoryImpl: AuthRepository {
         }
     }
     
+    public func signOut() async throws {
+        let api = AuthAPI.signOut
+        
+        try Task.checkCancellation()
+        
+        do {
+            _ = try await networkProvider.request(api: api)
+        } catch {
+            throw DomainError.unknown
+        }
+    }
+    
     public func refreshTokens(refreshToken: String) async throws -> AuthTokens {
         let api = AuthAPI.refreshTokens(refreshToken: refreshToken)
         
