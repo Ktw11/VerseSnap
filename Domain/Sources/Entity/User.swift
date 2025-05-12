@@ -13,11 +13,13 @@ public struct User: Decodable, Sendable {
     
     public init(
         id: String,
+        nickname: String,
         loginType: String,
         refreshToken: String,
         createdAt: TimeInterval
     ) {
         self.id = id
+        self.nickname = nickname
         self.loginType = loginType
         self.refreshToken = refreshToken
         self.createdAt = createdAt
@@ -26,6 +28,7 @@ public struct User: Decodable, Sendable {
     // MARK: Properties
     
     public let id: String
+    public let nickname: String
     public let loginType: String
     public let refreshToken: String
     public let createdAt: TimeInterval
