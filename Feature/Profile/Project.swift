@@ -17,6 +17,7 @@ let project = Project(
                 .featureInterface(type: targetType),
                 .domain,
                 .shared(type: .commonUI),
+                .shared(type: .utils),
                 .previewSupport
             ]
         ),

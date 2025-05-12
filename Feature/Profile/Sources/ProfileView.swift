@@ -10,7 +10,16 @@ import CommonUI
 
 public struct ProfileView: View {
     
+    // MARK: Lifecycle
+    
+    public init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+    }
+    
     // MARK: Properties
+    
+    @FocusState private var isFocused: Bool
+    @Bindable private var viewModel: ProfileViewModel
     
     public var body: some View {
         VStack(alignment: .leading) {
@@ -24,17 +33,7 @@ public struct ProfileView: View {
                 .frame(height: 40)
             
             VStack(alignment: .leading) {
-                HStack {
-                    nicknameView()
-                    
-                    Spacer()
-                    
-                    ProfileAsset.icEdit.swiftUIImage
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundStyle(Color.white)
-                        .frame(size: 24)
-                }
+                nicknameView(isEditMode: viewModel.isNicknameFocused, isNicknameUpdating: viewModel.isNicknameUpdating)
                 
                 Spacer()
                     .frame(height: 14)
@@ -46,7 +45,7 @@ public struct ProfileView: View {
             }
             .padding(.vertical, 18)
             .padding(.horizontal, 15)
-            .background(Color.white.opacity(0.06))
+            .background(Color.white.opacity(0.04))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding(.horizontal, 25)
             
@@ -66,15 +65,56 @@ public struct ProfileView: View {
             
             Spacer()
         }
+        .clipShape(Rectangle())
+        .onTapGesture {
+            viewModel.isNicknameFocused = false
+        }
     }
 }
 
 private extension ProfileView {
     @ViewBuilder
-    func nicknameView() -> some View {
-        #warning("text 반영 필요")
-        Text("땡땡땡" + " 님")
-            .foregroundStyle(.white)
+    func nicknameView(isEditMode: Bool, isNicknameUpdating: Bool) -> some View {
+        HStack {
+            if isEditMode {
+                TextField("", text: $viewModel.editingNickname)
+                    .lengthLimit(text: $viewModel.editingNickname, maxLength: 8)
+                    .tint(Color.white)
+                    .focused($isFocused)
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundStyle(.white)
+                    .onAppear {
+                        isFocused = true
+                    }
+            } else {
+                Text(viewModel.attributedNickname)
+            }
+            
+            Spacer()
+            
+            if isEditMode {
+                if isNicknameUpdating {
+                    LoadingView(size: 20)
+                } else {
+                    Button(action: {
+                        viewModel.didTapNicknameChangeDone()
+                    }, label: {
+                        Text("완료")
+                            .font(.suite(size: 15, weight: .regular))
+                            .foregroundStyle(Color.white)
+                    })
+                }
+            } else {
+                ProfileAsset.icEdit.swiftUIImage
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundStyle(Color.white)
+                    .frame(size: 24)
+                    .onTapGesture {
+                        viewModel.isNicknameFocused = true
+                    }
+            }
+        }
     }
     
     @ViewBuilder

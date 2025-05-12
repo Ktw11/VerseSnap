@@ -20,6 +20,8 @@ public extension String {
         var result = AttributedString()
         
         for (index, line) in lines.enumerated() {
+            guard !line.isEmpty else { continue }
+            
             var attributedLine = AttributedString(line)
             
             let startIndex: AttributedString.Index = attributedLine.startIndex
