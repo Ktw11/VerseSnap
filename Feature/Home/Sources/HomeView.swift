@@ -267,7 +267,7 @@ private struct RefreshButton: View {
                     HomeAsset.icRefresh.swiftUIImage
                         .resizable()
                         .renderingMode(.template)
-                        .tint(Color.white)
+                        .foregroundStyle(Color.white)
                         .frame(size: 14)
                 }
                 .clipShape(Circle())
