@@ -34,8 +34,10 @@ public actor SignOutUseCaseImpl: SignOutUseCase {
     
     public func signOut() async throws {
         try await authRepository.signOut()
-        try? await signInInfoRepository.reset()
-        try? await diaryRepository.deleteAll()
+        
+        async let resetSignInInfo: Void = await signInInfoRepository.reset()
+        async let deleteDiaries: Void = await diaryRepository.deleteAll()
+        _ = try? await (resetSignInInfo, deleteDiaries)
         
         await tokenUpdator.updateTokens(accessToken: nil, refreshToken: nil)
     }
