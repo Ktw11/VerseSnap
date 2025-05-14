@@ -12,6 +12,7 @@ public class GlobalStateUpdatorPreview: GlobalAppStateUpdatable, @unchecked Send
     
     public func addToast(info: ToastInfo) { }
     public func setScene(to scene: AppScene) { }
+    public func showLoadingOverlay(_ show: Bool) { }
 }
 
 public extension GlobalStateUpdatorPreview {

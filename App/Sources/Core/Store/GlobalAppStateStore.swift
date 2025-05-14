@@ -18,6 +18,7 @@ final class GlobalAppStateStore {
 
     var scene: AppScene = .splash
     var toasts: [Toast]
+    var showLoadingOverlay: Bool = false
 }
 
 extension GlobalAppStateStore: GlobalAppStateUpdatable {
@@ -27,6 +28,10 @@ extension GlobalAppStateStore: GlobalAppStateUpdatable {
     
     func setScene(to scene: AppScene) {
         self.scene = scene
+    }
+    
+    func showLoadingOverlay(_ show: Bool) {
+        self.showLoadingOverlay = show
     }
 }
 

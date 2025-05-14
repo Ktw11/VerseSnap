@@ -36,9 +36,24 @@ struct RootView: View {
             case let .tabs(user):
                 dependency.buildRootTabView(user: user)
             }
+            
+            loadingOverlay
         }
         .onAppear {
             viewModel.trySignIn()
+        }
+    }
+    
+    @ViewBuilder
+    private var loadingOverlay: some View {
+        if viewModel.showLoadingOverlay {
+            ZStack {
+                Color.black.opacity(0.7)
+                    .ignoresSafeArea()
+                
+                LoadingView()
+                    .frame(alignment: .center)
+            }
         }
     }
 }

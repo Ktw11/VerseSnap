@@ -24,6 +24,9 @@ final class RootViewModel {
     var scene: AppScene {
         appStateStore.scene
     }
+    var showLoadingOverlay: Bool {
+        appStateStore.showLoadingOverlay
+    }
     
     private let appStateStore: GlobalAppStateStore
     private let useCase: AuthUseCase

@@ -10,4 +10,5 @@ import Foundation
 public protocol GlobalAppStateUpdatable {
     @MainActor func addToast(info: ToastInfo)
     @MainActor func setScene(to scene: AppScene)
+    @MainActor func showLoadingOverlay(_ show: Bool)
 }
