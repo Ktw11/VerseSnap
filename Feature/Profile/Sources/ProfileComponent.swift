@@ -28,7 +28,8 @@ public final class ProfileComponent: ProfileBuilder {
     public func build() -> some View {
         let viewModel = ProfileViewModel(
             nickname: user.nickname,
-            useCase: dependency.useCase,
+            userUseCase: dependency.userUseCase,
+            signOutUseCase: dependency.signOutUseCase,
             appStateUpdator: dependency.appStateUpdator
         )
         ProfileView(viewModel: viewModel)

@@ -13,15 +13,18 @@ public struct ProfileDependency {
     // MARK: Lifecycle
     
     public init(
-        useCase: UserUseCase,
+        userUseCase: UserUseCase,
+        signOutUseCase: SignOutUseCase,
         appStateUpdator: GlobalAppStateUpdatable
     ) {
-        self.useCase = useCase
+        self.userUseCase = userUseCase
+        self.signOutUseCase = signOutUseCase
         self.appStateUpdator = appStateUpdator
     }
     
     // MARK: Properties
 
-    let useCase: UserUseCase
+    let userUseCase: UserUseCase
+    let signOutUseCase: SignOutUseCase
     let appStateUpdator: GlobalAppStateUpdatable
 }

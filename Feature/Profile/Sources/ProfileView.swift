@@ -137,7 +137,7 @@ import PreviewSupport
     let viewModel = ProfileViewModel(
         nickname: "nickname",
         userUseCase: UserUseCasePreview.preview,
-        authUseCase: AuthUseCasePreview.preview,
+        signOutUseCase: SignOutUseCasePreview.preview,
         appStateUpdator: GlobalStateUpdatorPreview.preview
     )
     

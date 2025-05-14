@@ -17,11 +17,13 @@ public final class ProfileViewModel: Sendable {
     
     public init(
         nickname: String,
-        useCase: UserUseCase,
+        userUseCase: UserUseCase,
+        signOutUseCase: SignOutUseCase,
         appStateUpdator: GlobalAppStateUpdatable
     ) {
         self.nickname = nickname
-        self.useCase = useCase
+        self.userUseCase = userUseCase
+        self.signOutUseCase = signOutUseCase
         self.appStateUpdator = appStateUpdator
     }
     
@@ -41,9 +43,11 @@ public final class ProfileViewModel: Sendable {
     var editingNickname: String = ""
     var isNicknameFocused: Bool = false
     private(set) var isNicknameUpdating: Bool = false
+    private(set) var isLoading: Bool = false
     
     private var nickname: String
-    private let useCase: UserUseCase
+    private let userUseCase: UserUseCase
+    private let signOutUseCase: SignOutUseCase
     private let appStateUpdator: GlobalAppStateUpdatable
     
     // MARK: Methods
@@ -54,14 +58,14 @@ public final class ProfileViewModel: Sendable {
         
         isNicknameUpdating = true
         
-        Task { [useCase, weak self] in
+        Task { [userUseCase, weak self] in
             defer {
                 self?.isNicknameUpdating = false
                 self?.isNicknameFocused = false
             }
             
             do {
-                try await useCase.updateNickname(to: newNickname)
+                try await userUseCase.updateNickname(to: newNickname)
                 self?.nickname = newNickname
             } catch {
                 self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
