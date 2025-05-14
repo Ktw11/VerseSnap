@@ -54,7 +54,7 @@ public struct ProfileView: View {
             
             VStack(spacing: 20) {
                 menuButton(title: "로그아웃") {
-                    #warning("action 반영 필요")
+                    viewModel.didTapSignOut()
                 }
                 
                 menuButton(title: "회원탈퇴") {

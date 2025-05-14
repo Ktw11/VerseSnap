@@ -72,4 +72,19 @@ public final class ProfileViewModel: Sendable {
             }
         }
     }
+    
+    func didTapSignOut() {
+        appStateUpdator.showLoadingOverlay(true)
+        
+        Task { [signOutUseCase, weak self] in
+            defer { self?.appStateUpdator.showLoadingOverlay(false) }
+            
+            do {
+                try await signOutUseCase.signOut()
+                self?.appStateUpdator.setScene(to: .signIn)
+            } catch {
+                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+            }
+        }
+    }
 }
