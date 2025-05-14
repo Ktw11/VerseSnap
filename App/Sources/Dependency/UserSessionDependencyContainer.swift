@@ -31,6 +31,7 @@ final class UserSessionDependencyContainer: Sendable {
             minimumImageLength: Constants.minimumImageLength
         )
         self.diaryEventReceiver = diaryEventPublisher
+        self.authDependencyContainer = dependency.authDependencyContainer
     }
     
     // MARK: Definitions
@@ -44,5 +45,10 @@ final class UserSessionDependencyContainer: Sendable {
     let user: User
     @MainActor let appStateStore: GlobalAppStateStore
     let useCaseBuilder: UseCaseBuilder
+    let authDependencyContainer: AuthDependencyContainer
     let diaryEventReceiver: DiaryEventReceiver
+    
+    var authUseCase: AuthUseCase {
+        authDependencyContainer.authUseCase
+    }
 }

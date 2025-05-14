@@ -14,7 +14,14 @@ extension UserSessionDependencyContainer {
     var profileBuilder: some ProfileBuilder {
         ProfileComponent(
             user: user,
-            dependency: ProfileDependency(useCase: useCaseBuilder.userUseCase, appStateUpdator: appStateStore)
+            dependency: ProfileDependency(
+                userUseCase: useCaseBuilder.userUseCase,
+                signOutUseCase: useCaseBuilder.signOutUseCase(
+                    authRepository: authDependencyContainer.authRepository,
+                    signInInfoRepository: authDependencyContainer.signInInfoRepository
+                ),
+                appStateUpdator: appStateStore
+            )
         )
     }
 }

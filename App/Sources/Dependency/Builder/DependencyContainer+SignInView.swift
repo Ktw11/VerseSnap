@@ -15,7 +15,7 @@ extension DependencyContainer {
         SignInComponent(
             dependency: SignInDependency(
                 accounts: [.apple, .kakao],
-                useCase: authUseCase,
+                useCase: authDependencyContainer.authUseCase,
                 appStateUpdator: appStateStore
             )
         )

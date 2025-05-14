@@ -14,6 +14,8 @@ protocol UseCaseBuilder: Sendable {
     var verseUseCase: VerseUseCase { get }
     var diaryUseCase: DiaryUseCase { get }
     var userUseCase: UserUseCase { get }
+    
+    func signOutUseCase(authRepository: AuthRepository, signInInfoRepository: SignInInfoRepository) -> SignOutUseCase
 }
 
 final class UseCaseComponent: UseCaseBuilder {
@@ -64,5 +66,14 @@ final class UseCaseComponent: UseCaseBuilder {
     
     var userUseCase: UserUseCase {
         UserUseCaseImpl(repository: repositoryBuilder.userRepository)
+    }
+    
+    func signOutUseCase(authRepository: AuthRepository, signInInfoRepository: SignInInfoRepository) -> SignOutUseCase {
+        SignOutUseCaseImpl(
+            authRepository: authRepository,
+            signInInfoRepository: signInInfoRepository,
+            diaryRepository: repositoryBuilder.diaryRepository,
+            tokenUpdator: tokenStore
+        )
     }
 }

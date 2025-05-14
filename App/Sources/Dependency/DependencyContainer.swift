@@ -12,15 +12,30 @@ import Repository
 import ThirdPartyAuth
 import VSNetwork
 
-final class DependencyContainer {
+final class DependencyContainer: Sendable {
     
     // MARK: LifeCycle
 
     @MainActor
     init() {
+        let schema = Schema([
+            PermanentDiary.self,
+            PermanentSignInInfo.self
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelContainer = try! ModelContainer(for: schema, configurations: [modelConfiguration])
+        
+        self.localDataSouceContainer = LocalDataSourceContainer(container: modelContainer)
+        self.authDependencyContainer = AuthDependencyContainer(
+            networkProvider: networkProvider,
+            signInInfoDataSource: localDataSouceContainer.signInInfoDataSource,
+            thirdAuthProvider: thirdAuthProvider,
+            tokenUpdator: tokenStore
+        )
+        
         Task {
             await networkProvider.setTokenStore(tokenStore)
-            await networkProvider.setTokenRefresher(authUseCase)
+            await networkProvider.setTokenRefresher(authDependencyContainer.authUseCase)
         }
     }
     
@@ -31,46 +46,17 @@ final class DependencyContainer {
     }
     
     // MARK: Properties
-
-    var authUseCase: AuthUseCase & TokenRefreshable {
-        AuthUseCaseImpl(
-            authRepository: authRepository,
-            signInInfoRepository: signInInfoRepository,
-            thirdAuthProvider: thirdAuthProvider,
-            tokenUpdator: tokenStore
-        )
-    }
     
     @MainActor
     let appStateStore: GlobalAppStateStore = .init()
-    lazy var diaryEventPublisher: DiaryEventSender & DiaryEventReceiver = DiaryEventPublisher()
-    lazy var thirdAuthProvider: ThirdPartyAuthProvidable = {
-        ThirdPartyAuthProvider(accounts: [.apple, .kakao])
-    }()
-    lazy var tokenStore: TokenStorable & TokenUpdatable = TokenStore()
-    lazy var localDataSouceContainer: LocalDataSourceContainer = {
-        LocalDataSourceContainer(container: modelContainer)
-    }()
+    let diaryEventPublisher: DiaryEventSender & DiaryEventReceiver = DiaryEventPublisher()
+    let thirdAuthProvider: ThirdPartyAuthProvidable = ThirdPartyAuthProvider(accounts: [.apple, .kakao])
+    let tokenStore: TokenStorable & TokenUpdatable = TokenStore()
+    let localDataSouceContainer: LocalDataSourceContainer
+    let authDependencyContainer: AuthDependencyContainer
     let networkProvider: NetworkProvidable = NetworkProvider(
         configuration: NetworkConfiguration(baseUrlString: AppKeys.baseUrl)
     )
-    
-    private let modelContainer: ModelContainer = {
-        let schema = Schema([
-            PermanentDiary.self,
-            PermanentSignInInfo.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        return try! ModelContainer(for: schema, configurations: [modelConfiguration])
-    }()
-    
-    private var authRepository: AuthRepository {
-        AuthRepositoryImpl(networkProvider: networkProvider)
-    }
-    
-    private var signInInfoRepository: SignInInfoRepository {
-        SignInInfoRepositoryImpl(dataSource: localDataSouceContainer.signInInfoDataSource)
-    }
     
     // MARK: Methods
 
@@ -79,7 +65,7 @@ final class DependencyContainer {
     func buildRootView() -> some View {
         let viewModel = RootViewModel(
             appStateStore: appStateStore,
-            useCase: authUseCase
+            useCase: authDependencyContainer.authUseCase
         )
         RootView(
             viewModel: viewModel,
