@@ -51,9 +51,9 @@ extension AuthAPI: API {
 
     var needsAuthorization: Bool {
         switch self {
-        case .signIn, .autoSignIn, .signOut:
+        case .signIn, .autoSignIn:
             false
-        case .refreshTokens:
+        case .refreshTokens, .signOut:
             true
         }
     }
