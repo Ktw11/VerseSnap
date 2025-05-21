@@ -12,6 +12,7 @@ enum AuthAPI {
     case signIn(token: String, account: String)
     case autoSignIn(refreshToken: String)
     case signOut
+    case deleteAccount
     case refreshTokens(refreshToken: String)
 }
 
@@ -26,12 +27,14 @@ extension AuthAPI: API {
             "auth/signOut"
         case .refreshTokens:
             "auth/refresh_token"
+        case .deleteAccount:
+            "auth/deleteAccount"
         }
     }
     
     var method: HttpMethod {
         switch self {
-        case .signIn, .autoSignIn, .signOut, .refreshTokens:
+        case .signIn, .autoSignIn, .signOut, .refreshTokens, .deleteAccount:
             .post
         }
     }
@@ -42,7 +45,7 @@ extension AuthAPI: API {
             return ["token": token]
         case let .autoSignIn(refreshToken):
             return ["refreshToken": refreshToken]
-        case .signOut:
+        case .signOut, .deleteAccount:
             return nil
         case let .refreshTokens(refreshToken):
             return ["refreshToken": refreshToken]
@@ -53,7 +56,7 @@ extension AuthAPI: API {
         switch self {
         case .signIn, .autoSignIn:
             false
-        case .refreshTokens, .signOut:
+        case .refreshTokens, .signOut, .deleteAccount:
             true
         }
     }

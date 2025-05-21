@@ -66,7 +66,15 @@ public actor AuthRepositoryImpl: AuthRepository {
     }
     
     public func deleteAccount() async throws {
-        #warning("구현 필요")
+        let api = AuthAPI.deleteAccount
+        
+        try Task.checkCancellation()
+        
+        do {
+            _ = try await networkProvider.request(api: api)
+        } catch {
+            throw DomainError.unknown
+        }
     }
     
     public func refreshTokens(refreshToken: String) async throws -> AuthTokens {
