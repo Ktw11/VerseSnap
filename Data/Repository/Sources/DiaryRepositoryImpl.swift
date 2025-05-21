@@ -33,8 +33,8 @@ public actor DiaryRepositoryImpl: DiaryRepository {
     
     // MARK: Methods
     
-    public func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
-        let request: Request.SaveVerseDiary = .init(verse: verse, imageURL: imageURL, hashtags: hashtags)
+    public func save(verses: [String], imageURL: String, hashtags: [String]) async throws -> VerseDiary {
+        let request: Request.SaveVerseDiary = .init(verses: verses, imageURL: imageURL, hashtags: hashtags)
         let api: API = VerseAPI.save(request)
         
         let result: VerseDiary
@@ -143,6 +143,6 @@ private extension DiaryRepositoryImpl {
 
 private extension VerseDiary {
     var toDTO: DiaryDTO {
-        DiaryDTO(id: id, imageURL: imageURL, hashtags: hashtags, createdAt: createdAt, verse: verse, isFavorite: isFavorite)
+        DiaryDTO(id: id, imageURL: imageURL, hashtags: hashtags, createdAt: createdAt, verses: verses, isFavorite: isFavorite)
     }
 }

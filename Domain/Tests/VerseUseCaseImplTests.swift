@@ -74,7 +74,7 @@ final class VerseUseCaseImplTests: XCTestCase {
     func test_generate_when_image_convert_success_image_upload_success_locale_isLanguageKorean_true_repository_success_then_return_VerseResult() async {
         // given
         let givenVerseInfo: GeneratedVerseInfo = .init(
-            verseInfo: .init(verses: ["asdasd"]),
+            verses: ["asdasd"],
             remainingLimit: 153
         )
         repository.expectedGenerateInfo = givenVerseInfo
@@ -98,7 +98,7 @@ final class VerseUseCaseImplTests: XCTestCase {
         // given
         
         let givenVerseInfo: GeneratedVerseInfo = .init(
-            verseInfo: .init(verses: ["asdasd"]),
+            verses: ["asdasd"],
             remainingLimit: 153
         )
         repository.expectedGenerateInfo = givenVerseInfo

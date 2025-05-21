@@ -39,7 +39,7 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
     
     // MARK: Methods
 
-    public func save(verse: String, image: UIImage, hashtags: [String]) async throws {
+    public func save(verses: [String], image: UIImage, hashtags: [String]) async throws {
         guard let imageData = imageConverter.convertToJpegData(image, minLength: minImageLength, maxKB: 900 * 1024) else {
             throw DomainError.failedToConvertImageToData
         }
@@ -48,7 +48,7 @@ public final class DiaryUseCaseImpl: DiaryUseCase {
         }
 
         let result = try await repository.save(
-            verse: verse,
+            verses: verses,
             imageURL: imageURL.absoluteString,
             hashtags: hashtags
         )

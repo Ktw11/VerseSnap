@@ -13,7 +13,7 @@ public struct DiaryDTO: Sendable {
     let imageURL: String
     let hashtags: [String]
     let createdAt: TimeInterval
-    let verse: String
+    let verses: [String]
     let isFavorite: Bool
 }
 
@@ -24,7 +24,7 @@ extension DiaryDTO {
             imageURL: imageURL,
             hashtags: hashtags,
             createdAt: createdAt,
-            verse: verse,
+            verses: verses,
             isFavorite: isFavorite
         )
     }

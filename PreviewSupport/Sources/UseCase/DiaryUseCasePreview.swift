@@ -25,7 +25,7 @@ public final class DiaryUseCasePreview: DiaryUseCase, @unchecked Sendable {
     
     // MARK: Methods
     
-    public func save(verse: String, image: UIImage, hashtags: [String]) async throws {
+    public func save(verses: [String], image: UIImage, hashtags: [String]) async throws {
         if let saveLoadingSeconds {
             try await Task.sleep(nanoseconds: UInt64(saveLoadingSeconds * 1000_000_000))
         }

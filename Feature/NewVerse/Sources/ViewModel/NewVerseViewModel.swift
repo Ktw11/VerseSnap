@@ -52,25 +52,26 @@ public final class NewVerseViewModel {
     private(set) var isSavingVerseDiary: Bool = false
     
     var backgroundBlurImage: UIImage? {
-        guard generatedVerse != nil else { return nil }
+        guard generatedVerses != nil else { return nil }
         guard let croppedImage else { return nil }
         return croppedImage
     }
     var isVerseGenerated: Bool {
-        generatedVerse != nil
+        generatedVerses != nil
     }
     var loadingText: LocalizedStringKey {
         Constants.loadingText
     }
     var buttonText: LocalizedStringKey {
-        if generatedVerse == nil {
+        if generatedVerses == nil {
             "삼행시 만들기"
         } else {
             "다시 만들기"
         }
     }
+    #warning("수정 필요")
     var verse: AttributedString? {
-        generatedVerse?
+        generatedVerses?.joined()
             .highlightFirstCharacterOfEachLine(
                 highlightedFont: .suite(size: 14, weight: .bold),
                 regularFont: .suite(size: 14, weight: .regular)
@@ -80,7 +81,7 @@ public final class NewVerseViewModel {
     let dateString: String = Date().yearMonthDayString()
     let imageRatio: CGFloat = 0.65
     
-    private var generatedVerse: String? = nil
+    private var generatedVerses: [String]?
 
     private let verseUseCase: VerseUseCase
     private let diaryUseCase: DiaryUseCase
@@ -98,8 +99,12 @@ public final class NewVerseViewModel {
             
             do {
                 let result = try await verseUseCase.generate(image: croppedImage)
-                #warning("수정 필요")
-                self?.generatedVerse = result.verseInfo.verses.joined()
+                
+                if result.verses.isEmpty {
+                    throw DomainError.cancelled
+                } else {
+                    self?.generatedVerses = result.verses
+                }
             } catch let error as DomainError {
                 self?.handleGenerateDomainError(error)
             } catch {
@@ -109,7 +114,7 @@ public final class NewVerseViewModel {
     }
     
     func didTapDone(completion: @escaping (() -> Void)) {
-        guard let croppedImage, let generatedVerse else { return }
+        guard let croppedImage, let generatedVerses else { return }
         guard !isSavingVerseDiary else { return }
         isSavingVerseDiary = true
         
@@ -122,7 +127,7 @@ public final class NewVerseViewModel {
             
             do {
                 try await diaryUseCase.save(
-                    verse: generatedVerse,
+                    verses: generatedVerses,
                     image: croppedImage,
                     hashtags: hashtagValues
                 )

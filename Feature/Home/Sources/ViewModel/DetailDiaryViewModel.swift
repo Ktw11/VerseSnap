@@ -24,7 +24,8 @@ final class DetailDiaryViewModel: Identifiable {
         self.timeString = createdDate.timeString()
         self.imageRatio = imageRatio
         self.imageURL = diary.imageURL
-        self.verse = diary.verse
+        #warning("수정 필요")
+        self.verse = diary.verses.joined()
             .highlightFirstCharacterOfEachLine(
                 highlightedFont: .suite(size: 14, weight: .bold),
                 regularFont: .suite(size: 14, weight: .regular)

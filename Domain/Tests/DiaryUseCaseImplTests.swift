@@ -52,7 +52,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            _ = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
+            _ = try await sut.save(verses: ["test"], image: UIImage(), hashtags: ["tag"])
             XCTFail()
         } catch DomainError.failedToConvertImageToData {
             // then
@@ -73,7 +73,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            _ = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
+            _ = try await sut.save(verses: ["test"], image: UIImage(), hashtags: ["tag"])
             XCTFail()
         } catch DomainError.failedToUploadImage {
             // then
@@ -86,7 +86,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
     
     func test_save_when_image_convert_success_and_image_upload_success_and_repository_fails_then_throw_error() async {
         // given
-        let givenVerse: String = "test"
+        let givenVerses: [String] = ["test"]
         let givenImageURL: URL = URL(string: "www.google.com")!
         let givenHashtags: [String] = ["tag", "tag2"]
         
@@ -96,12 +96,12 @@ final class DiaryUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            _ = try await sut.save(verse: givenVerse, image: UIImage(), hashtags: givenHashtags)
+            _ = try await sut.save(verses: givenVerses, image: UIImage(), hashtags: givenHashtags)
             XCTFail()
         } catch TestError.common {
             // then
             XCTAssertTrue(repository.isSaveCalled)
-            XCTAssertEqual(givenVerse, repository.requestedSaveVerse)
+            XCTAssertEqual(givenVerses, repository.requestedSaveVerses)
             XCTAssertEqual(givenImageURL.absoluteString, repository.requestedSaveImageURL)
             XCTAssertEqual(givenHashtags, repository.requestedSaveHashtags)
             XCTAssertFalse(diaryEventSender.isSendCalled)
@@ -117,7 +117,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
             imageURL: "url",
             hashtags: [],
             createdAt: 123,
-            verse: "verse",
+            verses: ["verse"],
             isFavorite: true
         )
         imageConverter.expectedConvertToJpegData = Data()
@@ -125,7 +125,7 @@ final class DiaryUseCaseImplTests: XCTestCase {
         
         // when
         do {
-            let _ = try await sut.save(verse: "test", image: UIImage(), hashtags: ["tag"])
+            let _ = try await sut.save(verses: ["test"], image: UIImage(), hashtags: ["tag"])
             
             // then
             XCTAssertTrue(imageConverter.isConvertToJpegDataCalled)
@@ -161,8 +161,8 @@ final class DiaryUseCaseImplTests: XCTestCase {
         // given
         let expectedResult = DiaryFetchResult(
             diaries: [
-                VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verse: "v1", isFavorite: false),
-                VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verse: "v2", isFavorite: true)
+                VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verses: ["v1"], isFavorite: false),
+                VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verses: ["v2"], isFavorite: true)
             ],
             isLastPage: true
         )
@@ -198,8 +198,8 @@ final class DiaryUseCaseImplTests: XCTestCase {
         // given
         let givenResult = DiaryFetchResult(
             diaries: [
-                VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verse: "v1", isFavorite: false),
-                VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verse: "v2", isFavorite: true)
+                VerseDiary(id: "1", imageURL: "url1", hashtags: ["tag"], createdAt: 100, verses: ["v1"], isFavorite: false),
+                VerseDiary(id: "2", imageURL: "url2", hashtags: ["tag2"], createdAt: 90, verses: ["v2"], isFavorite: true)
             ],
             isLastPage: true
         )

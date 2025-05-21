@@ -141,7 +141,7 @@ private extension PermanentDiary {
             imageURL: imageURL,
             hashtags: hashtags.components(separatedBy: ",").filter { !$0.isEmpty },
             createdAt: createdAt,
-            verse: verse,
+            verses: verses,
             isFavorite: isFavorite
         )
     }
@@ -154,7 +154,7 @@ private extension DiaryDTO {
             imageURL: imageURL,
             hashtags: hashtags,
             createdAt: createdAt,
-            verse: verse,
+            verses: verses,
             userId: userId,
             isFavorite: isFavorite
         )

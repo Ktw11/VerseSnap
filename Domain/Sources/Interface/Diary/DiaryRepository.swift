@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol DiaryRepository: Sendable {
-    func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary
+    func save(verses: [String], imageURL: String, hashtags: [String]) async throws -> VerseDiary
     func fetchDiaries(
         startTimestamp: TimeInterval,
         endTimestamp: TimeInterval,

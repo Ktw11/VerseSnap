@@ -10,7 +10,7 @@ import Foundation
 
 final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var isSaveCalled: Bool = false
-    var requestedSaveVerse: String?
+    var requestedSaveVerses: [String]?
     var requestedSaveImageURL: String?
     var requestedSaveHashtags: [String]?
     var expectedSaveError: Error?
@@ -36,9 +36,9 @@ final class MockDiaryRepository: DiaryRepository, @unchecked Sendable {
     var isDeleteAllCalled: Bool = false
     var expectedDeleteAllError: Error?
     
-    func save(verse: String, imageURL: String, hashtags: [String]) async throws -> VerseDiary {
+    func save(verses: [String], imageURL: String, hashtags: [String]) async throws -> VerseDiary {
         isSaveCalled = true
-        requestedSaveVerse = verse
+        requestedSaveVerses = verses
         requestedSaveImageURL = imageURL
         requestedSaveHashtags = hashtags
         

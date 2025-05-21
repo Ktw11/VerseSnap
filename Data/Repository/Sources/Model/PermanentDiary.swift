@@ -15,16 +15,16 @@ public final class PermanentDiary {
     private(set) var imageURL: String
     private(set) var hashtags: String
     private(set) var createdAt: TimeInterval
-    private(set) var verse: String
+    private(set) var verses: [String]
     private(set) var userId: String
     var isFavorite: Bool
     
-    init(id: String, imageURL: String, hashtags: [String], createdAt: TimeInterval, verse: String, userId: String, isFavorite: Bool) {
+    init(id: String, imageURL: String, hashtags: [String], createdAt: TimeInterval, verses: [String], userId: String, isFavorite: Bool) {
         self.id = id
         self.imageURL = imageURL
         self.hashtags = hashtags.joined(separator: ",")
         self.createdAt = createdAt
-        self.verse = verse
+        self.verses = verses
         self.userId = userId
         self.isFavorite = isFavorite
     }

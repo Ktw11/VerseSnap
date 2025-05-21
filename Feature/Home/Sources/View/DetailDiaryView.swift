@@ -185,7 +185,7 @@ private extension DetailDiaryView {
             imageURL: "https://randomuser.me/api/portraits/men/50.jpg",
             hashtags: ["해시해", "hashash"],
             createdAt: Date().timeIntervalSince1970,
-            verse: "삼:삼\n행:행행\n시:시시시시",
+            verses: ["삼: 심", "행: 행"],
             isFavorite: true
         ),
         imageRatio: 0.65

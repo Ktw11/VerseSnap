@@ -25,7 +25,7 @@ extension VerseAPI.Request {
     }
     
     struct SaveVerseDiary: Encodable {
-        let verse: String
+        let verses: [String]
         let imageURL: String
         let hashtags: [String]
     }

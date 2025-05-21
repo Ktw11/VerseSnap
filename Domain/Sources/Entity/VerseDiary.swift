@@ -15,14 +15,14 @@ public struct VerseDiary: Decodable, Equatable, Sendable, Hashable {
         imageURL: String,
         hashtags: [String],
         createdAt: TimeInterval,
-        verse: String,
+        verses: [String],
         isFavorite: Bool
     ) {
         self.id = id
         self.imageURL = imageURL
         self.hashtags = hashtags
         self.createdAt = createdAt
-        self.verse = verse
+        self.verses = verses
         self.isFavorite = isFavorite
     }
     
@@ -32,6 +32,6 @@ public struct VerseDiary: Decodable, Equatable, Sendable, Hashable {
     public let imageURL: String
     public let hashtags: [String]
     public let createdAt: TimeInterval
-    public let verse: String
+    public let verses: [String]
     public var isFavorite: Bool
 }
