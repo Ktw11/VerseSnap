@@ -18,6 +18,7 @@ public actor ThirdPartyAuthProvider: ThirdPartyAuthProvidable {
     
     // MARK: Properties
     
+    private var recentSignedInAccount: ThirdPartyAccount?
     private let helpers: [ThirdPartyAccount: ThirdPartyAccountAuthHelpable]
     
     // MARK: Methods
@@ -33,14 +34,24 @@ public actor ThirdPartyAuthProvider: ThirdPartyAuthProvidable {
         return try await helper.getToken()
     }
     
-    public func signOut(account: ThirdPartyAccount) async throws {
-        guard let helper = helpers[account] else { throw ThirdPartyAuthProviderError.invalidAccount }
-        try await helper.signOut()
+    public func didSignIn(account: ThirdPartyAccount) async {
+        recentSignedInAccount = account
     }
     
-    public func unlink(account: ThirdPartyAccount) async throws {
+    public func signOut() async throws {
+        guard let account = recentSignedInAccount else { throw ThirdPartyAuthProviderError.notFoundAccount }
         guard let helper = helpers[account] else { throw ThirdPartyAuthProviderError.invalidAccount }
+        
+        try await helper.signOut()
+        recentSignedInAccount = nil
+    }
+    
+    public func unlink() async throws {
+        guard let account = recentSignedInAccount else { throw ThirdPartyAuthProviderError.notFoundAccount }
+        guard let helper = helpers[account] else { throw ThirdPartyAuthProviderError.invalidAccount }
+        
         try await helper.unlink()
+        recentSignedInAccount = nil
     }
 }
 

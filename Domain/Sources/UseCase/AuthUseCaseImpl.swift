@@ -78,10 +78,13 @@ private extension AuthUseCaseImpl {
     }
     
     func updateSignInInfo(id: String, refreshToken: String, account: ThirdPartyAccount) {
-        Task.detached(priority: .medium) { [signInInfoRepository] in
-            try? await signInInfoRepository.save(
+        Task.detached(priority: .medium) { [signInInfoRepository, thirdAuthProvider] in
+            async let saveInfos: Void = await signInInfoRepository.save(
                 info: .init(refreshToken: refreshToken, signInType: account.rawValue, userId: id)
             )
+            async let didSignInAccount: Void = await thirdAuthProvider.didSignIn(account: account)
+            
+            _ = try? await (saveInfos, didSignInAccount)
         }
     }
 }

@@ -14,6 +14,7 @@ final class SignOutUseCaseImplTests: XCTestCase {
     var authRepository: MockAuthRepository!
     var signInInfoRepository: MockSignInInfoRepository!
     var diaryRepository: MockDiaryRepository!
+    var thirdAuthProvider: MockThirdAuthProvider!
     var tokenUpdator: MockTokenUpdator!
     
     override func setUp() {
@@ -22,18 +23,21 @@ final class SignOutUseCaseImplTests: XCTestCase {
         authRepository = MockAuthRepository()
         signInInfoRepository = MockSignInInfoRepository()
         diaryRepository = MockDiaryRepository()
+        thirdAuthProvider = MockThirdAuthProvider()
         tokenUpdator = MockTokenUpdator()
         
         sut = SignOutUseCaseImpl(
             authRepository: authRepository,
             signInInfoRepository: signInInfoRepository,
             diaryRepository: diaryRepository,
+            thirdAuthProvider: thirdAuthProvider,
             tokenUpdator: tokenUpdator
         )
     }
     
     override func tearDown() {
         tokenUpdator = nil
+        thirdAuthProvider = nil
         diaryRepository = nil
         signInInfoRepository = nil
         authRepository = nil
@@ -55,6 +59,7 @@ final class SignOutUseCaseImplTests: XCTestCase {
             XCTAssertTrue(authRepository.isSignOutCalled)
             XCTAssertFalse(signInInfoRepository.isResetCalled)
             XCTAssertFalse(diaryRepository.isDeleteAllCalled)
+            XCTAssertFalse(thirdAuthProvider.isSignOutCalled)
             XCTAssertFalse(tokenUpdator.isUpdateTokensCalled)
         } catch {
             XCTFail()
@@ -73,6 +78,7 @@ final class SignOutUseCaseImplTests: XCTestCase {
             XCTAssertTrue(authRepository.isSignOutCalled)
             XCTAssertTrue(signInInfoRepository.isResetCalled)
             XCTAssertTrue(diaryRepository.isDeleteAllCalled)
+            XCTAssertTrue(thirdAuthProvider.isSignOutCalled)
             XCTAssertTrue(tokenUpdator.isUpdateTokensCalled)
             XCTAssertEqual(tokenUpdator.requestedAccessToken, nil)
             XCTAssertEqual(tokenUpdator.requestedRefreshToken, nil)
@@ -93,6 +99,7 @@ final class SignOutUseCaseImplTests: XCTestCase {
             XCTAssertTrue(authRepository.isSignOutCalled)
             XCTAssertTrue(signInInfoRepository.isResetCalled)
             XCTAssertTrue(diaryRepository.isDeleteAllCalled)
+            XCTAssertTrue(thirdAuthProvider.isSignOutCalled)
             XCTAssertTrue(tokenUpdator.isUpdateTokensCalled)
             XCTAssertEqual(tokenUpdator.requestedAccessToken, nil)
             XCTAssertEqual(tokenUpdator.requestedRefreshToken, nil)
@@ -110,6 +117,7 @@ final class SignOutUseCaseImplTests: XCTestCase {
             XCTAssertTrue(authRepository.isSignOutCalled)
             XCTAssertTrue(signInInfoRepository.isResetCalled)
             XCTAssertTrue(diaryRepository.isDeleteAllCalled)
+            XCTAssertTrue(thirdAuthProvider.isSignOutCalled)
             XCTAssertTrue(tokenUpdator.isUpdateTokensCalled)
             XCTAssertEqual(tokenUpdator.requestedAccessToken, nil)
             XCTAssertEqual(tokenUpdator.requestedRefreshToken, nil)

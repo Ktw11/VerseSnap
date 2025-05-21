@@ -13,6 +13,7 @@ public protocol ThirdPartyAuthProvidable: Sendable {
     func handleURL(_ url: URL) -> Bool
     
     func getToken(account: ThirdPartyAccount) async throws -> String
-    func signOut(account: ThirdPartyAccount) async throws
-    func unlink(account: ThirdPartyAccount) async throws
+    func didSignIn(account: ThirdPartyAccount) async
+    func signOut() async throws
+    func unlink() async throws
 }

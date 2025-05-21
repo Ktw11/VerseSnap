@@ -15,11 +15,13 @@ public actor SignOutUseCaseImpl: SignOutUseCase {
         authRepository: AuthRepository,
         signInInfoRepository: SignInInfoRepository,
         diaryRepository: DiaryRepository,
+        thirdAuthProvider: ThirdPartyAuthProvidable,
         tokenUpdator: TokenUpdatable
     ) {
         self.authRepository = authRepository
         self.signInInfoRepository = signInInfoRepository
         self.diaryRepository = diaryRepository
+        self.thirdAuthProvider = thirdAuthProvider
         self.tokenUpdator = tokenUpdator
     }
     
@@ -28,6 +30,7 @@ public actor SignOutUseCaseImpl: SignOutUseCase {
     private let authRepository: AuthRepository
     private let signInInfoRepository: SignInInfoRepository
     private let diaryRepository: DiaryRepository
+    private let thirdAuthProvider: ThirdPartyAuthProvidable
     private let tokenUpdator: TokenUpdatable
     
     // MARK: Methdos
@@ -35,6 +38,16 @@ public actor SignOutUseCaseImpl: SignOutUseCase {
     public func signOut() async throws {
         try await authRepository.signOut()
         
+        async let resetLocalDatas: Void = await resetLocalDatas()
+        async let updateTokens: Void = await tokenUpdator.updateTokens(accessToken: nil, refreshToken: nil)
+        async let signOutThirdParty: Void = await thirdAuthProvider.signOut()
+        
+        _ = try? await (resetLocalDatas, updateTokens, signOutThirdParty)
+    }
+}
+
+private extension SignOutUseCaseImpl {
+    func resetLocalDatas() async {
         async let resetSignInInfo: Void = await signInInfoRepository.reset()
         async let deleteDiaries: Void = await diaryRepository.deleteAll()
         _ = try? await (resetSignInInfo, deleteDiaries)

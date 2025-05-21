@@ -73,6 +73,7 @@ final class UseCaseComponent: UseCaseBuilder {
             authRepository: authRepository,
             signInInfoRepository: signInInfoRepository,
             diaryRepository: repositoryBuilder.diaryRepository,
+            thirdAuthProvider: thirdAuthProvider,
             tokenUpdator: tokenStore
         )
     }

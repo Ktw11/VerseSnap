@@ -10,4 +10,5 @@ import Foundation
 public enum ThirdPartyAuthProviderError: Error {
     case failedToGetToken
     case invalidAccount
+    case notFoundAccount
 }
