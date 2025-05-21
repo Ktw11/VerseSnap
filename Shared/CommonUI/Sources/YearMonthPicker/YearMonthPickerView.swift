@@ -66,8 +66,7 @@ public struct YearMonthPickerView: View {
                 CommonUIAsset.Color.buttonBG.swiftUIColor
                     .clipShape(Capsule())
                     .overlay {
-                        #warning("번역 필요")
-                        Text(verbatim: "확인")
+                        Text("확인")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.white)
                     }
