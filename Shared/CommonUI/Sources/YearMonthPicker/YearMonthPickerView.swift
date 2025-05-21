@@ -58,7 +58,7 @@ public struct YearMonthPickerView: View {
  
     public var body: some View {
         VStack(spacing: 10) {
-            pickers()
+            pickers
             
             Button(action: {
                 isPresenting.toggle()
@@ -83,17 +83,16 @@ public struct YearMonthPickerView: View {
             selectedMonth = localSelectedMonth
         }
     }
-    
-    // MARK: Methods
-    
+}
+
+private extension YearMonthPickerView {
     @ViewBuilder
-    private func pickers() -> some View {
+    var pickers: some View {
         HStack(spacing: 0) {
             Group {
                 Picker(selection: selectedYearWrapper, label: EmptyView()) {
                     ForEach(years, id: \.self) { year in
-                        #warning("번역 필요")
-                        Text(verbatim: "\(year)년")
+                        Text(verbatim: String(year))
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.white)
                     }
@@ -101,8 +100,7 @@ public struct YearMonthPickerView: View {
 
                 Picker(selection: $localSelectedMonth, label: EmptyView()) {
                     ForEach(months, id: \.self) { months in
-                        #warning("번역 필요")
-                        Text(verbatim: "\(months)월")
+                        Text(verbatim: String(months))
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.white)
                     }
@@ -112,7 +110,7 @@ public struct YearMonthPickerView: View {
         }
     }
     
-    private func availableMonths(_ selectedYear: Int) -> [Int] {
+    func availableMonths(_ selectedYear: Int) -> [Int] {
         if selectedYear == limit.minimumYear && selectedYear == limit.currentYear {
             return Array(limit.minimumMonth...limit.currentMonth)
         } else if selectedYear == limit.minimumYear {
@@ -124,7 +122,7 @@ public struct YearMonthPickerView: View {
         }
     }
     
-    private func isValidMonth(selectedYear: Int, selectedMonth: Int) -> Bool {
+    func isValidMonth(selectedYear: Int, selectedMonth: Int) -> Bool {
         return availableMonths(selectedYear).contains(selectedMonth)
     }
 }
