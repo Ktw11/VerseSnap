@@ -18,7 +18,7 @@ public extension View {
                 content()
                     .safeAreaPadding()
                     .background(CommonUIAsset.Color.placeholderBG.swiftUIColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .clipShape(RoundedRectangle(cornerRadius: 18))
                     .frame(maxHeight: .infinity, alignment: .bottom)
                     .ignoresSafeArea()
                     .readAndBindHeight()
