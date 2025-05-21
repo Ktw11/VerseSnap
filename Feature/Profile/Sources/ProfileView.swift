@@ -38,8 +38,7 @@ public struct ProfileView: View {
                 Spacer()
                     .frame(height: 14)
                 
-                #warning("text 반영 필요")
-                Text(verbatim: "오늘의 삼행시를 기록해보세요")
+                Text("오늘의 삼행시를 기록해보세요")
                     .foregroundStyle(.white)
                     .font(.suite(size: 16, weight: .regular))
             }

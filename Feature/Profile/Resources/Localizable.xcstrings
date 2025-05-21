@@ -24,6 +24,16 @@
         }
       }
     },
+    "오늘의 삼행시를 기록해보세요" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record today’s verse!"
+          }
+        }
+      }
+    },
     "완료" : {
       "localizations" : {
         "en" : {
