@@ -86,7 +86,7 @@ public final class HomeViewModel: Sendable {
     private var cachedDiaries: Set<VerseDiary> = []
     private let stackPagingController: HomeDiaryPagingController<HomeStackContentViewModel>
     private let gridPagingController: HomeDiaryPagingController<HomeGridContentViewModel>
-    var favoriteTasks: Dictionary<String, Task<Void, Never>> = .init()
+    private var favoriteTasks: Dictionary<String, Task<Void, Never>> = .init()
     private let currentYear: Int
     private let currentMonth: Int
     private let calendar: Calendar
