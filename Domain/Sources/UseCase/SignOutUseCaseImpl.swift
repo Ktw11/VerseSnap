@@ -38,20 +38,26 @@ public actor SignOutUseCaseImpl: SignOutUseCase {
     public func signOut() async throws {
         try await authRepository.signOut()
         
-        async let resetLocalDatas: Void = await resetLocalDatas()
-        async let updateTokens: Void = await tokenUpdator.updateTokens(accessToken: nil, refreshToken: nil)
         async let signOutThirdParty: Void = await thirdAuthProvider.signOut()
+        async let resetUserSession: Void = await resetUserSession()
+        _ = try? await (signOutThirdParty, resetUserSession)
+    }
+    
+    public func deleteAccount() async throws {
+        try await authRepository.deleteAccount()
         
-        _ = try? await (resetLocalDatas, updateTokens, signOutThirdParty)
+        async let unlinkThirdParty: Void = await thirdAuthProvider.unlink()
+        async let resetUserSession: Void = await resetUserSession()
+        _ = try? await (unlinkThirdParty, resetUserSession)
     }
 }
 
 private extension SignOutUseCaseImpl {
-    func resetLocalDatas() async {
+    func resetUserSession() async {
         async let resetSignInInfo: Void = await signInInfoRepository.reset()
         async let deleteDiaries: Void = await diaryRepository.deleteAll()
-        _ = try? await (resetSignInInfo, deleteDiaries)
+        async let updateTokens: Void = await tokenUpdator.updateTokens(accessToken: nil, refreshToken: nil)
         
-        await tokenUpdator.updateTokens(accessToken: nil, refreshToken: nil)
+        _ = try? await (resetSignInInfo, deleteDiaries, updateTokens)
     }
 }

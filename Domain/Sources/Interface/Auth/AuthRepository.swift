@@ -11,5 +11,6 @@ public protocol AuthRepository: Sendable {
     func signIn(token: String, account: String) async throws -> SignInResponse
     func signIn(refreshToken: String) async throws -> SignInResponse
     func signOut() async throws
+    func deleteAccount() async throws
     func refreshTokens(refreshToken: String) async throws -> AuthTokens
 }

@@ -21,6 +21,9 @@ final class MockAuthRepository: AuthRepository, @unchecked Sendable {
     var isSignOutCalled: Bool = false
     var expectedSignOutError: Error?
     
+    var isDeleteAccountCalled: Bool = false
+    var expectedDeleteAccountError: Error?
+    
     var isRefreshTokensCalled: Bool = false
     var expectedRefreshToken: AuthTokens?
     var expectedRefreshTokenError: Error?
@@ -54,6 +57,14 @@ final class MockAuthRepository: AuthRepository, @unchecked Sendable {
         
         if let expectedSignOutError {
             throw expectedSignOutError
+        }
+    }
+    
+    func deleteAccount() async throws {
+        isDeleteAccountCalled = true
+        
+        if let expectedDeleteAccountError {
+            throw expectedDeleteAccountError
         }
     }
     

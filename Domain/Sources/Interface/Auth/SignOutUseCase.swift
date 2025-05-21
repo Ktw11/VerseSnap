@@ -9,4 +9,5 @@ import Foundation
 
 public protocol SignOutUseCase: Sendable {
     func signOut() async throws
+    func deleteAccount() async throws
 }

@@ -65,6 +65,10 @@ public actor AuthRepositoryImpl: AuthRepository {
         }
     }
     
+    public func deleteAccount() async throws {
+        #warning("구현 필요")
+    }
+    
     public func refreshTokens(refreshToken: String) async throws -> AuthTokens {
         let api = AuthAPI.refreshTokens(refreshToken: refreshToken)
         

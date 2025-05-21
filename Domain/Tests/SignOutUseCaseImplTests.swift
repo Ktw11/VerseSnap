@@ -125,4 +125,84 @@ final class SignOutUseCaseImplTests: XCTestCase {
             XCTFail()
         }
     }
+    
+    func test_deleteAccount_when_authRepository_fails_then_throw_error() async {
+        // given
+        authRepository.expectedDeleteAccountError = TestError.common
+        
+        // when
+        do {
+            try await sut.deleteAccount()
+            XCTFail()
+        } catch TestError.common {
+            // then
+            XCTAssertTrue(authRepository.isDeleteAccountCalled)
+            XCTAssertFalse(signInInfoRepository.isResetCalled)
+            XCTAssertFalse(diaryRepository.isDeleteAllCalled)
+            XCTAssertFalse(thirdAuthProvider.isUnlinkCalled)
+            XCTAssertFalse(tokenUpdator.isUpdateTokensCalled)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_deleteAccount_when_authRepository_success_and_signInInfoRepository_fails_then_continue() async {
+        // given
+        signInInfoRepository.expectedResetError = TestError.common
+        
+        // when
+        do {
+            try await sut.deleteAccount()
+            
+            // then
+            XCTAssertTrue(authRepository.isDeleteAccountCalled)
+            XCTAssertTrue(signInInfoRepository.isResetCalled)
+            XCTAssertTrue(diaryRepository.isDeleteAllCalled)
+            XCTAssertTrue(thirdAuthProvider.isUnlinkCalled)
+            XCTAssertTrue(tokenUpdator.isUpdateTokensCalled)
+            XCTAssertEqual(tokenUpdator.requestedAccessToken, nil)
+            XCTAssertEqual(tokenUpdator.requestedRefreshToken, nil)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_deleteAccount_when_authRepository_success_and_diaryRepository_fails_then_continue() async {
+        // given
+        diaryRepository.expectedDeleteAllError = TestError.common
+        
+        // when
+        do {
+            try await sut.deleteAccount()
+            
+            // then
+            XCTAssertTrue(authRepository.isDeleteAccountCalled)
+            XCTAssertTrue(signInInfoRepository.isResetCalled)
+            XCTAssertTrue(diaryRepository.isDeleteAllCalled)
+            XCTAssertTrue(thirdAuthProvider.isUnlinkCalled)
+            XCTAssertTrue(tokenUpdator.isUpdateTokensCalled)
+            XCTAssertEqual(tokenUpdator.requestedAccessToken, nil)
+            XCTAssertEqual(tokenUpdator.requestedRefreshToken, nil)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_deleteAccount_success() async {
+        // when
+        do {
+            try await sut.deleteAccount()
+            
+            // then
+            XCTAssertTrue(authRepository.isDeleteAccountCalled)
+            XCTAssertTrue(signInInfoRepository.isResetCalled)
+            XCTAssertTrue(diaryRepository.isDeleteAllCalled)
+            XCTAssertTrue(thirdAuthProvider.isUnlinkCalled)
+            XCTAssertTrue(tokenUpdator.isUpdateTokensCalled)
+            XCTAssertEqual(tokenUpdator.requestedAccessToken, nil)
+            XCTAssertEqual(tokenUpdator.requestedRefreshToken, nil)
+        } catch {
+            XCTFail()
+        }
+    }
 }
