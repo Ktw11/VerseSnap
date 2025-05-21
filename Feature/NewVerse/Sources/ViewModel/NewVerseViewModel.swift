@@ -69,9 +69,9 @@ public final class NewVerseViewModel {
             "다시 만들기"
         }
     }
-    #warning("수정 필요")
+
     var verse: AttributedString? {
-        generatedVerses?.joined()
+        generatedVerses?
             .highlightFirstCharacterOfEachLine(
                 highlightedFont: .suite(size: 14, weight: .bold),
                 regularFont: .suite(size: 14, weight: .regular)

@@ -7,16 +7,9 @@
 
 import SwiftUI
 
-public extension String {
-    func firstLetters(separator: String) -> String {
-        self.components(separatedBy: .newlines)
-          .compactMap { $0.first }
-          .map(String.init)
-          .joined(separator: separator)
-    }
-    
+public extension [String] {
     func highlightFirstCharacterOfEachLine(highlightedFont: Font?, regularFont: Font?) -> AttributedString {
-        let lines = self.components(separatedBy: "\n")
+        let lines = self
         var result = AttributedString()
         
         for (index, line) in lines.enumerated() {
@@ -37,5 +30,12 @@ public extension String {
         }
         
         return result
+    }
+    
+    func firstLetters(separator: String) -> String {
+        self
+          .compactMap { $0.first }
+          .map(String.init)
+          .joined(separator: separator)
     }
 }

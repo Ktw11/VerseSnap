@@ -29,7 +29,6 @@ struct HomeStackViewModelFactory: HomeContentViewModelFactory {
         let day: Int = calendar.component(.day, from: createdDate)
         let weekdayIndex: Int = calendar.component(.weekday, from: createdDate)
         
-        #warning("수정 필요")
         return HomeStackContentViewModel(
             id: diary.id,
             photoContainerViewModel: .init(
@@ -38,7 +37,7 @@ struct HomeStackViewModelFactory: HomeContentViewModelFactory {
                 bottomTitle: Constants.weekdaySymbols[safe: weekdayIndex] ?? ""
             ),
             title: createdDate.monthDayString(),
-            description: diary.verses.joined().firstLetters(separator: "/"),
+            description: diary.verses.firstLetters(separator: "/"),
             timeString: createdDate.timeString(),
             isFavorite: diary.isFavorite
         )
