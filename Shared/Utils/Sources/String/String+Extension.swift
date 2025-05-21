@@ -36,6 +36,7 @@ public extension [String] {
         self
           .compactMap { $0.first }
           .map(String.init)
+          .filter { !$0.isEmpty }
           .joined(separator: separator)
     }
 }
