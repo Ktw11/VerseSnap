@@ -58,7 +58,7 @@ public struct ProfileView: View {
                 }
                 
                 menuButton(title: "회원탈퇴") {
-                    #warning("action 반영 필요")
+                    viewModel.didTapDeleteAccount()
                 }
             }
             .padding(.horizontal, 30)
@@ -68,6 +68,17 @@ public struct ProfileView: View {
         .clipShape(Rectangle())
         .onTapGesture {
             viewModel.isNicknameFocused = false
+        }
+        .modalView($viewModel.isDeleteAccountModalPresented) {
+            DeleteAccountConfirmView(
+                onConfirm: {
+                    viewModel.isDeleteAccountModalPresented = false
+                    viewModel.confirmDeleteAccount()
+                },
+                onDismiss: {
+                    viewModel.isDeleteAccountModalPresented = false
+                }
+            )
         }
     }
 }
@@ -150,3 +161,59 @@ import PreviewSupport
 }
 
 #endif
+
+private struct DeleteAccountConfirmView: View {
+    let onConfirm: () -> Void
+    let onDismiss: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            Text("회원탈퇴")
+                .font(.suite(size: 23, weight: .bold))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text("정말로 탈퇴하시겠습니까? 탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.")
+                .font(.suite(size: 17, weight: .regular))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            HStack(spacing: 12) {
+                capsuleButton(
+                    title: "취소",
+                    foregroundColor: .white,
+                    backgroundColor: Color.gray.opacity(0.3),
+                    action: { onDismiss() }
+                )
+                
+                capsuleButton(
+                    title: "확인",
+                    foregroundColor: .black,
+                    backgroundColor: Color.white.opacity(0.7),
+                    action: { onConfirm() }
+                )
+            }
+            .padding(.top, 8)
+        }
+        .padding(.horizontal, 14)
+        .padding(.top, 14)
+        .padding(.bottom, 24)
+    }
+    
+    @ViewBuilder
+    func capsuleButton(
+        title: String,
+        foregroundColor: Color,
+        backgroundColor: Color,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Text(title)
+                .foregroundColor(foregroundColor)
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+                .background(backgroundColor)
+                .clipShape(Capsule())
+        }
+    }
+}

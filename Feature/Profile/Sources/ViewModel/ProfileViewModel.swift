@@ -42,6 +42,7 @@ public final class ProfileViewModel: Sendable {
     
     var editingNickname: String = ""
     var isNicknameFocused: Bool = false
+    var isDeleteAccountModalPresented = false
     private(set) var isNicknameUpdating: Bool = false
     private(set) var isLoading: Bool = false
     
@@ -74,13 +75,31 @@ public final class ProfileViewModel: Sendable {
     }
     
     func didTapSignOut() {
+        executeSignOutUseCase { [signOutUseCase] in
+            try await signOutUseCase.signOut()
+        }
+    }
+    
+    func didTapDeleteAccount() {
+        isDeleteAccountModalPresented = true
+    }
+    
+    func confirmDeleteAccount() {
+        executeSignOutUseCase { [signOutUseCase] in
+            try await signOutUseCase.deleteAccount()
+        }
+    }
+}
+
+private extension ProfileViewModel {
+    func executeSignOutUseCase(_ execute: @escaping () async throws -> Void) {
         appStateUpdator.showLoadingOverlay(true)
         
-        Task { [signOutUseCase, weak self] in
+        Task { [weak self] in
             defer { self?.appStateUpdator.showLoadingOverlay(false) }
             
             do {
-                try await signOutUseCase.signOut()
+                try await execute()
                 self?.appStateUpdator.setScene(to: .signIn)
             } catch {
                 self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
