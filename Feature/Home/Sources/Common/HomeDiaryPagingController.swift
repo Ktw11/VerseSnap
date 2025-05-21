@@ -59,6 +59,7 @@ final class HomeDiaryPagingController<ViewModel: HomeContentViewModel> {
     func insertDiary(_ diary: VerseDiary, at index: Int) {
         let viewModel = viewModelFactory.build(from: diary)
         viewModels.insert(viewModel, at: index)
+        pagingState.isEmpty = false
     }
     
     func reset() {
