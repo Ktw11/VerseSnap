@@ -11,15 +11,15 @@ public struct GeneratedVerseInfo: Decodable, Equatable, Sendable {
     // MARK: Lifecycle
     
     public init(
-        verse: String,
+        verses: [String],
         remainingLimit: Int
     ) {
-        self.verse = verse
+        self.verses = verses
         self.remainingLimit = remainingLimit
     }
     
     // MARK: Properties
 
-    public let verse: String
+    public let verses: [String]
     public let remainingLimit: Int
 }

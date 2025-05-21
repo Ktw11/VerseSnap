@@ -98,8 +98,8 @@ public final class NewVerseViewModel {
             
             do {
                 let result = try await verseUseCase.generate(image: croppedImage)
-                
-                self?.generatedVerse = result.verse
+                #warning("수정 필요")
+                self?.generatedVerse = result.verseInfo.verses.joined()
             } catch let error as DomainError {
                 self?.handleGenerateDomainError(error)
             } catch {

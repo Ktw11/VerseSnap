@@ -38,7 +38,7 @@ public extension VerseUseCasePreview {
     
     static var dummy: GeneratedVerseInfo {
         GeneratedVerseInfo(
-            verse: "삼: 삼삼삼\n행: 행행행\n시: 시시시",
+            verses: ["삼: 삼삼삼", "행: 행행", "시: 시시"],
             remainingLimit: 3
         )
     }
