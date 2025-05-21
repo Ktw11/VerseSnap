@@ -15,7 +15,7 @@ public final class PermanentDiary {
     private(set) var imageURL: String
     private(set) var hashtags: String
     private(set) var createdAt: TimeInterval
-    private(set) var verses: [String]
+    private(set) var verses: String
     private(set) var userId: String
     var isFavorite: Bool
     
@@ -24,7 +24,7 @@ public final class PermanentDiary {
         self.imageURL = imageURL
         self.hashtags = hashtags.joined(separator: ",")
         self.createdAt = createdAt
-        self.verses = verses
+        self.verses = verses.joined(separator: ",")
         self.userId = userId
         self.isFavorite = isFavorite
     }
