@@ -1,9 +1,0 @@
-{
-  "sourceLanguage" : "ko",
-  "strings" : {
-    "@@@ SPLASH" : {
-      "shouldTranslate" : false
-    }
-  },
-  "version" : "1.0"
-}
