@@ -33,7 +33,7 @@ public final class ProfileViewModel: Sendable {
         let left = AttributedString(nickname)
             .foreground(Color.white)
             .fonted(.suite(size: 20, weight: .bold))
-        let right = AttributedString(localized: " 님")
+        let right = AttributedString(localized: "title")
             .foreground(Color.white)
             .fonted(.suite(size: 20, weight: .regular))
         
@@ -69,7 +69,7 @@ public final class ProfileViewModel: Sendable {
                 try await userUseCase.updateNickname(to: newNickname)
                 self?.nickname = newNickname
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
             }
         }
     }
@@ -102,7 +102,7 @@ private extension ProfileViewModel {
                 try await execute()
                 self?.appStateUpdator.setScene(to: .signIn)
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
             }
         }
     }

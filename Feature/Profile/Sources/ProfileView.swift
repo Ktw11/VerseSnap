@@ -38,7 +38,7 @@ public struct ProfileView: View {
                 Spacer()
                     .frame(height: 14)
                 
-                Text("오늘의 삼행시를 기록해보세요")
+                Text("Record today’s verse!")
                     .foregroundStyle(.white)
                     .font(.suite(size: 16, weight: .regular))
             }
@@ -52,11 +52,11 @@ public struct ProfileView: View {
                 .frame(height: 50)
             
             VStack(spacing: 20) {
-                menuButton(title: "로그아웃") {
+                menuButton(title: "Sign-out") {
                     viewModel.didTapSignOut()
                 }
                 
-                menuButton(title: "회원탈퇴") {
+                menuButton(title: "Delete Account") {
                     viewModel.didTapDeleteAccount()
                 }
             }
@@ -109,7 +109,7 @@ private extension ProfileView {
                     Button(action: {
                         viewModel.didTapNicknameChangeDone()
                     }, label: {
-                        Text("완료")
+                        Text("Done")
                             .font(.suite(size: 15, weight: .regular))
                             .foregroundStyle(Color.white)
                     })
@@ -128,7 +128,7 @@ private extension ProfileView {
     }
     
     @ViewBuilder
-    func menuButton(title: String, action: (@escaping () -> Void)) -> some View {
+    func menuButton(title: LocalizedStringKey, action: (@escaping () -> Void)) -> some View {
         Button(action: {
             action()
         }, label: {
@@ -167,26 +167,26 @@ private struct DeleteAccountConfirmView: View {
     
     var body: some View {
         VStack(spacing: 24) {
-            Text("회원탈퇴")
+            Text("Delete Account")
                 .font(.suite(size: 23, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            Text("정말로 탈퇴하시겠습니까? 탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.")
+            Text("Are you sure you want to delete your account?\nAll of your data will be permanently removed and cannot be recovered.")
                 .font(.suite(size: 17, weight: .regular))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             HStack(spacing: 12) {
                 capsuleButton(
-                    title: "취소",
+                    title: "Cancel",
                     foregroundColor: .white,
                     backgroundColor: Color.gray.opacity(0.3),
                     action: { onDismiss() }
                 )
                 
                 capsuleButton(
-                    title: "확인",
+                    title: "Confirm",
                     foregroundColor: .black,
                     backgroundColor: Color.white.opacity(0.7),
                     action: { onConfirm() }

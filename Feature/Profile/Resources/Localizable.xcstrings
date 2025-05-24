@@ -1,65 +1,81 @@
 {
-  "sourceLanguage" : "ko",
+  "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
-    " 님" : {
+    "An error occurred. Please try again." : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“”"
+            "value" : "에러가 발생했습니다. 다시 시도해주세요."
           }
         }
       }
     },
-    "에러가 발생했습니다. 다시 시도해주세요." : {
+    "Are you sure you want to delete your account?\nAll of your data will be permanently removed and cannot be recovered." : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "An error occurred. Please try again."
+            "value" : "정말로 탈퇴하시겠습니까? 탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다."
           }
         }
       }
     },
-    "오늘의 삼행시를 기록해보세요" : {
+    "Delete Account" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Record today’s verse!"
+            "value" : "회원탈퇴"
           }
         }
       }
     },
-    "완료" : {
+    "Done" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Done"
+            "value" : "완료"
           }
         }
       }
     },
-    "정말로 탈퇴하시겠습니까? 탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다." : {
+    "Record today’s verse!" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Are you sure you want to delete your account? All of your data will be permanently removed and cannot be recovered."
+            "value" : "오늘의 삼행시를 기록해보세요"
           }
         }
       }
     },
-    "회원탈퇴" : {
+    "Sign-out" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로그아웃"
+          }
+        }
+      }
+    },
+    "title" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete account"
+            "value" : " "
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " 님"
           }
         }
       }
