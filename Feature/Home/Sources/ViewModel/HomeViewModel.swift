@@ -256,8 +256,8 @@ private extension HomeStackContentViewModel {
         .init(
             id: Constants.placeholderId,
             photoContainerViewModel: .init(imageURL: "", topTitle: nil, bottomTitle: "Today"),
-            title: String(localized: "오늘의 삼행시"),
-            description: String(localized: "기록하기"),
+            title: String(localized: "Today’s verse"),
+            description: String(localized: "Create"),
             timeString: nil,
             isFavorite: nil
         )

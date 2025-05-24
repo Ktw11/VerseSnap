@@ -1,32 +1,32 @@
 {
-  "sourceLanguage" : "ko",
+  "sourceLanguage" : "en",
   "strings" : {
-    "기록하기" : {
+    "Create" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create"
+            "value" : "기록하기"
           }
         }
       }
     },
-    "아직 생성한 삼행시가 없습니다." : {
+    "Today’s verse" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You haven’t created any verses  yet."
+            "value" : "오늘의 삼행시"
           }
         }
       }
     },
-    "오늘의 삼행시" : {
+    "You haven’t created any verses yet." : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Today’s verse"
+            "value" : "아직 기록한 삼행시가 없습니다."
           }
         }
       }

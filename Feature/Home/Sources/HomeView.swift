@@ -225,7 +225,7 @@ private extension HomeView {
     
     @ViewBuilder
     func contentEmptyView() -> some View {
-        Text("아직 생성한 삼행시가 없습니다.")
+        Text("You haven’t created any verses yet.")
             .font(.suite(size: 14, weight: .regular))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
