@@ -77,6 +77,8 @@ private struct CustomTabView: View {
             } label: {
                 AppAsset.Image.icHomeTab.swiftUIImage
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundStyle(selected == .home ? Color.white : Color.white.opacity(0.3))
                     .frame(size: Constants.tabIconSize)
             }
            
@@ -87,6 +89,8 @@ private struct CustomTabView: View {
             } label: {
                 AppAsset.Image.icPlusTab.swiftUIImage
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundStyle(Color.white.opacity(0.3))
                     .frame(size: Constants.tabIconSize)
             }
             
@@ -97,6 +101,8 @@ private struct CustomTabView: View {
             } label: {
                 AppAsset.Image.icProfileTab.swiftUIImage
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundStyle(selected == .profile ? Color.white : Color.white.opacity(0.3))
                     .frame(size: Constants.tabIconSize)
             }
             
