@@ -2,7 +2,7 @@ import ProjectDescription
 
 public enum TargetType: String, Sendable {
     // App
-    case app = "App"
+    case verseSnap = "VerseSnap"
     
     // Domain
     case domain = "Domain"
@@ -41,7 +41,7 @@ public extension TargetType {
     
     var bundleId: String {
         switch self {
-        case .app:
+        case .verseSnap:
             baseBundleId
         case .domain:
             "\(baseBundleId).Domain"

@@ -1,7 +1,7 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let type = TargetType.app
+let type = TargetType.verseSnap
 
 let project = Project(
     name: type.name,

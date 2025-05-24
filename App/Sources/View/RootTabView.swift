@@ -75,7 +75,7 @@ private struct CustomTabView: View {
             Button {
                 selected = .home
             } label: {
-                AppAsset.Image.icHomeTab.swiftUIImage
+                VerseSnapAsset.Image.icHomeTab.swiftUIImage
                     .resizable()
                     .renderingMode(.template)
                     .foregroundStyle(selected == .home ? Color.white : Color.white.opacity(0.3))
@@ -87,7 +87,7 @@ private struct CustomTabView: View {
             Button {
                 isNewVersePresented.toggle()
             } label: {
-                AppAsset.Image.icPlusTab.swiftUIImage
+                VerseSnapAsset.Image.icPlusTab.swiftUIImage
                     .resizable()
                     .renderingMode(.template)
                     .foregroundStyle(Color.white.opacity(0.3))
@@ -99,7 +99,7 @@ private struct CustomTabView: View {
             Button {
                 selected = .profile
             } label: {
-                AppAsset.Image.icProfileTab.swiftUIImage
+                VerseSnapAsset.Image.icProfileTab.swiftUIImage
                     .resizable()
                     .renderingMode(.template)
                     .foregroundStyle(selected == .profile ? Color.white : Color.white.opacity(0.3))
