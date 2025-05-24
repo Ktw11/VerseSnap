@@ -15,6 +15,7 @@ let project = Project(
             resources: ["Resources/**"],
             dependencies: [
                 .featureInterface(type: targetType),
+                .featureInterface(type: .newVerse),
                 .domain,
                 .shared(type: .commonUI),
                 .shared(type: .utils),
