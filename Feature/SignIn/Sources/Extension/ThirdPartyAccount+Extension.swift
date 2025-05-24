@@ -30,9 +30,9 @@ extension ThirdPartyAccount {
     var buttonText: String {
         switch self {
         case .apple:
-            String(localized: "애플", bundle: .module)
+            String(localized: "Apple", bundle: .module)
         case .kakao:
-            String(localized: "카카오", bundle: .module)
+            String(localized: "Kakao", bundle: .module)
         }
     }
 }

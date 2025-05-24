@@ -25,7 +25,7 @@ public struct SignInView: View {
             VStack {
                 Spacer()
                 
-                Text("로그인")
+                Text("Sign-In")
                     .foregroundStyle(Color.white)
                     .font(.largeTitle)
                 
@@ -88,8 +88,8 @@ private struct SignInButton: View {
             
             Spacer()
 
-            Text("\(buttonText)로 로그인", bundle: .module)
-                .font(.system(size: 16, weight: .regular))
+            Text("Sign in with \(buttonText)", bundle: .module)
+                .font(.system(size: 16, weight: .semibold))
             
             Spacer()
         }

@@ -1,45 +1,52 @@
 {
-  "sourceLanguage" : "ko",
+  "sourceLanguage" : "en",
   "strings" : {
-    "%@로 로그인" : {
+    "An error occurred. Please try again later." : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sign in with %@"
+            "value" : "에러가 발생했습니다. 다시 시도해주세요."
           }
         }
       }
     },
-    "로그인" : {
-      "shouldTranslate" : false
-    },
-    "애플" : {
+    "Apple" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apple"
+            "value" : "애플"
           }
         }
       }
     },
-    "에러가 발생했습니다. 다시 시도해주세요." : {
+    "Kakao" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "An error occurred. Please try again later."
+            "value" : "카카오"
           }
         }
       }
     },
-    "카카오" : {
+    "Sign in with %@" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kakao"
+            "value" : "%@로 로그인"
+          }
+        }
+      }
+    },
+    "Sign-In" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로그인"
           }
         }
       }

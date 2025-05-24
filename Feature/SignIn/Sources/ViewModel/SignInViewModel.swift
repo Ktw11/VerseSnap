@@ -42,7 +42,7 @@ public final class SignInViewModel {
                 let result = try await useCase.signIn(account: account)
                 self?.appStateUpdator.setScene(to: .tabs(result.user))
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again later."))
             }
         }
     }
