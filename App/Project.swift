@@ -29,7 +29,10 @@ let project = Project(
                             ]
                         ]
                     ],
-                    "NSPhotoLibraryUsageDescription": "need access to photo library"
+                    "NSPhotoLibraryUsageDescription": "need access to photo library",
+                    "UISupportedInterfaceOrientations": [
+                        "UIInterfaceOrientationPortrait"
+                    ]
                 ]
             ),
             sources: ["Sources/**"],
