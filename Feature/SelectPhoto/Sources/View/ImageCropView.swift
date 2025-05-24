@@ -87,7 +87,7 @@ struct ImageCropView: View {
                 .coordinateSpace(Constants.outerSpace)
         }
         .toolbar {
-            Button("완료") {
+            Button("Done") {
                 didTapDone()
             }
         }

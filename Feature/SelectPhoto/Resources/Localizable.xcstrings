@@ -1,62 +1,62 @@
 {
-  "sourceLanguage" : "ko",
+  "sourceLanguage" : "en",
   "strings" : {
-    "사진 선택" : {
+    "Album permission is required." : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select photo"
+            "value" : "앨범 권한이 필요합니다."
           }
         }
       }
     },
-    "설정으로 이동" : {
+    "Cancel" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Go to Settings"
+            "value" : "취소"
           }
         }
       }
     },
-    "앨범 권한이 필요합니다." : {
+    "Done" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Album permission is required."
+            "value" : "완료"
           }
         }
       }
     },
-    "앱에서 카메라를 사용하려면 카메라 권한이 필요합니다. 설정에서 권한을 변경해주세요." : {
+    "Go to Settings" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "To select the photo, you need to grant album permission. Please change the permission in Settings."
+            "value" : "설정으로 이동"
           }
         }
       }
     },
-    "완료" : {
+    "Select photo" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Done"
+            "value" : "사진 선택"
           }
         }
       }
     },
-    "취소" : {
+    "To select the photo, you need to grant album permission. Please change the permission in Settings." : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "cancel"
+            "value" : "앱에서 카메라를 사용하려면 카메라 권한이 필요합니다. 설정에서 권한을 변경해주세요."
           }
         }
       }

@@ -74,7 +74,7 @@ private extension SelectPhotoView {
             
             Spacer()
             
-            Text("사진 선택")
+            Text("Select photo")
                 .font(.system(size: 17))
                 .foregroundStyle(Color.white)
             
@@ -116,16 +116,16 @@ private extension SelectPhotoView {
             .task {
                 await viewModel.requestAuthorization()
             }
-            .alert("앨범 권한이 필요합니다.", isPresented: $viewModel.isAuthAlertPresented) {
-                Button("설정으로 이동") {
+            .alert("Album permission is required.", isPresented: $viewModel.isAuthAlertPresented) {
+                Button("Go to Settings") {
                     viewModel.openAppSettings()
                 }
                 
-                Button("취소", role: .cancel) {
+                Button("Cancel", role: .cancel) {
                     dismiss()
                 }
             } message: {
-                Text("앱에서 카메라를 사용하려면 카메라 권한이 필요합니다. 설정에서 권한을 변경해주세요.")
+                Text("To select the photo, you need to grant album permission. Please change the permission in Settings.")
             }
     }
 }
