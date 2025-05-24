@@ -141,7 +141,7 @@ private extension NewVerseView {
                     isPresented.toggle()
                 }
             }, label: {
-                Text("완료")
+                Text("Done")
                     .font(.suite(size: 17, weight: .regular))
                     .foregroundStyle(.white)
                     .padding(.trailing, 27)
@@ -172,7 +172,7 @@ private extension NewVerseView {
                         .aspectRatio(contentMode: .fill)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    Text("사진 선택하기")
+                    Text("Select Photo")
                         .foregroundStyle(.white)
                         .font(.suite(size: 15, weight: .regular))
                 }

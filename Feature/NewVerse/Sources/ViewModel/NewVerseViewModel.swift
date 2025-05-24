@@ -32,14 +32,14 @@ public final class NewVerseViewModel {
     private enum Constants {
         static let maxHastagCount: Int = 5
         static var loadingText: LocalizedStringKey {
-            let defaultText: LocalizedStringKey = "삼행시 뽑는 중.. 🔥"
+            let defaultText: LocalizedStringKey = "loadingText1"
             
             return [
                 defaultText,
-                "삼행시 생각 중.. 🔥",
-                "머리 싸매는 중.. 🧐",
-                "머리 굴리는 중.. 🗿",
-                "진지하게 고민 중.. 🤔"
+                "loadingText2",
+                "loadingText3",
+                "loadingText4",
+                "loadingText5"
             ].randomElement() ?? defaultText
         }
     }
@@ -64,9 +64,9 @@ public final class NewVerseViewModel {
     }
     var buttonText: LocalizedStringKey {
         if generatedVerses == nil {
-            "삼행시 만들기"
+            "Generate"
         } else {
-            "다시 만들기"
+            "Regenerate"
         }
     }
 
@@ -108,7 +108,7 @@ public final class NewVerseViewModel {
             } catch let error as DomainError {
                 self?.handleGenerateDomainError(error)
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
             }
         }
     }
@@ -132,7 +132,7 @@ public final class NewVerseViewModel {
                     hashtags: hashtagValues
                 )
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
             }
         }
     }
@@ -166,9 +166,9 @@ extension NewVerseViewModel: HashtagEventListener {
     func handleGenerateDomainError(_ error: DomainError) {
         switch error {
         case .exceedDailyLimit:
-            appStateUpdator.addToast(info: .init(message: "오늘의 삼행시 횟수 제한을 초과했어요."))
+            appStateUpdator.addToast(info: .init(message: "You have exceeded today’s limit."))
         default:
-            appStateUpdator.addToast(info: .init(message: "에러가 발생했습니다. 다시 시도해주세요."))
+            appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
         }
     }
 }

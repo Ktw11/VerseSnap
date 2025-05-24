@@ -1,112 +1,142 @@
 {
-  "sourceLanguage" : "ko",
+  "sourceLanguage" : "en",
   "strings" : {
-    "다시 만들기" : {
+    "An error occurred. Please try again." : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Regenerate"
+            "value" : "에러가 발생했습니다. 다시 시도해주세요."
           }
         }
       }
     },
-    "머리 굴리는 중.. 🗿" : {
+    "Done" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Racking my brain... 🧐"
+            "value" : "완료"
           }
         }
       }
     },
-    "머리 싸매는 중.. 🧐" : {
+    "Generate" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Racking my brain... 🧐"
+            "value" : "삼행시 만들기"
           }
         }
       }
     },
-    "사진 선택하기" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select Photo"
-          }
-        }
-      }
-    },
-    "삼행시 만들기" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Generate"
-          }
-        }
-      }
-    },
-    "삼행시 뽑는 중.. 🔥" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thinking.. 🔥"
-          }
-        }
-      }
-    },
-    "삼행시 생각 중.. 🔥" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thinking.. 🔥"
-          }
-        }
-      }
-    },
-    "에러가 발생했습니다. 다시 시도해주세요." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An error occurred. Please try again."
-          }
-        }
-      }
-    },
-    "오늘의 삼행시 횟수 제한을 초과했어요." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have exceeded today’s limit."
-          }
-        }
-      }
-    },
-    "완료" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Done"
-          }
-        }
-      }
-    },
-    "진지하게 고민 중.. 🤔" : {
+    "loadingText1" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deep in thought... 🤔"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "머리 굴리는 중.. 🗿"
+          }
+        }
+      }
+    },
+    "loadingText2" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Racking my brain... 🧐"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "머리 싸매는 중.. 🧐"
+          }
+        }
+      }
+    },
+    "loadingText3" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Racking my brain... 🧐"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "삼행시 뽑는 중.. 🔥"
+          }
+        }
+      }
+    },
+    "loadingText4" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Thinking.. 🔥\""
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "삼행시 생각 중.. 🔥"
+          }
+        }
+      }
+    },
+    "loadingText5" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Thinking.. 🔥\""
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "진지하게 고민 중.. 🤔"
+          }
+        }
+      }
+    },
+    "Regenerate" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 만들기"
+          }
+        }
+      }
+    },
+    "Select Photo" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사진 선택하기"
+          }
+        }
+      }
+    },
+    "You have exceeded today’s limit." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘의 삼행시 횟수 제한을 초과했어요."
           }
         }
       }
