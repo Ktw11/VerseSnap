@@ -33,7 +33,7 @@ public final class ProfileViewModel: Sendable {
         let left = AttributedString(nickname)
             .foreground(Color.white)
             .fonted(.suite(size: 20, weight: .bold))
-        let right = AttributedString(localized: "title")
+        let right = AttributedString(localized: "title", bundle: .module)
             .foreground(Color.white)
             .fonted(.suite(size: 20, weight: .regular))
         

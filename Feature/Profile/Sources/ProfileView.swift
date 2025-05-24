@@ -51,8 +51,8 @@ public struct ProfileView: View {
             Spacer()
                 .frame(height: 50)
             
-            VStack(spacing: 20) {
-                menuButton(title: "Sign-out") {
+            VStack(alignment: .leading, spacing: 20) {
+                menuButton(title: "Sign Out") {
                     viewModel.didTapSignOut()
                 }
                 

@@ -54,7 +54,7 @@
         }
       }
     },
-    "Sign-out" : {
+    "Sign Out" : {
       "localizations" : {
         "ko" : {
           "stringUnit" : {
