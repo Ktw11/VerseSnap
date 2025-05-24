@@ -7,7 +7,7 @@ public extension Project.Options {
         .options(
             automaticSchemesOptions: automaticSchemesOptions ?? .enabled(),
             defaultKnownRegions: ["en", "ko"],
-            developmentRegion: "ko"
+            developmentRegion: "en"
         )
     }
 }
