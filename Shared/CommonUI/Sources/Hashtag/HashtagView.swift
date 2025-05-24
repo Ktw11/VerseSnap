@@ -101,7 +101,7 @@ private extension HashtagView {
     func textFieldView() -> some View {
         ZStack(alignment: .leading) {
             if hashtag.value.isEmpty {
-                Text("해시태그를 입력해주세요")
+                Text("Please enter a hashtag")
                     .font(Constants.textFont)
                     .foregroundStyle(Color.gray)
             }
@@ -113,7 +113,7 @@ private extension HashtagView {
                 .font(Constants.textFont)
                 .foregroundStyle(.white)
                 .background {
-                    Text(hashtag.value.isEmpty ? "해시태그를 입력해주세요" : hashtag.value)
+                    Text(hashtag.value.isEmpty ? "Please enter a hashtag" : hashtag.value)
                         .font(Constants.textFont)
                         .fixedSize()
                         .hidden()

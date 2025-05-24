@@ -1,5 +1,5 @@
 {
-  "sourceLanguage" : "ko",
+  "sourceLanguage" : "en",
   "strings" : {
     "" : {
       "shouldTranslate" : false
@@ -7,46 +7,22 @@
     "#" : {
       "shouldTranslate" : false
     },
-    "%lld년" : {
-      "extractionState" : "stale",
+    "done" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
-    "%lld월" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
-    "해시태그를 입력해주세요" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please enter a hashtag."
+            "value" : "확인"
           }
         }
       }
     },
-    "확인" : {
+    "Please enter a hashtag" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "done"
+            "value" : "해시태그를 입력해주세요"
           }
         }
       }
