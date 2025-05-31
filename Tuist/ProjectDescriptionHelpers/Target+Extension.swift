@@ -4,6 +4,7 @@ public extension Target {
     static func commonTarget(
         type: TargetType,
         product: Product,
+        productName: String? = nil,
         infoPlist: InfoPlist? = nil,
         sources: SourceFilesList?,
         resources: ResourceFileElements? = nil,
@@ -14,6 +15,7 @@ public extension Target {
             name: type.name,
             destinations: .iOS,
             product: product,
+            productName: productName,
             bundleId: type.bundleId,
             infoPlist: infoPlist ?? .extendingDefault(with: [
                 "CFBundleAllowMixedLocalizations": true

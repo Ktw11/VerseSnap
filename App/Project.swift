@@ -11,12 +11,14 @@ let project = Project(
         Target.commonTarget(
             type: type,
             product: .app,
+            productName: type.name,
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
                         "UIColorName": "LaunchScreenColor",
                         "UIImageName": "",
                     ],
+                    "CFBundleDisplayName": "VerseSnap",
                     "KakaoAppKey": "$(KAKAO_APP_KEY)",
                     "BaseURL": "$(API_BASE_URL)",
                     "LSApplicationQueriesSchemes": [
