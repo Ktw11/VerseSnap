@@ -35,6 +35,8 @@ final class RootViewModel {
     
     func trySignIn() {
         Task { [weak self, useCase] in
+            try await Task.sleep(for: .seconds(1))
+            
             if let result = await useCase.signInWithSavedToken() {
                 self?.appStateStore.setScene(to: .tabs(result.user))
             } else {

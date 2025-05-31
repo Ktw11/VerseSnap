@@ -40,16 +40,6 @@
           }
         }
       }
-    },
-    "Sign-In" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "로그인"
-          }
-        }
-      }
     }
   },
   "version" : "1.0"

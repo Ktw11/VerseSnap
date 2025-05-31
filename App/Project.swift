@@ -14,7 +14,7 @@ let project = Project(
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
-                        "UIColorName": "",
+                        "UIColorName": "LaunchScreenColor",
                         "UIImageName": "",
                     ],
                     "KakaoAppKey": "$(KAKAO_APP_KEY)",

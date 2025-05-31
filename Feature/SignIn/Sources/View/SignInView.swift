@@ -25,9 +25,10 @@ public struct SignInView: View {
             VStack {
                 Spacer()
                 
-                Text("Sign-In")
-                    .foregroundStyle(Color.white)
-                    .font(.largeTitle)
+                CommonUIAsset.Image.icSplash.swiftUIImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .containerRelativeFrame(.horizontal) { width, _ in width * 0.3 }
                 
                 Spacer()
                 

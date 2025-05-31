@@ -28,9 +28,7 @@ struct RootView: View {
 
             switch viewModel.scene {
             case .splash:
-                #warning("스플래시 화면 구현 필요")
-                Text("@@@ SPLASH")
-                    .font(.largeTitle)
+                splashView
             case .signIn:
                 dependency.signInBuilder.build()
             case let .tabs(user):
@@ -41,6 +39,16 @@ struct RootView: View {
         }
         .onAppear {
             viewModel.trySignIn()
+        }
+    }
+    
+    @ViewBuilder
+    private var splashView: some View {
+        ZStack(alignment: .center) {
+            CommonUIAsset.Image.icSplash.swiftUIImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .containerRelativeFrame(.horizontal) { width, _ in width * 0.3 }
         }
     }
     
