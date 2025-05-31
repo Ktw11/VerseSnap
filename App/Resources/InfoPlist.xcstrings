@@ -10,6 +10,12 @@
             "state" : "new",
             "value" : "VerseSnap"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "삼.행.시"
+          }
         }
       }
     },
