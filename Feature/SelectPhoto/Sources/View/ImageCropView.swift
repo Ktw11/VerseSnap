@@ -87,7 +87,7 @@ struct ImageCropView: View {
                 .coordinateSpace(Constants.outerSpace)
         }
         .toolbar {
-            Button("Done") {
+            Button(String(localized: "Done", bundle: .module)) {
                 didTapDone()
             }
         }

@@ -42,7 +42,8 @@ public final class SignInViewModel {
                 let result = try await useCase.signIn(account: account)
                 self?.appStateUpdator.setScene(to: .tabs(result.user))
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again later."))
+                let message = String(localized: "An error occurred. Please try again later.", bundle: .module)
+                self?.appStateUpdator.addToast(info: .init(message: message))
             }
         }
     }

@@ -74,7 +74,7 @@ private extension SelectPhotoView {
             
             Spacer()
             
-            Text("Select photo")
+            Text("Select photo", bundle: .module)
                 .font(.system(size: 17))
                 .foregroundStyle(Color.white)
             
@@ -116,16 +116,19 @@ private extension SelectPhotoView {
             .task {
                 await viewModel.requestAuthorization()
             }
-            .alert("Album permission is required.", isPresented: $viewModel.isAuthAlertPresented) {
-                Button("Go to Settings") {
+            .alert(
+                String(localized: "Album permission is required.", bundle: .module),
+                isPresented: $viewModel.isAuthAlertPresented
+            ) {
+                Button(String(localized: "Go to Settings", bundle: .module)) {
                     viewModel.openAppSettings()
                 }
                 
-                Button("Cancel", role: .cancel) {
+                Button(String(localized: "Cancel", bundle: .module), role: .cancel) {
                     dismiss()
                 }
             } message: {
-                Text("To select the photo, you need to grant album permission. Please change the permission in Settings.")
+                Text("To select the photo, you need to grant album permission. Please change the permission in Settings.", bundle: .module)
             }
     }
 }

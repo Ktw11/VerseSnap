@@ -9,10 +9,10 @@ import Foundation
 
 public struct Toast: Identifiable, Equatable {
     private(set) public var id: String = UUID().uuidString
-    public let message: LocalizedStringResource
+    public let message: String
     public let duration: Duration
     
-    public init(message: LocalizedStringResource, duration: Duration = .seconds(2)) {
+    public init(message: String, duration: Duration = .seconds(2)) {
         self.message = message
         self.duration = duration
     }

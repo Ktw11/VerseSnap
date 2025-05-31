@@ -66,7 +66,7 @@ public struct YearMonthPickerView: View {
                 CommonUIAsset.Color.buttonBG.swiftUIColor
                     .clipShape(Capsule())
                     .overlay {
-                        Text("done")
+                        Text("done", bundle: .module)
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.white)
                     }

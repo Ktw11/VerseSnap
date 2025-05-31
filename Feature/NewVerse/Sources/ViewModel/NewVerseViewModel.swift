@@ -31,16 +31,16 @@ public final class NewVerseViewModel {
     
     private enum Constants {
         static let maxHastagCount: Int = 5
-        static var loadingText: LocalizedStringKey {
-            let defaultText: LocalizedStringKey = "loadingText1"
-            
-            return [
-                defaultText,
+        static var loadingText: String {
+            let keys: [String.LocalizationValue] = [
+                "loadingText1",
                 "loadingText2",
                 "loadingText3",
                 "loadingText4",
                 "loadingText5"
-            ].randomElement() ?? defaultText
+            ]
+            return keys.randomElement()
+                .map { String(localized: $0, bundle: .module) } ?? String(localized: "loadingText1", bundle: .module)
         }
     }
     
@@ -59,14 +59,14 @@ public final class NewVerseViewModel {
     var isVerseGenerated: Bool {
         generatedVerses != nil
     }
-    var loadingText: LocalizedStringKey {
+    var loadingText: String {
         Constants.loadingText
     }
-    var buttonText: LocalizedStringKey {
+    var buttonText: String {
         if generatedVerses == nil {
-            "Generate"
+            String(localized: "Generate", bundle: .module)
         } else {
-            "Regenerate"
+            String(localized: "Regenerate", bundle: .module)
         }
     }
 
@@ -108,7 +108,8 @@ public final class NewVerseViewModel {
             } catch let error as DomainError {
                 self?.handleGenerateDomainError(error)
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
+                let message: String = String(localized: "An error occurred. Please try again.", bundle: .module)
+                self?.appStateUpdator.addToast(info: .init(message: message))
             }
         }
     }
@@ -132,7 +133,8 @@ public final class NewVerseViewModel {
                     hashtags: hashtagValues
                 )
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
+                let message: String = String(localized: "An error occurred. Please try again.", bundle: .module)
+                self?.appStateUpdator.addToast(info: .init(message: message))
             }
         }
     }
@@ -166,9 +168,11 @@ extension NewVerseViewModel: HashtagEventListener {
     func handleGenerateDomainError(_ error: DomainError) {
         switch error {
         case .exceedDailyLimit:
-            appStateUpdator.addToast(info: .init(message: "You have exceeded today’s limit."))
+            let message: String = String(localized: "You have exceeded today’s limit.")
+            appStateUpdator.addToast(info: .init(message: message))
         default:
-            appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
+            let message: String = String(localized: "An error occurred. Please try again.")
+            appStateUpdator.addToast(info: .init(message: message))
         }
     }
 }

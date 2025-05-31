@@ -8,9 +8,9 @@
 import Foundation
 
 public struct ToastInfo {
-    public let message: LocalizedStringResource
+    public let message: String
     
-    public init(message: LocalizedStringResource) {
+    public init(message: String) {
         self.message = message
     }
 }

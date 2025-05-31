@@ -141,7 +141,7 @@ private extension NewVerseView {
                     isPresented.toggle()
                 }
             }, label: {
-                Text("Done")
+                Text("Done", bundle: .module)
                     .font(.suite(size: 17, weight: .regular))
                     .foregroundStyle(.white)
                     .padding(.trailing, 27)
@@ -172,7 +172,7 @@ private extension NewVerseView {
                         .aspectRatio(contentMode: .fill)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    Text("Select Photo")
+                    Text("Select Photo", bundle: .module)
                         .foregroundStyle(.white)
                         .font(.suite(size: 15, weight: .regular))
                 }

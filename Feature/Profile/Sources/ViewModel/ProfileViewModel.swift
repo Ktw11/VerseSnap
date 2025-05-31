@@ -69,7 +69,8 @@ public final class ProfileViewModel: Sendable {
                 try await userUseCase.updateNickname(to: newNickname)
                 self?.nickname = newNickname
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
+                let message = String(localized: "An error occurred. Please try again.", bundle: .module)
+                self?.appStateUpdator.addToast(info: .init(message: message))
             }
         }
     }
@@ -102,7 +103,8 @@ private extension ProfileViewModel {
                 try await execute()
                 self?.appStateUpdator.setScene(to: .signIn)
             } catch {
-                self?.appStateUpdator.addToast(info: .init(message: "An error occurred. Please try again."))
+                let message = String(localized: "An error occurred. Please try again.", bundle: .module)
+                self?.appStateUpdator.addToast(info: .init(message: message))
             }
         }
     }

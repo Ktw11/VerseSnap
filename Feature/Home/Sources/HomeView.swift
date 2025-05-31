@@ -225,7 +225,7 @@ private extension HomeView {
     
     @ViewBuilder
     func contentEmptyView() -> some View {
-        Text("You haven’t created any verses yet.")
+        Text("You haven’t created any verses yet.", bundle: .module)
             .font(.suite(size: 14, weight: .regular))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }

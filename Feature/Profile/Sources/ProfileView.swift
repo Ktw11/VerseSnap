@@ -38,7 +38,7 @@ public struct ProfileView: View {
                 Spacer()
                     .frame(height: 14)
                 
-                Text("Record today’s verse!")
+                Text("Record today’s verse!", bundle: .module)
                     .foregroundStyle(.white)
                     .font(.suite(size: 16, weight: .regular))
             }
@@ -52,11 +52,11 @@ public struct ProfileView: View {
                 .frame(height: 50)
             
             VStack(alignment: .leading, spacing: 20) {
-                menuButton(title: "Sign Out") {
+                menuButton(title: String(localized: "Sign Out", bundle: .module)) {
                     viewModel.didTapSignOut()
                 }
                 
-                menuButton(title: "Delete Account") {
+                menuButton(title: String(localized: "Delete Account", bundle: .module)) {
                     viewModel.didTapDeleteAccount()
                 }
             }
@@ -109,7 +109,7 @@ private extension ProfileView {
                     Button(action: {
                         viewModel.didTapNicknameChangeDone()
                     }, label: {
-                        Text("Done")
+                        Text("Done", bundle: .module)
                             .font(.suite(size: 15, weight: .regular))
                             .foregroundStyle(Color.white)
                     })
@@ -128,7 +128,7 @@ private extension ProfileView {
     }
     
     @ViewBuilder
-    func menuButton(title: LocalizedStringKey, action: (@escaping () -> Void)) -> some View {
+    func menuButton(title: String, action: (@escaping () -> Void)) -> some View {
         Button(action: {
             action()
         }, label: {
@@ -167,26 +167,26 @@ private struct DeleteAccountConfirmView: View {
     
     var body: some View {
         VStack(spacing: 24) {
-            Text("Delete Account")
+            Text("Delete Account", bundle: .main)
                 .font(.suite(size: 23, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            Text("Are you sure you want to delete your account?\nAll of your data will be permanently removed and cannot be recovered.")
+            Text("Are you sure you want to delete your account?\nAll of your data will be permanently removed and cannot be recovered.", bundle: .main)
                 .font(.suite(size: 17, weight: .regular))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             HStack(spacing: 12) {
                 capsuleButton(
-                    title: "Cancel",
+                    title: String(localized: "Cancel", bundle: .module),
                     foregroundColor: .white,
                     backgroundColor: Color.gray.opacity(0.3),
                     action: { onDismiss() }
                 )
                 
                 capsuleButton(
-                    title: "Confirm",
+                    title: String(localized: "Confirm", bundle: .module),
                     foregroundColor: .black,
                     backgroundColor: Color.white.opacity(0.7),
                     action: { onConfirm() }
