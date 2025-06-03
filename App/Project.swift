@@ -31,7 +31,7 @@ let project = Project(
                             ]
                         ]
                     ],
-                    "NSPhotoLibraryUsageDescription": "need access to photo library",
+                    "NSPhotoLibraryUsageDescription": "Permission to access your photo library is required to use the acrostic poem generation feature. You can change this in Settings.",
                     "UISupportedInterfaceOrientations": [
                         "UIInterfaceOrientationPortrait"
                     ]
