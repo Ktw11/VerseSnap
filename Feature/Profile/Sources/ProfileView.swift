@@ -167,12 +167,12 @@ private struct DeleteAccountConfirmView: View {
     
     var body: some View {
         VStack(spacing: 24) {
-            Text("Delete Account", bundle: .main)
+            Text("Delete Account", bundle: .module)
                 .font(.suite(size: 23, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            Text("Are you sure you want to delete your account?\nAll of your data will be permanently removed and cannot be recovered.", bundle: .main)
+            Text("Are you sure you want to delete your account?\nAll of your data will be permanently removed and cannot be recovered.", bundle: .module)
                 .font(.suite(size: 17, weight: .regular))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
