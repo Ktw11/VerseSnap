@@ -19,6 +19,7 @@ let project = Project(
                         "UIImageName": "",
                     ],
                     "CFBundleDisplayName": "VerseSnap",
+                    "CFBundleShortVersionString": "1.0.1",
                     "KakaoAppKey": "$(KAKAO_APP_KEY)",
                     "BaseURL": "$(API_BASE_URL)",
                     "LSApplicationQueriesSchemes": [

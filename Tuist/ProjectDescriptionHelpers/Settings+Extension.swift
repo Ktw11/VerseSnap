@@ -9,7 +9,7 @@ public extension ProjectDescription.Settings {
 
 private extension ProjectDescription.Settings {
     static let baseSettings: SettingsDictionary = [
-        "MARKETING_VERSION": "1.0.0",
+        "MARKETING_VERSION": "1.0.1",
         "CURRENT_PROJECT_VERSION": "1",
         "VERSIONING_SYSTEM": "apple-generic",
         "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
